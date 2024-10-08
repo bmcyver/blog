@@ -15,7 +15,7 @@ const { page } = Astro.props;
     <nav class="pagination-wrapper" aria-label="Pagination">
       <LinkButton
         disabled={!page.url.prev}
-        href={page.url.prev as string}
+        href={new URL(page.url.prev as string).pathname}
         className={`mr-4 select-none ${page.url.prev ? "" : "disabled"}`}
         ariaLabel="Previous"
       >
@@ -30,7 +30,7 @@ const { page } = Astro.props;
       {page.currentPage} / {page.lastPage}
       <LinkButton
         disabled={!page.url.next}
-        href={page.url.next as string}
+        href={new URL(page.url.next as string).pathname}
         className={`mx-4 select-none ${page.url.next ? "" : "disabled"}`}
         ariaLabel="Next"
       >
