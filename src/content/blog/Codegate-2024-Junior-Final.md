@@ -3,7 +3,7 @@ title: Codegate Junior 2024 Final Writeup
 description: Codegate Junior 2024 Final Writeup
 pubDatetime: 2024-09-24T12:55:34.381Z
 modDatetime: 2024-09-24T12:55:34.381Z
-featured: true
+featured: false
 draft: false
 tags:
     - CTF
