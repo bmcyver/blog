@@ -5,7 +5,7 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml ./
 
 FROM base AS prod-deps
-RUN pnpm install --omit=dev
+RUN pnpm install --prod
 
 FROM base AS build-deps
 RUN pnpm install
