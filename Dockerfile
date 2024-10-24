@@ -14,8 +14,9 @@ COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 RUN pnpm build
 
-FROM nginx:alpine AS runtime
+FROM base AS production
 
-COPY ./nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist ./dist
+
 EXPOSE 80
+CMD ["node", "dist/server/entry.js"]

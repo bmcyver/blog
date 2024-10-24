@@ -1,21 +1,24 @@
-import type socialIcons from "@assets/socialIcons";
+export type SiteConfig = {
+	author: string
+	title: string
+	description: string
+	lang: string
+	ogLocale: string
+	date: {
+		locale: string | string[] | undefined
+		options: Intl.DateTimeFormatOptions
+	}
+}
 
-export type Site = {
-  website: string;
-  author: string;
-  profile: string;
-  desc: string;
-  title: string;
-  ogImage?: string;
-  lightAndDarkMode: boolean;
-  postPerIndex: number;
-  postPerPage: number;
-  scheduledPostMargin: number;
-};
+export type PaginationLink = {
+	url: string
+	text?: string
+	srLabel?: string
+}
 
-export type SocialObjects = {
-  name: keyof typeof socialIcons;
-  href: string;
-  active: boolean;
-  linkTitle: string;
-}[];
+export type SiteMeta = {
+	title: string
+	description?: string
+	ogImage?: string | undefined
+	articleDate?: string | undefined
+}

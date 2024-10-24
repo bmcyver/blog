@@ -1,151 +1,161 @@
 ---
-import { getCollection } from "astro:content";
-import Layout from "@layouts/Layout.astro";
-import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro";
-import LinkButton from "@components/LinkButton.astro";
-import Hr from "@components/Hr.astro";
-import Card from "@components/Card";
-import Socials from "@components/Socials.astro";
-import getSortedPosts from "@utils/getSortedPosts";
-import { SITE, SOCIALS } from "@config";
+import PageLayout from '../layouts/BaseLayout.astro'
+import Section from '../components/Section.astro'
+import Card from '../components/Card.astro'
+import ProjectCard from '../components/ProjectCard.astro'
+import Label from '../components/Label.astro'
+import SkillLayout from '../components/SkillLayout.astro'
+import PostPreview from '@/components/blog/PostPreview.astro'
 
-const posts = await getCollection("blog");
+import { Image } from 'astro:assets'
+import viichan from '../assets/viichan.jpg'
 
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+import { getAllPosts, sortMDByDate } from '@/utils'
 
-const socialCount = SOCIALS.filter(social => social.active).length;
+const languages = ['Javascript', 'Typescript', 'Python', 'C', 'C++']
+const frameworks = ['Nestjs', 'Express', 'Fastify']
+const others = ['Docker', 'Insomnia', 'Git']
+
+const MAX_POSTS = 10
+const allPosts = await getAllPosts()
+const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
 
-<Layout>
-  <Header />
-  <main id="main-content">
-    <section id="hero">
-      <h1>soso한 blog</h1>
-      <a
-        target="_blank"
-        href="/rss.xml"
-        class="rss-link"
-        aria-label="rss feed"
-        title="RSS Feed"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="rss-icon"
-          ><path
-            d="M19 20.001C19 11.729 12.271 5 4 5v2c7.168 0 13 5.832 13 13.001h2z"
-          ></path><path
-            d="M12 20.001h2C14 14.486 9.514 10 4 10v2c4.411 0 8 3.589 8 8.001z"
-          ></path><circle cx="6" cy="18" r="2"></circle>
-        </svg>
-        <span class="sr-only">RSS Feed</span>
-      </a>
+<PageLayout meta={{ title: 'Home' }}>
+	<div class='flex w-full flex-col gap-y-10'>
+		<section class='flex flex-col items-center gap-y-7'>
+			<Image src={viichan} alt='profile photo' class='h-28 w-auto p-2' loading='eager' />
 
-      <p>
-        혼자 공부하며 끄적이는 soso한 내용을 담고 있습니다 :D
-      </p>
-      {
-        // only display if at least one social link is enabled
-        socialCount > 0 && (
-          <div class="social-wrapper">
-            <div class="social-links">Social Links:</div>
-            <Socials />
-          </div>
-        )
-      }
-    </section>
+			<div class='flex flex-col items-center gap-y-4'>
+				<h1 class='text-3xl font-bold'>bmcyver</h1>
+			</div>
+		</section>
 
-    <Hr />
+		<Section title='About'>
+			<p class='text-muted-foreground'>
+				I'm <b>16 y/o student developer</b> from South Korea, using <b>Typescript</b>.
+				<br />
+				Also, I'm interested in <b>web hacking</b> and learning <b>new technologies</b>.
+			</p>
+		</Section>
+		{
+			allPostsByDate.length > 0 && (
+				<Section title='Posts'>
+					<ul class='flex flex-col gap-y-2'>
+						{allPostsByDate.map((p) => (
+							<li class='flex flex-col gap-x-2 sm:flex-row'>
+								<PostPreview post={p} />
+							</li>
+						))}
+					</ul>
+				</Section>
+			)
+		}
 
-    {
-      featuredPosts.length > 0 && (
-        <>
-          <section id="featured">
-            <h2>Featured</h2>
-            <ul>
-              {featuredPosts.map(({ data, slug }) => (
-                <Card
-                  href={`/posts/${slug}/`}
-                  frontmatter={data}
-                  secHeading={false}
-                />
-              ))}
-            </ul>
-          </section>
-          {recentPosts.length > 0 && <Hr />}
-        </>
-      )
-    }
+		<!-- <Section title='Experience'>
+			<Card
+				heading='Lorem Ipsum'
+				subheading='Sit amet consectetur'
+				date='Dec 2022 - Nov 2023'
+				imagePath='/src/assets/about-astro.png'
+				altText='Lorem, ipsum dolor sit'
+				imageClass='h-12 w-auto md:-left-16'
+			>
+				<ul class='ml-4 list-disc text-muted-foreground'>
+					<li>
+						Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore debitis recusandae, ut
+						molestiae laboriosam pariatur!
 
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts">
-          <h2>Recent Posts</h2>
-          <ul>
-            {recentPosts.map(
-              ({ data, slug }, index) =>
-                index < SITE.postPerIndex && (
-                  <Card
-                    href={`/posts/${slug}/`}
-                    frontmatter={data}
-                    secHeading={false}
-                  />
-                )
-            )}
-          </ul>
-        </section>
-      )
-    }
+						<li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, pariatur!</li>
+					</li>
+				</ul>
+			</Card>
+			<Card
+				heading='Lorem Ipsum'
+				subheading='Sit amet consectetur'
+				date='Dec 2022 - Nov 2023'
+				imagePath='/src/assets/about-astro.png'
+				altText='Lorem, ipsum dolor sit'
+				imageClass='h-12 w-auto md:-left-16'
+			/>
+		</Section> -->
 
-    <div class="all-posts-btn-wrapper">
-      <LinkButton href="/posts/">
-        All Posts
-        <svg xmlns="http://www.w3.org/2000/svg"
-          ><path
-            d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
-          ></path>
-        </svg>
-      </LinkButton>
-    </div>
-  </main>
+		<!-- <Section title='Education'>
+			<Card
+				heading='Lorem Ipsum'
+				subheading='Sit amet consectetur'
+				date='Dec 2022 - Nov 2023'
+				imagePath='/src/assets/about-astro.png'
+				altText='Lorem, ipsum dolor sit'
+				imageClass='h-12 w-auto md:-left-16'
+			>
+				<ul class='ml-4 list-disc text-muted-foreground'>
+					<li>
+						Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore debitis recusandae, ut
+						molestiae laboriosam pariatur!
 
-  <Footer />
-</Layout>
+						<li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, pariatur!</li>
+					</li>
+				</ul>
+			</Card>
+			<Card
+				heading='Lorem Ipsum'
+				subheading='Sit amet consectetur'
+				date='Dec 2022 - Nov 2023'
+				imagePath='/src/assets/about-astro.png'
+				altText='Lorem, ipsum dolor sit'
+				imageClass='h-12 w-auto md:-left-16'
+			/>
+		</Section> -->
 
-<style>
-  /* ===== Hero Section ===== */
-  #hero {
-    @apply pb-6 pt-8;
-  }
-  #hero h1 {
-    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
-  }
-  #hero .rss-link {
-    @apply mb-6;
-  }
-  #hero .rss-icon {
-    @apply mb-2 h-6 w-6 scale-110 fill-skin-accent sm:mb-3 sm:scale-125;
-  }
-  #hero p {
-    @apply my-2;
-  }
-  .social-wrapper {
-    @apply mt-4 flex flex-col sm:flex-row sm:items-center;
-  }
-  .social-links {
-    @apply mb-1 mr-2 whitespace-nowrap sm:mb-0;
-  }
+		<!-- <Section title='Projects'>
+			<div class='flex flex-col gap-y-3 sm:flex-row sm:gap-x-3 sm:gap-y-0'>
+				<ProjectCard
+					href='https://www.google.com'
+					heading='Consectetur'
+					subheading='Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+					imagePath='/src/assets/coming-soon.png'
+					altText='Example'
+					class='w-full sm:w-1/2'
+				/>
+				<ProjectCard
+					as='div'
+					heading='Coming soon...'
+					subheading=''
+					imagePath='/src/assets/coming-soon.png'
+					altText='Lorem, ipsum dolor sit'
+					class='w-full sm:w-1/2'
+				/>
+			</div>
+		</Section> -->
 
-  /* ===== Featured & Recent Posts Sections ===== */
-  #featured,
-  #recent-posts {
-    @apply pb-6 pt-12;
-  }
-  #featured h2,
-  #recent-posts h2 {
-    @apply text-2xl font-semibold tracking-wide;
-  }
-  .all-posts-btn-wrapper {
-    @apply my-8 text-center;
-  }
-</style>
+		<!-- <Section title='Certifications'>
+			<Card
+				as='a'
+				heading='Lorem ipsum, dolor sit amet consectetur adipisicing.'
+				subheading='Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam dicta magni consequuntur corrupti.'
+				date='Mar 2024 - Mar 2024'
+				imagePath='/src/assets/about-astro.png'
+				altText='Lorem, ipsum dolor sit'
+				imageClass='h-11 w-auto md:-left-16'
+				href='https://www.google.com'
+			/>
+			<Card
+				as='a'
+				heading='Lorem ipsum, dolor sit amet'
+				subheading='Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam dicta.'
+				date='Mar 2029 - Mar 2032'
+				imagePath='/src/assets/about-astro.png'
+				altText='Lorem, ipsum dolor sit'
+				imageClass='h-11 w-auto md:-left-16'
+				href='https://www.google.com'
+			/>
+		</Section> -->
+
+		<Section title='Skills'>
+			<SkillLayout title='Languages' skills={languages} />
+			<SkillLayout title='Frameworks' skills={frameworks} />
+			<SkillLayout title='Others' skills={others} />
+		</Section>
+	</div>
+</PageLayout>
