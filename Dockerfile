@@ -1,22 +1,24 @@
-FROM node:18-alpine AS base
-
+FROM node:lts AS base
 WORKDIR /app
 RUN npm install -g pnpm
 
-FROM base AS dependencies
+COPY package.json pnpm-lock.yaml ./
 
-COPY package*.json ./
+FROM base AS prod-deps
+RUN pnpm install --omit=dev
+
+FROM base AS build-deps
 RUN pnpm install
 
-FROM base AS build
-
-COPY --from=dependencies /app/node_modules ./node_modules
+FROM build-deps AS build
 COPY . .
-RUN pnpm build
+RUN pnpm run build
 
-FROM base AS production
-
+FROM base AS runtime
+COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 
+ENV HOST=0.0.0.0
+ENV PORT=80
 EXPOSE 80
-CMD ["node", "dist/server/entry.js"]
+CMD node ./dist/server/entry.mjs
