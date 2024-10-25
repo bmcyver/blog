@@ -7,7 +7,7 @@ export const siteConfig: SiteConfig = {
 	// Meta property used to construct the meta title property, found in src/components/BaseHead.astro L:11
 	title: 'bmcyver.dev',
 	// Meta property used as the default description meta property
-	description: 'A blog about web development, programming, and other tech-related topics.',
+	description: '혼자 공부하며 끄적거리는 soso한 블로그',
 	// HTML lang property, found in src/layouts/Base.astro L:18
 	lang: 'ko-KR',
 	// Meta property, found in src/components/BaseHead.astro L:42
