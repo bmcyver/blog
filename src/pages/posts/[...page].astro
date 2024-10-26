@@ -26,7 +26,7 @@ const { page, uniqueTags } = Astro.props
 
 const meta = {
 	description: 'Posts',
-	title: 'Blog'
+	title: 'Posts'
 }
 
 const paginationProps = {
@@ -63,7 +63,7 @@ const paginationProps = {
 			</svg>
 		</Button>
 
-		<h1 class='mb-6 mt-5 text-2xl font-bold'>Blog</h1>
+		<h1 class='mb-6 mt-5 text-2xl font-bold'>Posts</h1>
 		{page.data.length === 0 && <p>No posts yet.</p>}
 
 		{
