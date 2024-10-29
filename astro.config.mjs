@@ -10,13 +10,14 @@ import expressiveCode from 'astro-expressive-code';
 import { expressiveCodeOptions } from './src/site.config';
 import icon from 'astro-icon';
 import node from "@astrojs/node";
+import compress from 'astro-compress';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://bmcyver.dev',
   integrations: [expressiveCode(expressiveCodeOptions), tailwind({
     applyBaseStyles: false
-  }), sitemap(), mdx(), icon()],
+  }), sitemap(), mdx(), icon(), compress()],
   markdown: {
     remarkPlugins: [remarkUnwrapImages, remarkReadingTime],
     rehypePlugins: [[rehypeExternalLinks, {
