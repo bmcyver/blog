@@ -1,3 +1,13 @@
+---
+title: KOSPO CTF 2024 Writeup
+description: A writeup for KOSPO CTF 2024
+publishDate: 2024-10-08T15:34:20.075Z
+tags:
+  - Writeup
+  - CTF
+draft: false
+---
+
 # KOSPO CTF 2024 Writeup
 
 A writeup for KOSPO CTF 2024.
