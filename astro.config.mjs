@@ -6,6 +6,8 @@ import sitemap from '@astrojs/sitemap';
 import { remarkReadingTime } from './src/utils/remarkReadingTime.ts';
 import remarkUnwrapImages from 'remark-unwrap-images';
 import rehypeExternalLinks from 'rehype-external-links';
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import expressiveCode from 'astro-expressive-code';
 import { expressiveCodeOptions } from './src/site.config';
 import icon from 'astro-icon';
@@ -18,11 +20,11 @@ export default defineConfig({
     applyBaseStyles: false
   }), sitemap(), mdx(), icon()],
   markdown: {
-    remarkPlugins: [remarkUnwrapImages, remarkReadingTime],
+    remarkPlugins: [remarkUnwrapImages, remarkReadingTime, remarkMath],
     rehypePlugins: [[rehypeExternalLinks, {
       target: '_blank',
       rel: ['nofollow, noopener, noreferrer']
-    }]],
+    }], rehypeKatex],
     remarkRehype: {
       footnoteLabelProperties: {
         className: ['']

