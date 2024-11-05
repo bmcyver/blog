@@ -1,13 +1,13 @@
 ---
-import type { TocItem } from '@/utils'
+import type { TocItem } from '@/utils';
 
 interface Props {
-	heading: TocItem
+	heading: TocItem;
 }
 
 const {
 	heading: { depth, slug, subheadings, text }
-} = Astro.props
+} = Astro.props;
 ---
 
 <li class={`${depth > 2 ? 'ms-2' : ''}`}>

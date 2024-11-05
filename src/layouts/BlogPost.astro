@@ -1,35 +1,35 @@
 ---
-import type { CollectionEntry } from 'astro:content'
+import type { CollectionEntry } from 'astro:content';
 
-import BlogHero from '@/components/blog/Hero.astro'
-import TOC from '@/components/blog/TOC.astro'
-import Button from '@/components/Button.astro'
+import BlogHero from '@/components/blog/Hero.astro';
+import TOC from '@/components/blog/TOC.astro';
+import Button from '@/components/Button.astro';
 
-import PageLayout from './BaseLayout.astro'
+import PageLayout from './BaseLayout.astro';
 
 interface Props {
-	post: CollectionEntry<'post'>
+	post: CollectionEntry<'post'>;
 }
 
-const { post } = Astro.props
+const { post } = Astro.props;
 const {
 	data: { description, ogImage, publishDate, title, updatedDate },
 	slug
-} = post
+} = post;
 
-const socialImage = ogImage ?? `/og-image/${slug}.png`
-const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString()
-const { headings } = await post.render()
+const socialImage = ogImage ?? `/og-image/${slug}.png`;
+const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
+const { headings } = await post.render();
 ---
 
 <PageLayout meta={{ articleDate, description, ogImage: socialImage, title }}>
 	<!-- Katex -->
-	<link
-		rel='stylesheet'
-		href='https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css'
-		integrity='sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+'
-		crossorigin='anonymous'
-	/>
+	<script
+		is:inline
+		async
+		src='https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js'
+		integrity='sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg'
+		crossorigin='anonymous'></script>
 
 	<div class='w-full'>
 		<Button title='Back' href='/posts' style='button'>
@@ -80,20 +80,20 @@ const { headings } = await post.render()
 </PageLayout>
 
 <script>
-	const scrollBtn = document.getElementById('to-top-btn') as HTMLButtonElement
-	const targetHeader = document.getElementById('blog-hero') as HTMLDivElement
+	const scrollBtn = document.getElementById('to-top-btn') as HTMLButtonElement;
+	const targetHeader = document.getElementById('blog-hero') as HTMLDivElement;
 
 	function callback(entries: IntersectionObserverEntry[]) {
 		entries.forEach((entry) => {
 			// only show the scroll to top button when the heading is out of view
-			scrollBtn.dataset.show = (!entry.isIntersecting).toString()
-		})
+			scrollBtn.dataset.show = (!entry.isIntersecting).toString();
+		});
 	}
 
 	scrollBtn.addEventListener('click', () => {
-		document.documentElement.scrollTo({ behavior: 'smooth', top: 0 })
-	})
+		document.documentElement.scrollTo({ behavior: 'smooth', top: 0 });
+	});
 
-	const observer = new IntersectionObserver(callback)
-	observer.observe(targetHeader)
+	const observer = new IntersectionObserver(callback);
+	observer.observe(targetHeader);
 </script>

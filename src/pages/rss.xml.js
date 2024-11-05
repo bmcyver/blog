@@ -1,9 +1,9 @@
-import rss from '@astrojs/rss'
-import { siteConfig } from '@/site-config'
-import { getAllPosts } from '@/utils'
+import rss from '@astrojs/rss';
+import { siteConfig } from '@/site-config';
+import { getAllPosts } from '@/utils';
 
 export const GET = async () => {
-	const posts = await getAllPosts()
+	const posts = await getAllPosts();
 
 	return rss({
 		title: siteConfig.title,
@@ -15,5 +15,5 @@ export const GET = async () => {
 			pubDate: post.data.publishDate,
 			link: `/posts/${post.slug}`
 		}))
-	})
-}
+	});
+};

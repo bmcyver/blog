@@ -1,24 +1,24 @@
 ---
-import PageLayout from '../layouts/BaseLayout.astro'
-import Section from '../components/Section.astro'
+import PageLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
 // import Card from '../components/Card.astro'
 // import ProjectCard from '../components/ProjectCard.astro'
 // import Label from '../components/Label.astro'
-import SkillLayout from '../components/SkillLayout.astro'
-import PostPreview from '@/components/blog/PostPreview.astro'
+import SkillLayout from '../components/SkillLayout.astro';
+import PostPreview from '@/components/blog/PostPreview.astro';
 
-import { Image } from 'astro:assets'
-import viichan from '../assets/viichan.png'
+import { Image } from 'astro:assets';
+import viichan from '../assets/viichan.png';
 
-import { getAllPosts, sortMDByDate } from '@/utils'
+import { getAllPosts, sortMDByDate } from '@/utils';
 
-const languages = ['Javascript', 'Typescript', 'Python', 'C', 'C++']
-const frameworks = ['Nestjs', 'Express', 'Fastify']
-const others = ['Docker', 'Insomnia', 'Git']
+const languages = ['Javascript', 'Typescript', 'Python', 'C', 'C++'];
+const frameworks = ['Nestjs', 'Express', 'Fastify'];
+const others = ['Docker', 'Insomnia', 'Git'];
 
-const MAX_POSTS = 10
-const allPosts = await getAllPosts()
-const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
+const MAX_POSTS = 10;
+const allPosts = await getAllPosts();
+const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
 ---
 
 <PageLayout meta={{ title: 'Home' }}>

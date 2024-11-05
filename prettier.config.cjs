@@ -2,7 +2,6 @@
 module.exports = {
   // i am just using the standard config, change if you need something else
   ...require('prettier-config-standard'),
-  pluginSearchDirs: [__dirname],
   plugins: [
     'prettier-plugin-astro',
     'prettier-plugin-tailwindcss'
@@ -18,5 +17,6 @@ module.exports = {
   useTabs: true,
   singleQuote: true,
   trailingComma: 'none',
+  semi: true,
   printWidth: 100
 }
