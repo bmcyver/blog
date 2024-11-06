@@ -2,6 +2,7 @@
 title: Codegate 2024 Junior Final Writeup
 description: Writeup for Codegate 2024 Junior Final (Web)
 publishDate: 2024-09-24T12:55:34.381Z
+updatedDate: 2024-09-24T12:55:34.381Z
 tags:
   - Writeup
   - CTF
@@ -15,7 +16,7 @@ draft: false
 총 3단계로 이루어진 문제이다. (플래그는 일반적으로는 접근 불가한 **SITE_SECRET** 테이블에 존재한다.)
 
 1. 에러를 발생시켜 권한 상승
-2. session 생성
+2. **session** 생성
 3. **SQL Injection**으로 **flag** 획득
 
 **Spring Boot**에서는 인증(로그인, 회원가입 등)이 성공하면, 하나의 핸들러를 거치게 된다.
@@ -66,7 +67,7 @@ class ShieldCloud : AuthenticationSuccessHandler {
 }
 ```
 
-위 코드를 보면, **shieldParam**이 **true**일 경우 **ROLE_USER**를 부여하고, `JsonParseException`을 제외한 `Exception`이 발생한 경우 **ROLE_ADMIN**을 부여한다. 즉, **ROLE_ADMIN**을 부여받기 위해서는 **NullPointerException**을 발생시켜야 한다. (필요한 키인 **user_role**이 없는 경우 **NullPointerException**이 발생한다.)
+위 코드를 보면, **shieldParam**이 **true**일 경우 **ROLE_USER**를 부여하고, **JsonParseException**을 제외한 **Exception**이 발생한 경우 **ROLE_ADMIN**을 부여한다. 즉, **ROLE_ADMIN**을 부여받기 위해서는 **NullPointerException**을 발생시켜야 한다. (필요한 키인 **user_role**이 없는 경우 **NullPointerException**이 발생한다.)
 
 그러나, **ROLE_ADMIN**을 받기만 해서는 **flag**를 얻기 위한 어떠한 작업도 수행할 수 없다. 아래의 코드를 보면, **flag**를 얻을 수 있는 통로인 **/api/v6/shieldosint/search**에서 **session**이 없다면 **Session null**을 반환하기 때문이다.
 
@@ -241,7 +242,7 @@ fun filterQuery(query: String): String {
     }
 ```
 
-이제 여기서 위 코드의 **WAF**를 우회해야 하는데 간단히 우회할 수 있다. **UNION(SELECT(sdata)FROM(SITE_SECRET))**를 사용하면 된다!
+이제 여기서 위 코드의 **WAF**를 우회해야 하는데 간단히 우회할 수 있다. <strong>UNION(SELECT(sdata)FROM(SITE_SECRET))</strong>를 사용하면 된다!
 
 최종적인 익스 코드는 아래와 같다.
 
@@ -430,6 +431,7 @@ with open('img1.jpeg', 'rb') as file_a, open('img2.jpeg', 'rb') as file_b:
 
 먼저 **secret.js**를 봐보자.
 
+<!-- prettier-ignore-start -->
 ```javascript
 var g = require('dyson-generators');
 var realFlag = require('fs').readFileSync('/flag.txt').toString();
@@ -457,9 +459,9 @@ module.exports = {
 				) {
 					return 'Try Again!!';
 				}
-
-				const SuperSecretPassword = ('[REDACTED]'[(guessPassword, guessFlag)] =
-					req.query.guess !== undefined ? atob(req.query.guess).split('|') : ['idk', 'idk']);
+				const SuperSecretPassword = '[REDACTED]'
+                [guessPassword, guessFlag] =
+					req.query.guess !== undefined ? atob(req.query.guess).split('|') : ['idk', 'idk'])
 				if (SuperSecretPassword == guessPassword) {
 					return realFlag;
 				} else if (realFlag == guessFlag) {
@@ -475,6 +477,7 @@ module.exports = {
 	}
 };
 ```
+<!-- prettier-ignore-end -->
 
 **/api/flagService**로 요청을 받으며, **localhost**이면서 **SuperSecretPassword**와 **guessPassword**가 같거나, **realFlag**와 **guessFlag**가 같으면 **flag**를 반환한다. 그러나 이는 일반적으로는 우회가 불가능하다. **SuperSecretPassword**는 풀이자가 알 수 없도록 길 것이며, **realFlag**는 **sha256**으로 해싱되어 있을 거기 때문이다.
 
@@ -525,12 +528,15 @@ module.exports = {
 
 이를 통해서 일단, **localhost** 필터링을 우회할 수 있다.
 
-**secret.js**를 좀 자세히 보면, `;`이 안 찍혀 있는 것을 알 수 있다.
+**secret.js**를 좀 자세히 보면, <strong>;(semicolon)</strong>이 안 찍혀 있는 것을 알 수 있다.
 
+<!-- prettier-ignore-start -->
 ```javascript
-const SuperSecretPassword = ('[REDACTED]'[(guessPassword, guessFlag)] =
-	req.query.guess !== undefined ? atob(req.query.guess).split('|') : ['idk', 'idk']);
+const SuperSecretPassword = '[REDACTED]'
+[guessPassword, guessFlag] =
+	req.query.guess !== undefined ? atob(req.query.guess).split('|') : ['idk', 'idk'])
 ```
+<!-- prettier-ignore-end -->
 
 와
 
@@ -541,11 +547,11 @@ const SuperSecretPassword =
 		: ['idk', 'idk'];
 ```
 
-는 **ASI**의 misbehavior로 인해, 같은 코드로 인식된다. 따라서, **http://url:port/user?,api/flagService?guess=**로 요청을 하면 **flag**를 얻을 수 있다. (물론 아래 사진과 같이, **host**를 변경해야 한다.)
+는 **ASI misbehavior**로 인해, 같은 코드로 인식된다. 따라서, <strong>http://url:port/user?,api/flagService?guess=</strong>로 요청을 하면 **flag**를 얻을 수 있다. (물론 아래 사진과 같이, **host**를 변경해야 한다.)
 
 ![dyson1](dyson1.png)
 
-대회 때 **multi request**가 있는 것은 알았으나, **ASI**의 misbehavior를 이용한 우회는 생각하지 못했다. 그래서 **npm audit** 돌려서 나온, **prototype pollution**만 엄청 시도해보고 있었다.
+대회 때 **multi request**가 있는 것은 알았으나, **ASI misbehavior**를 이용한 우회는 생각하지 못했다. 그래서 **npm audit** 돌려서 나온, **prototype pollution**만 엄청 시도해보고 있었다.
 
 ## Ai
 

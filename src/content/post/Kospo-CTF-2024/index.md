@@ -2,6 +2,7 @@
 title: KOSPO CTF 2024 Writeup
 description: A writeup for KOSPO CTF 2024
 publishDate: 2024-10-08T15:34:20.075Z
+updatedDate: 2024-10-08T15:34:20.075Z
 tags:
   - Writeup
   - CTF
@@ -93,7 +94,7 @@ draft: false
 }
 ```
 
-**getMe**를 통해 id, pw를 반환하며, **getBook**을 통해 flag를 얻을 수 있다. 그러나 **getBook**의 경우에는 **is_premium_user**가 **true**여야 flag를 반환한다. 따라서 **updateUser**를 통해 **is_premium_user**를 **true**로 변경한 후, **getBook**을 통해 flag를 얻을 수 있다.
+**getMe**를 통해 **id**, **pw**를 반환하며, **getBook**을 통해 **flag**를 얻을 수 있다. 그러나 **getBook**의 경우에는 **is_premium_user**가 **true**여야 **flag**를 반환한다. 따라서 **updateUser**를 통해 **is_premium_user**를 **true**로 변경한 후, **getBook**을 통해 **flag**를 얻을 수 있다.
 
 ```javascript
 const book_content_query = `

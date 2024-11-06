@@ -24,12 +24,11 @@ const { headings } = await post.render();
 
 <PageLayout meta={{ articleDate, description, ogImage: socialImage, title }}>
 	<!-- Katex -->
-	<script
-		is:inline
-		defer
-		src='https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js'
-		integrity='sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg'
-		crossorigin='anonymous'></script>
+	<link
+		rel='stylesheet'
+		href='/katex.min.css'
+		integrity='sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+'
+	/>
 
 	<div class='w-full'>
 		<Button title='Back' href='/posts' style='button'>

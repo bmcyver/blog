@@ -2,6 +2,7 @@
 title: Exploring EJS RCE Gadgets
 description: A study on EJS RCE gadgets
 publishDate: 2024-10-18T09:20:38.272Z
+updatedDate: 2024-10-18T09:20:38.272Z
 tags:
   - Study
 draft: false
