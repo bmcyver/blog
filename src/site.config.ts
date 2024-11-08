@@ -1,5 +1,6 @@
 import type { SiteConfig } from '@/types';
 import type { AstroExpressiveCodeOptions } from 'astro-expressive-code';
+import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 
 export const siteConfig: SiteConfig = {
 	// Used as both a meta property (src/components/BaseHead.astro L:31 + L:49) & the generated satori png (src/pages/og-image/[slug].png.ts)
@@ -37,6 +38,12 @@ export const menuLinks: Array<{ title: string; path: string }> = [
 // https://expressive-code.com/reference/configuration/
 export const expressiveCodeOptions: AstroExpressiveCodeOptions = {
 	// One dark, one light theme => https://expressive-code.com/guides/themes/#available-themes
+	//@ts-ignore
+	plugins: [pluginLineNumbers()],
+	defaultProps: {
+		//@ts-ignore
+		showLineNumbers: false
+	},
 	themes: ['github-dark'],
 	themeCssSelector(theme, { styleVariants }) {
 		// If one dark and one light theme are available
