@@ -2,6 +2,11 @@
 	"name": "blog",
 	"type": "module",
 	"version": "0.0.1",
+	"private": "true",
+	"author": {
+		"name": "bmcyver",
+		"email": "me@bmcyver.dev"
+	},
 	"scripts": {
 		"dev": "astro dev --watch",
 		"start": "node ./dist/server/entry.mjs",
