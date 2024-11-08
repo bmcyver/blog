@@ -8,7 +8,7 @@ import SkillLayout from '../components/SkillLayout.astro';
 import PostPreview from '@/components/blog/PostPreview.astro';
 
 import { Image } from 'astro:assets';
-import viichan from '../assets/viichan.png';
+import Logo from '../assets/logo.webp';
 
 import { getAllPosts, sortMDByDate } from '@/utils';
 
@@ -24,7 +24,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
 <PageLayout meta={{ title: 'Home' }}>
 	<div class='flex w-full flex-col gap-y-10'>
 		<section class='flex flex-col items-center gap-y-7'>
-			<Image src={viichan} alt='profile photo' class='h-28 w-auto p-2' loading='eager' />
+			<Image src={Logo} alt='profile photo' class='h-28 w-auto p-2' loading='eager' />
 
 			<div class='flex flex-col items-center gap-y-4'>
 				<h1 class='text-3xl font-bold'>bmcyver</h1>

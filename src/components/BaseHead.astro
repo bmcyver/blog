@@ -10,7 +10,7 @@ type Props = SiteMeta;
 
 const { articleDate, description, title } = Astro.props;
 
-const titleSeparator = '•';
+const titleSeparator = '-';
 const siteTitle = `${title} ${titleSeparator} ${siteConfig.title}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -26,7 +26,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
 <link href="/manifest.webmanifest" rel="manifest" /> -->
 
-<link rel='icon' href='/favicon.ico' />
+<link rel='icon' href='/logo.webp' />
 
 {/* Font preloads */}
 <!-- <link rel='preload' href='/fonts/Satoshi-Variable.ttf' as='font' type='font/ttf' crossorigin />
