@@ -60,13 +60,27 @@
 		--input: 240 3.7% 15.9%;
 		--ring: 240 4.9% 83.9%;
 	}
-}
-
-@layer base {
 	* {
 		@apply border-border;
 	}
 	body {
 		@apply bg-background text-foreground;
 	}
+}
+
+code::before,
+code::after {
+    content: none !important;
+}
+
+code {
+    background-color: #f0f0f0;
+    color: #333333;
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+}
+
+.dark code {
+    background-color: #2d2d2d;
+    color: #f0f0f0;
 }
