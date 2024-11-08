@@ -50,6 +50,9 @@ importers:
       rehype-katex:
         specifier: ^7.0.1
         version: 7.0.1
+      remark-github-blockquote-alert:
+        specifier: ^1.3.0
+        version: 1.3.0
       remark-math:
         specifier: ^6.0.0
         version: 6.0.0
@@ -2907,6 +2910,10 @@ packages:
 
   remark-gfm@4.0.0:
     resolution: {integrity: sha512-U92vJgBPkbw4Zfu/IiW2oTZLSL3Zpv+uI7My2eq8JxKgqraFdU8YUGicEJCEgSbeaG+QDFqIcwwfMTOEelPxuA==}
+
+  remark-github-blockquote-alert@1.3.0:
+    resolution: {integrity: sha512-cwkBA4x+VH4J2VAMzhbmSeAmK5tBd5iwesgSUUQuRtuQ48XQm6sXXNLY9PR7ohZmZiqMeoDMUGCTur5zwR4lTQ==}
+    engines: {node: '>=16'}
 
   remark-math@6.0.0:
     resolution: {integrity: sha512-MMqgnP74Igy+S3WwnhQ7kqGlEerTETXMvJhrUzDikVZ2/uogJCb+WHUg97hK9/jcfc0dkD73s3LN8zU49cTEtA==}
@@ -7135,6 +7142,10 @@ snapshots:
       unified: 11.0.5
     transitivePeerDependencies:
       - supports-color
+
+  remark-github-blockquote-alert@1.3.0:
+    dependencies:
+      unist-util-visit: 5.0.0
 
   remark-math@6.0.0:
     dependencies:
