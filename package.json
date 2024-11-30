@@ -23,7 +23,7 @@
 		"@astrojs/sitemap": "^3.2.1",
 		"@astrojs/tailwind": "^5.1.2",
 		"@expressive-code/plugin-line-numbers": "^0.38.3",
-		"astro": "^4.16.14",
+		"astro": "^4.16.16",
 		"astro-expressive-code": "^0.33.5",
 		"astro-icon": "^1.1.4",
 		"clsx": "^2.1.1",
@@ -46,7 +46,7 @@
 		"eslint": "^8.57.1",
 		"eslint-plugin-astro": "^0.31.4",
 		"eslint-plugin-jsx-a11y": "^6.10.2",
-		"prettier": "^3.3.3",
+		"prettier": "^3.4.1",
 		"prettier-config-standard": "^7.0.0",
 		"prettier-plugin-astro": "^0.13.0",
 		"prettier-plugin-tailwindcss": "^0.5.14"
