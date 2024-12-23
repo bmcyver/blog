@@ -521,4 +521,4 @@ exports.renderFile = function () {
 
 ## Conclusion
 
-`JavaScript`로 개발할떄는 `prorotype pollution`이 발생하지 않도록 주의하자 :D
+`JavaScript`로 개발할때는 `prorotype pollution`이 발생하지 않도록 주의하자 :D
