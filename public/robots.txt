@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://bmcyver.dev/sitemap-index.xml

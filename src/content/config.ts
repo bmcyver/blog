@@ -1,37 +1,24 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, z } from 'astro:content'
 
-function removeDupsAndLowerCase(array: string[]) {
-	if (!array.length) return array;
-	const lowercaseItems = array.map((str) => str.toLowerCase());
-	const distinctItems = new Set(lowercaseItems);
-	return Array.from(distinctItems);
+const postsCollection = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    published: z.date(),
+    updated: z.date().optional(),
+    draft: z.boolean().optional().default(false),
+    description: z.string().optional().default(''),
+    image: z.string().optional().default(''),
+    tags: z.array(z.string()).optional().default([]),
+    category: z.string().optional().default(''),
+    lang: z.string().optional().default(''),
+
+    /* For internal use */
+    prevTitle: z.string().default(''),
+    prevSlug: z.string().default(''),
+    nextTitle: z.string().default(''),
+    nextSlug: z.string().default(''),
+  }),
+})
+export const collections = {
+  posts: postsCollection,
 }
-
-const post = defineCollection({
-	type: 'content',
-	schema: ({ image }) =>
-		z.object({
-			title: z.string().max(60),
-			description: z.string().min(10).max(160),
-			publishDate: z
-				.string()
-				.or(z.date())
-				.transform((val) => new Date(val)),
-			updatedDate: z
-				.string()
-				.or(z.date())
-				.optional()
-				.transform((str) => (str ? new Date(str) : undefined)),
-			coverImage: z
-				.object({
-					src: image(),
-					alt: z.string()
-				})
-				.optional(),
-			draft: z.boolean().default(false),
-			tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
-			ogImage: z.string().optional()
-		})
-});
-
-export const collections = { post };
