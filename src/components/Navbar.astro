@@ -103,9 +103,6 @@ function loadButtonScript() {
 
 loadButtonScript();
 
-document.addEventListener('astro:after-swap', () => {
-    loadButtonScript();
-}, { once: false });
 </script>
 
 {import.meta.env.PROD && <script is:inline define:vars={{scriptUrl: url('/pagefind/pagefind.js')}}>
