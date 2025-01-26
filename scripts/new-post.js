@@ -1,7 +1,7 @@
 /* This is a script to create a new post markdown file with front-matter */
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 function getDate() {
   const today = new Date()
