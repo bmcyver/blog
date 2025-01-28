@@ -9,9 +9,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "type-check": "tsc --noEmit --isolatedDeclarations",
+    "format": "prettier --write  \"**/*.{js,jsx,ts,tsx,md,mdx,svelte,astro}\"",
+    "lint": "eslint --fix \"src/**/*.{js,ts,jsx,tsx,svelte,astro}\"",
     "new-post": "node scripts/new-post.js",
-    "format": "biome format --write ./src",
-    "lint": "biome check --apply ./src",
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
@@ -29,7 +29,7 @@
     "@iconify/svelte": "^4.2.0",
     "@swup/astro": "^1.5.0",
     "@tailwindcss/typography": "^0.5.16",
-    "astro": "^5.1.9",
+    "astro": "^5.1.10",
     "astro-compress": "^2.3.6",
     "astro-icon": "^1.1.5",
     "hastscript": "^9.0.0",
@@ -58,8 +58,15 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-astro": "^0.31.4",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "prettier": "^3.4.2",
+    "prettier-config-standard": "^7.0.0",
+    "prettier-plugin-astro": "^0.13.0",
+    "prettier-plugin-tailwindcss": "^0.5.14",
     "@astrojs/ts-plugin": "^1.10.4",
-    "@biomejs/biome": "1.8.3",
     "@rollup/plugin-yaml": "^4.1.2",
     "@types/markdown-it": "^14.1.2",
     "@types/mdast": "^4.0.4",

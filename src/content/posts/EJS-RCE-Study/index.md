@@ -345,21 +345,21 @@ return returnedFn;
 
 ```javascript
 if (opts.outputFunctionName) {
-+	if (!_JS_IDENTIFIER.test(opts.outputFunctionName)) {
-+		throw new Error('outputFunctionName is not a valid JS identifier.');
-+	}
+/* 추가 */	if (!_JS_IDENTIFIER.test(opts.outputFunctionName)) {
+/* 추가 */		throw new Error('outputFunctionName is not a valid JS identifier.');
+/* 추가 */	}
 	prepended += '  var ' + opts.outputFunctionName + ' = __append;' + '\n';
 }
-+if (opts.localsName && !_JS_IDENTIFIER.test(opts.localsName)) {
-+	throw new Error('localsName is not a valid JS identifier.');
-+}
+/* 추가 */if (opts.localsName && !_JS_IDENTIFIER.test(opts.localsName)) {
+/* 추가 */	throw new Error('localsName is not a valid JS identifier.');
+/* 추가 */}
 if (opts.destructuredLocals && opts.destructuredLocals.length) {
 	var destructuring = '  var __locals = (' + opts.localsName + ' || {}),\n';
-	for (var i = 0; i < opts.destructuredLocals.length; i++) {
+	for (var i = 0; i < opts.destructuredLocals.length; i++) { 
 		var name = opts.destructuredLocals[i];
-+		if (!_JS_IDENTIFIER.test(name)) {
-+			throw new Error('destructuredLocals[' + i + '] is not a valid JS identifier.');
-+		}
+/* 추가 */		if (!_JS_IDENTIFIER.test(name)) {
+/* 추가 */			throw new Error('destructuredLocals[' + i + '] is not a valid JS identifier.');
+/* 추가 */		}
 		if (i > 0) {
 			destructuring += ',\n  ';
 		}
@@ -402,10 +402,10 @@ if (opts.client) {
 `v3.1.10`에서 `prototype pollution`을 통해서 `RCE(코드의 흐름이 망가지는 것도 있음)`을 막기 위해서 업데이트를 하며, 널리 알려진 것 같다. (본인 기준)
 
 ```javascript
--function Template(text, opts) {
--	opts = opts || utils.createNullProtoObjWherePossible();
-+function Template(text, optsParam) {
-+	var opts = utils.hasOwnOnlyObject(optsParam);
+/* 삭제 */function Template(text, opts) {
+/* 삭제 */	opts = opts || utils.createNullProtoObjWherePossible();
+/* 추가 */function Template(text, optsParam) {
+/* 추가 */	var opts = utils.hasOwnOnlyObject(optsParam);
 	var options = utils.createNullProtoObjWherePossible();
 	this.templateText = text;
 	/** @type {string | null} */

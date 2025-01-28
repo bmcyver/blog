@@ -3,10 +3,10 @@ title: Markdown Example
 published: 2000-01-01
 updated: 2000-01-01
 description: A simple example of a Markdown blog post.
-tags: 
-    - Markdown
-    - Blogging
-    - Demo
+tags:
+  - Markdown
+  - Blogging
+  - Demo
 category: Guides
 draft: true
 ---
@@ -74,15 +74,15 @@ for i in range(10):
 
 Now a nested list:
 
-1. First, get these ingredients:
+1.  First, get these ingredients:
 
     - carrots
     - celery
     - lentils
 
-2. Boil some water.
+2.  Boil some water.
 
-3. Dump everything in the pot and follow
+3.  Dump everything in the pot and follow
     this algorithm:
 
         find wooden spoon
@@ -159,7 +159,7 @@ Here's a "line block":
 
 and images can be specified like so:
 
-[//]: # (![example image]&#40;./demo-banner.png "An exemplary image"&#41;)
+[//]: # '![example image](./demo-banner.png "An exemplary image")'
 
 Inline math equations go in like so: $\omega = d\phi / dt$. Display
 math should get its own line and be put in in double-dollarsigns:

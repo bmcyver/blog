@@ -2,7 +2,7 @@
 title: Draft Example
 published: 2000-01-01
 updated: 2000-01-01
-tags: 
+tags:
   - Markdown
   - Blogging
   - Demo
@@ -24,3 +24,4 @@ tags: [Markdown, Blogging, Demo]
 category: Examples
 draft: false
 ---
+```
