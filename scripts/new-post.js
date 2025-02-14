@@ -40,13 +40,12 @@ const content = `---
 title: ${args[0]}
 published: ${getDate()}
 updated: ${getDate()}
-description: ''
-image: ''
+description: 
+image: 
 tags: 
-  - ''
-category: ''
-draft: false 
-lang: ''
+  - 
+category: 
+draft: false
 ---
 `;
 
