@@ -50,8 +50,8 @@ class ShieldCloud : AuthenticationSuccessHandler {
 
             } catch (e: JsonParseException) {
                 authorities.add(SimpleGrantedAuthority("ROLE_USER"))
-            } catch (e: Exception) {
-                authorities.add(SimpleGrantedAuthority("ROLE_ADMIN"))
+            } catch (e: Exception) { // [!code highlight:3]
+                authorities.add(SimpleGrantedAuthority("ROLE_ADMIN")) 
             }
         } else {
             authorities.add(SimpleGrantedAuthority("ROLE_USER"))
@@ -103,7 +103,7 @@ class ApiController(private val userService: UserService) {
                 val query = querycheck
 
                 if (query.isNotEmpty()) {
-                    val customQueryResult = reflectionController.reflectMethod(methodName, query, magiccheck)
+                    val customQueryResult = reflectionController.reflectMethod(methodName, query, magiccheck) // [!code highlight]
                     return "Query Result: $customQueryResult"
                 } else {
                     return "Query Result: $defaultQueryResult"
@@ -201,7 +201,7 @@ class ReflectionController {
 
 ```kotlin
 fun filterQuery(query: String): String {
-        val hasWhitespace = Regex("\\s")
+        val hasWhitespace = Regex("\\s") // [!code highlight:9]
         val containsRuntime = Regex("(?i)runtime")
         val containsJava = Regex("(?i)java")
         val special_check1 = Regex("/")
@@ -336,7 +336,7 @@ def verify_file():
                         if b"CODEGATE2024\x00" not in exif_data:
                             return  jsonify({'error': 'Unsupported file parse'}), 400
 
-                        json_start_marker = b"CODEGATE2024\x00"
+                        json_start_marker = b"CODEGATE2024\x00" # [!code highlight:4]
                         json_start_index = exif_data.find(json_start_marker) + len(json_start_marker)
                         json_data_bytes = exif_data[json_start_index:]
                         json_data_str = json_data_bytes.decode('ascii')
@@ -355,7 +355,7 @@ def verify_file():
                     if exif_data:
                         exif = {ExifTags.TAGS.get(tag, tag): value for tag, value in exif_data.items()}
                         for key, value in exif.items():
-                            if "ImageDescription" in key:
+                            if "ImageDescription" in key: 
                                 ret = validate_domain(value) or validate_ipv4(value) or validate_ipv6(value)
                                 if not ret:
                                     return jsonify({'success': 'Verified'})
@@ -363,7 +363,7 @@ def verify_file():
                                     return jsonify({'success': 'Verified'})
                                 if ")" in value:
                                     return jsonify({'success': 'Verified'})
-                                description_contents = safe_eval(value)
+                                description_contents = safe_eval(value) # [!code highlight]
                                 items_dict = dict(description_contents)
                                 return jsonify({'debug': f'{items_dict}' })
                 except Exception as e:

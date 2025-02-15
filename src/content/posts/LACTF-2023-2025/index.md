@@ -1,15 +1,15 @@
 ---
-title: LA CTF 2023-2025
+title: LA CTF 2023-2025 Writeup
 published: 2025-02-15
 updated: 2025-02-15
-description: LA CTF 2023년부터 2025년까지의 Web 분야의 풀이를 정리한 글입니다.
+description: A writeup for LA CTF 2023-2025 (Web)
 image: ./logo.gif
 tags:
   - Writeup
   - CTF
   - Web
 category: CTF
-draft: false
+draft: true
 ---
 
 한번 풀어보고 싶었던 **LA CTF**의 **Web** 문제들을 풀어보았다. 업솔빙한 문제도 포함되어 있다.
@@ -167,7 +167,7 @@ function randomUUID() {
 function getUsers() {
 	let output = '<strong>Admin users:</strong>\n';
 	adminuuids.forEach((adminuuid) => {
-		const hash = crypto
+		const hash = crypto // [!code highlight:4]
 			.createHash('md5')
 			.update('admin' + adminuuid)
 			.digest('hex');
@@ -190,8 +190,8 @@ app.get('/', (req, res) => {
 		if (useruuids.length > 50) {
 			useruuids.shift();
 		}
-	} else if (isAdmin(id)) {
-		res.send(process.env.FLAG);
+	} else if (isAdmin(id)) { // [!code highlight:4]
+		res.send(process.env.FLAG); 
 		return;
 	}
 
@@ -286,6 +286,8 @@ await r.get('/').then((res) => logger.flag(res.data));
 If you wanna catch up on ALL the campus news, check out my new blog. It even has a reverse image search feature!
 
 ### Solution
+
+//TODO
 
 ## web/california-state-police (40 solves, 480 points)
 
