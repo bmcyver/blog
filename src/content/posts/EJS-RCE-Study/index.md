@@ -179,7 +179,7 @@ exports.renderFile = function () {
 				}
 				// Undocumented after Express 2, but still usable, esp. for
 				// items that are unsafe to be passed along with data, like `root`
-				viewOpts = data.settings['view options'];
+				viewOpts = data.settings['view options']; // [!code highlight:4]
 				if (viewOpts) {
 					utils.shallowCopy(opts, viewOpts);
 				}
@@ -206,7 +206,7 @@ exports.renderFile = function () {
 
 ```javascript
 function Template(text, optsParam) {
-	var opts = utils.hasOwnOnlyObject(optsParam);
+	var opts = utils.hasOwnOnlyObject(optsParam); // // [!code highlight:2]
 	var options = utils.createNullProtoObjWherePossible();
 	this.templateText = text;
 	/** @type {string | null} */
@@ -345,21 +345,21 @@ return returnedFn;
 
 ```javascript
 if (opts.outputFunctionName) {
-/* 추가 */	if (!_JS_IDENTIFIER.test(opts.outputFunctionName)) {
-/* 추가 */		throw new Error('outputFunctionName is not a valid JS identifier.');
-/* 추가 */	}
+	if (!_JS_IDENTIFIER.test(opts.outputFunctionName)) { // [!code ++:3]
+		throw new Error('outputFunctionName is not a valid JS identifier.');
+	} 
 	prepended += '  var ' + opts.outputFunctionName + ' = __append;' + '\n';
 }
-/* 추가 */if (opts.localsName && !_JS_IDENTIFIER.test(opts.localsName)) {
-/* 추가 */	throw new Error('localsName is not a valid JS identifier.');
-/* 추가 */}
+if (opts.localsName && !_JS_IDENTIFIER.test(opts.localsName)) { // [!code ++:3]
+	throw new Error('localsName is not a valid JS identifier.'); 
+} 
 if (opts.destructuredLocals && opts.destructuredLocals.length) {
 	var destructuring = '  var __locals = (' + opts.localsName + ' || {}),\n';
 	for (var i = 0; i < opts.destructuredLocals.length; i++) { 
 		var name = opts.destructuredLocals[i];
-/* 추가 */		if (!_JS_IDENTIFIER.test(name)) {
-/* 추가 */			throw new Error('destructuredLocals[' + i + '] is not a valid JS identifier.');
-/* 추가 */		}
+		if (!_JS_IDENTIFIER.test(name)) { // [!code ++:3]
+			throw new Error('destructuredLocals[' + i + '] is not a valid JS identifier.'); 
+		} 
 		if (i > 0) {
 			destructuring += ',\n  ';
 		}
@@ -399,13 +399,13 @@ if (opts.client) {
 
 `CVE-2024-33883`가 발급되어 있다. [여기](#ejs--317-1)에서 사용된 페이로드를 확인할 수 있다.
 
-`v3.1.10`에서 `prototype pollution`을 통해서 `RCE(코드의 흐름이 망가지는 것도 있음)`을 막기 위해서 업데이트를 하며, 널리 알려진 것 같다. (본인 기준)
+`v3.1.10`에서 `prototype pollution`을 통해서 `RCE`와 `DoS`를 막기 위해서 업데이트를 하며, 널리 알려진 것 같다. (본인 기준)
 
 ```javascript
-/* 삭제 */function Template(text, opts) {
-/* 삭제 */	opts = opts || utils.createNullProtoObjWherePossible();
-/* 추가 */function Template(text, optsParam) {
-/* 추가 */	var opts = utils.hasOwnOnlyObject(optsParam);
+function Template(text, opts) {  // [!code --:2]
+	opts = opts || utils.createNullProtoObjWherePossible(); 
+function Template(text, optsParam) { // [!code ++:2]
+	var opts = utils.hasOwnOnlyObject(optsParam); 
 	var options = utils.createNullProtoObjWherePossible();
 	this.templateText = text;
 	/** @type {string | null} */
