@@ -207,7 +207,7 @@ exports.renderFile = function () {
 
 ```javascript
 function Template(text, optsParam) {
-	var opts = utils.hasOwnOnlyObject(optsParam); // // [!code highlight:2]
+	var opts = utils.hasOwnOnlyObject(optsParam); // [!code highlight:2]
 	var options = utils.createNullProtoObjWherePossible();
 	this.templateText = text;
 	/** @type {string | null} */

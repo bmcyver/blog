@@ -71,10 +71,10 @@ for i in range(10):
 ```
 
 ```ts
-let x: [string, number] // [!code highlight]
-console.log('hewwo') // [!code --]
-console.log('hello') // [!code ++]
-console.log('goodbye')
+let x: [string, number]; // [!code highlight]
+console.log('hewwo'); // [!code --]
+console.log('hello'); // [!code ++]
+console.log('goodbye');
 ```
 
 ### An h3 header

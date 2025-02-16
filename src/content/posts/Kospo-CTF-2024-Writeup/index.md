@@ -19,7 +19,7 @@ draft: false
 
 ```json
 {
-    "name": "Query",
+  "name": "Query",
     "fields": [
         {
             "name": "getMe", // id, pw 반환

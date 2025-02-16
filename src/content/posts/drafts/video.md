@@ -3,9 +3,9 @@ title: Include Video in the Posts
 published: 2000-01-01
 updated: 2000-01-01
 description: This post demonstrates how to include embedded video in a blog post.
-tags: 
-    - Example
-    - Video
+tags:
+  - Example
+  - Video
 category: Guides
 draft: true
 ---
@@ -16,9 +16,7 @@ Just copy the embed code from YouTube or other platforms, and paste it in the ma
 ---
 title: Include Video in the Post
 published: 2023-10-19
-// ...
 ---
-
 <iframe width="100%" height="468" src="https://www.youtube.com/embed/5gIf0_xpFPI?si=N1WTorLKL0uwLsU_" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
 ```
 

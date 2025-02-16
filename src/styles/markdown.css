@@ -53,7 +53,6 @@
         } */
     }
 
-
     span.highlighted {
         margin: 0 -1.25rem;
         padding: 0 1.25rem;
@@ -70,12 +69,16 @@
             @apply bg-[var(--codeblock-diff-add)];
             &::before {
                 @apply text-[var(--codeblock-diff-add-text)];
+                content: '+';
+                margin-right: 0.5rem;
             }
         }
         &.remove {
             @apply bg-[var(--codeblock-diff-remove)];
             &::before {
                 @apply text-[var(--codeblock-diff-remove-text)];
+                content: '-';
+                margin-right: 0.5rem;
             }
         }
     }
