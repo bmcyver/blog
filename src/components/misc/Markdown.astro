@@ -50,8 +50,28 @@ const className = Astro.props.class;
       copyButton.innerHTML = `<div>${copyIcon} ${successIcon}</div>
       `;
 
+      let dataLang = document.createElement('div');
+      dataLang.className =
+        'dataLang absolute h-8 w-auto top-0.5 right-2 text-xs text-right p-1.5 rounded-lg transition-all ease-in-out';
+      dataLang.innerHTML = `
+        <div>${codeBlock.getAttribute('data-language')}</div>
+      `;
+
       wrapper.appendChild(codeBlock);
       wrapper.appendChild(copyButton);
+      wrapper.appendChild(dataLang);
+
+      copyButton.style.display = 'none';
+      dataLang.style.display = 'block';
+
+      wrapper.onmouseover = (event) => {
+        copyButton.style.display = 'block';
+        dataLang.style.display = 'none';
+      };
+      wrapper.onmouseout = (event) => {
+        copyButton.style.display = 'none';
+        dataLang.style.display = 'block';
+      };
 
       let timeout: ReturnType<typeof setTimeout>;
       copyButton.addEventListener('click', async () => {
