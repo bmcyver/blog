@@ -5,10 +5,7 @@ updated: 2000-01-01
 description: Read more about Markdown features in Fuwari
 image: ''
 tags:
-  - Demo
-  - Example
-  - Markdown
-  - Fuwari
+  - Guides
 category: Guides
 draft: true
 ---

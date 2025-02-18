@@ -38,19 +38,6 @@
         &:after {
             content:none;
         }
-
-        /* counter-reset: line;
-        span.line {
-            &:before {
-                @apply text-white/25 mr-4 w-4 inline-block;
-                content: counter(line);
-                counter-increment: line;
-                direction: rtl;
-            }
-            &:last-child:empty, &:last-child:has(> span:empty:only-child) {
-                display: none;
-            }
-        } */
     }
 
     span.highlighted {
@@ -58,6 +45,7 @@
         padding: 0 1.25rem;
         @apply inline-block bg-[var(--codeblock-highlight-bg)];
         width: calc(100% + 2.5rem);
+        line-height: 1.5rem;
     }
 
     span.diff {
@@ -65,6 +53,7 @@
         padding: 0 1.25rem;
         @apply inline-block;
         width: calc(100% + 2.5rem);
+        line-height: 1.5rem;
         &.add {
             @apply bg-[var(--codeblock-diff-add)];
             &::before {

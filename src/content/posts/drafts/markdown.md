@@ -4,9 +4,7 @@ published: 2000-01-01
 updated: 2000-01-01
 description: A simple example of a Markdown blog post.
 tags:
-  - Markdown
-  - Blogging
-  - Demo
+  - Guides
 category: Guides
 draft: true
 ---

@@ -22,6 +22,9 @@
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "editor.foldingImportsByDefault": true,
   "editor.foldingStrategy": "auto"
 }

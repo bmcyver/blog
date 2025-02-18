@@ -3,15 +3,15 @@ import path from 'path';
 import { Icon } from 'astro-icon/components';
 import I18nKey from '../i18n/i18nKey';
 import { i18n } from '../i18n/translation';
-import { getDir } from '../utils/url-utils';
 import PostMetadata from './PostMeta.astro';
 import ImageWrapper from './misc/ImageWrapper.astro';
+import {render} from 'astro:content';
+import { getPostUrlById } from '../utils/url-utils';
 
 interface Props {
   class?: string;
   entry: any;
   title: string;
-  url: string;
   published: Date;
   updated?: Date;
   tags: string[];
@@ -24,7 +24,6 @@ interface Props {
 const {
   entry,
   title,
-  url,
   published,
   updated,
   tags,
@@ -33,13 +32,16 @@ const {
   description,
   style,
 } = Astro.props;
+
+const id = getPostUrlById(entry.id);
+
 const className = Astro.props.class;
 
 const hasCover = image !== undefined && image !== null && image !== '';
 
 const coverWidth = '28%';
 
-const { remarkPluginFrontmatter } = await entry.render();
+const { remarkPluginFrontmatter } = await render(entry);
 ---
 
 <div
@@ -59,7 +61,7 @@ const { remarkPluginFrontmatter } = await entry.render();
     ]}
   >
     <a
-      href={url}
+      href={id}
       class="text-90 group mb-3 block w-full text-3xl font-bold transition before:absolute before:top-[35px] before:left-[18px] before:hidden before:h-5 before:w-1 before:rounded-md before:bg-[var(--primary)] hover:text-[var(--primary)] active:text-[var(--title-active)] md:before:block dark:hover:text-[var(--primary)] dark:active:text-[var(--title-active)]"
     >
       {title}
@@ -111,7 +113,7 @@ const { remarkPluginFrontmatter } = await entry.render();
   {
     hasCover && (
       <a
-        href={url}
+        href={id}
         aria-label={title}
         class:list={[
           'group',
@@ -128,7 +130,7 @@ const { remarkPluginFrontmatter } = await entry.render();
         </div>
         <ImageWrapper
           src={image}
-          basePath={path.join('content/posts/', getDir(entry.id))}
+          basePath={path.join('content/posts/', entry.id)}
           alt="Cover Image of the Post"
           class="h-full w-full"
         />
@@ -139,7 +141,7 @@ const { remarkPluginFrontmatter } = await entry.render();
   {
     !hasCover && (
       <a
-        href={url}
+        href={id}
         aria-label={title}
         class="btn-regular absolute top-3 right-3 bottom-3 !hidden w-[3.25rem] rounded-xl bg-[var(--enter-btn-bg)] hover:bg-[var(--enter-btn-bg-hover)] active:scale-95 active:bg-[var(--enter-btn-bg-active)] md:!flex"
       >

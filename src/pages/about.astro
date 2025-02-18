@@ -1,14 +1,18 @@
 ---
 import MainGridLayout from '../layouts/MainGridLayout.astro';
 
-import { getEntry } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 import Markdown from '@components/misc/Markdown.astro';
 import I18nKey from '../i18n/i18nKey';
 import { i18n } from '../i18n/translation';
 
-const aboutPost = await getEntry('spec', 'about');
+const entry = await getEntry('spec', 'about');
 
-const { Content } = await aboutPost.render();
+if (!entry) {
+  throw new Error('Spec Entry not found');
+}
+
+const { Content } = await render(entry);
 ---
 
 <MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>

@@ -5,9 +5,7 @@ updated: 2000-01-01
 description: How to use this blog template."
 image: ./cover.jpeg
 tags:
-  - 'Fuwari'
-  - 'Blogging'
-  - 'Customization'
+  - Guides
 category: Guides
 draft: true
 ---

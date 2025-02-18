@@ -3,9 +3,7 @@ title: Draft Example
 published: 2000-01-01
 updated: 2000-01-01
 tags:
-  - Markdown
-  - Blogging
-  - Demo
+  - Guides
 category: Guides
 draft: true
 ---

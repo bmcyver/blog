@@ -29,10 +29,8 @@ if (isLocal) {
   const files = import.meta.glob<ImageMetadata>('../../**', {
     import: 'default',
   });
-  const normalizedPath = path
-    .normalize(path.join('../../', basePath, src))
-    .replace(/\\/g, '/');
-  const file = files[normalizedPath];
+  const normalizedPath = path.join(basePath, src).replaceAll('\\', '/');
+  const file = files[Object.keys(files).filter((key) => key.toLowerCase().endsWith(normalizedPath.toLowerCase()))[0]];
   if (!file) {
     console.error(
       `\n[ERROR] Image file not found: ${normalizedPath.replace('../../', 'src/')}`,
