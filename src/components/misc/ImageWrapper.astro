@@ -30,7 +30,12 @@ if (isLocal) {
     import: 'default',
   });
   const normalizedPath = path.join(basePath, src).replaceAll('\\', '/');
-  const file = files[Object.keys(files).filter((key) => key.toLowerCase().endsWith(normalizedPath.toLowerCase()))[0]];
+  const file =
+    files[
+      Object.keys(files).filter((key) =>
+        key.toLowerCase().endsWith(normalizedPath.toLowerCase()),
+      )[0]
+    ];
   if (!file) {
     console.error(
       `\n[ERROR] Image file not found: ${normalizedPath.replace('../../', 'src/')}`,
@@ -45,7 +50,7 @@ const imageStyle = `object-position: ${position}`;
 
 <div id={id} class:list={[className, 'relative overflow-hidden']}>
   <div
-    class="bg-opacity-50 pointer-events-none absolute inset-0 transition dark:bg-black/10"
+    class="pointer-events-none absolute inset-0 bg-opacity-50 transition dark:bg-black/10"
   >
   </div>
   {
