@@ -25,6 +25,9 @@
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "editor.foldingImportsByDefault": true,
   "editor.foldingStrategy": "auto"
 }

@@ -39,7 +39,7 @@ const className = Astro.props.class;
       let copyButton = document.createElement('button');
       copyButton.className =
         'copy-btn btn-regular-dark absolute active:scale-90 h-8 w-8 top-2 right-2 opacity-75 text-sm p-1.5 rounded-lg transition-all ease-in-out';
-
+      copyButton.setAttribute('aria-label', 'Copy code');
       codeBlock.setAttribute('tabindex', '0');
       if (codeBlock.parentNode) {
         codeBlock.parentNode.insertBefore(wrapper, codeBlock);

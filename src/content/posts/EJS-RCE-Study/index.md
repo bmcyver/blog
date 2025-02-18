@@ -2,7 +2,7 @@
 title: Exploring EJS RCE
 description: A study on EJS RCE
 published: 2024-10-18
-updated: 2025-10-18
+updated: 2024-10-18
 tags:
   - Study
   - JavaScript
@@ -20,7 +20,7 @@ draft: false
 
 ```javascript
 app.get('/', (req, res) => {
-	res.render('index', req.query);
+  res.render('index', req.query);
 });
 ```
 
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 
 ```javascript
 app.get('/', (req, res) => {
-	res.render('index');
+  res.render('index');
 });
 ```
 
@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 
 ```javascript
 app.get('/', (req, res) => {
-	res.render('index', req.query);
+  res.render('index', req.query);
 });
 ```
 
@@ -68,8 +68,8 @@ http://localhost:3000/?id=2&settings[view options][client]=1&settings[view optio
 
 ```javascript
 app.post('/a', (req, res) => {
-	merge({}, req.body);
-	res.render('index', { foo: 'bar' });
+  merge({}, req.body);
+  res.render('index', { foo: 'bar' });
 });
 ```
 
@@ -81,12 +81,12 @@ app.post('/a', (req, res) => {
 
 ```typescript
 await r.post('/a', {
-	constructor: {
-		prototype: {
-			client: 1,
-			escapeFunction: `console.log;console.info("RCE!!!")`
-		}
-	}
+  constructor: {
+    prototype: {
+      client: 1,
+      escapeFunction: `console.log;console.info("RCE!!!")`,
+    },
+  },
 });
 ```
 
@@ -94,20 +94,18 @@ await r.post('/a', {
 
 ```typescript
 await r.post('/a', {
-	constructor: {
-		prototype: {
-			'view options': {
-				client: 1,
-				escapeFunction: `console.log;console.info("RCE!!!")`
-			}
-		}
-	}
+  constructor: {
+    prototype: {
+      'view options': {
+        client: 1,
+        escapeFunction: `console.log;console.info("RCE!!!")`,
+      },
+    },
+  },
 });
 ```
 
-> [!NOTE]
-> `Prototype Pollution`이 발생한다는 것 자체가 큰 취약점이다. `Prototype Pollution`이 발생한다면 사용하고 있는 라이브러리에 따라서, 큰 문제가 발생할 수 있다. _(Ex. `jsonwebtoken`을 사용 중이라면 `token`이 잘못 생성되게도 할 수 있다.)_
-
+> [!NOTE] > `Prototype Pollution`이 발생한다는 것 자체가 큰 취약점이다. `Prototype Pollution`이 발생한다면 사용하고 있는 라이브러리에 따라서, 큰 문제가 발생할 수 있다. _(Ex. `jsonwebtoken`을 사용 중이라면 `token`이 잘못 생성되게도 할 수 있다.)_
 
 ### EJS RCE In CTFs
 
@@ -147,55 +145,55 @@ CTF에서는 `EJS RCE`와 관련된 문제가 종종 출제된다. 그러나, �
 
 ```javascript
 exports.renderFile = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var filename = args.shift();
-	var cb;
-	var opts = { filename: filename };
-	var data;
-	var viewOpts;
+  var args = Array.prototype.slice.call(arguments);
+  var filename = args.shift();
+  var cb;
+  var opts = { filename: filename };
+  var data;
+  var viewOpts;
 
-	// Do we have a callback?
-	if (typeof arguments[arguments.length - 1] == 'function') {
-		cb = args.pop();
-	}
-	// Do we have data/opts?
-	if (args.length) {
-		// Should always have data obj
-		data = args.shift();
-		// Normal passed opts (data obj + opts obj)
-		if (args.length) {
-			// Use shallowCopy so we don't pollute passed in opts obj with new vals
-			utils.shallowCopy(opts, args.pop());
-		}
-		// Special casing for Express (settings + opts-in-data)
-		else {
-			// Express 3 and 4
-			if (data.settings) {
-				// Pull a few things from known locations
-				if (data.settings.views) {
-					opts.views = data.settings.views;
-				}
-				if (data.settings['view cache']) {
-					opts.cache = true;
-				}
-				// Undocumented after Express 2, but still usable, esp. for
-				// items that are unsafe to be passed along with data, like `root`
-				viewOpts = data.settings['view options']; // [!code highlight:4]
-				if (viewOpts) {
-					utils.shallowCopy(opts, viewOpts);
-				}
-			}
-			// Express 2 and lower, values set in app.locals, or people who just
-			// want to pass options in their data. NOTE: These values will override
-			// anything previously set in settings  or settings['view options']
-			utils.shallowCopyFromList(opts, data, _OPTS_PASSABLE_WITH_DATA_EXPRESS);
-		}
-		opts.filename = filename;
-	} else {
-		data = utils.createNullProtoObjWherePossible();
-	}
+  // Do we have a callback?
+  if (typeof arguments[arguments.length - 1] == 'function') {
+    cb = args.pop();
+  }
+  // Do we have data/opts?
+  if (args.length) {
+    // Should always have data obj
+    data = args.shift();
+    // Normal passed opts (data obj + opts obj)
+    if (args.length) {
+      // Use shallowCopy so we don't pollute passed in opts obj with new vals
+      utils.shallowCopy(opts, args.pop());
+    }
+    // Special casing for Express (settings + opts-in-data)
+    else {
+      // Express 3 and 4
+      if (data.settings) {
+        // Pull a few things from known locations
+        if (data.settings.views) {
+          opts.views = data.settings.views;
+        }
+        if (data.settings['view cache']) {
+          opts.cache = true;
+        }
+        // Undocumented after Express 2, but still usable, esp. for
+        // items that are unsafe to be passed along with data, like `root`
+        viewOpts = data.settings['view options']; // [!code highlight:4]
+        if (viewOpts) {
+          utils.shallowCopy(opts, viewOpts);
+        }
+      }
+      // Express 2 and lower, values set in app.locals, or people who just
+      // want to pass options in their data. NOTE: These values will override
+      // anything previously set in settings  or settings['view options']
+      utils.shallowCopyFromList(opts, data, _OPTS_PASSABLE_WITH_DATA_EXPRESS);
+    }
+    opts.filename = filename;
+  } else {
+    data = utils.createNullProtoObjWherePossible();
+  }
 
-	return tryHandleCache(opts, data, cb);
+  return tryHandleCache(opts, data, cb);
 };
 ```
 
@@ -207,45 +205,49 @@ exports.renderFile = function () {
 
 ```javascript
 function Template(text, optsParam) {
-	var opts = utils.hasOwnOnlyObject(optsParam); // [!code highlight:2]
-	var options = utils.createNullProtoObjWherePossible();
-	this.templateText = text;
-	/** @type {string | null} */
-	this.mode = null;
-	this.truncate = false;
-	this.currentLine = 1;
-	this.source = '';
-	options.client = opts.client || false;
-	options.escapeFunction = opts.escape || opts.escapeFunction || utils.escapeXML;
-	options.compileDebug = opts.compileDebug !== false;
-	options.debug = !!opts.debug;
-	options.filename = opts.filename;
-	options.openDelimiter = opts.openDelimiter || exports.openDelimiter || _DEFAULT_OPEN_DELIMITER;
-	options.closeDelimiter =
-		opts.closeDelimiter || exports.closeDelimiter || _DEFAULT_CLOSE_DELIMITER;
-	options.delimiter = opts.delimiter || exports.delimiter || _DEFAULT_DELIMITER;
-	options.strict = opts.strict || false;
-	options.context = opts.context;
-	options.cache = opts.cache || false;
-	options.rmWhitespace = opts.rmWhitespace;
-	options.root = opts.root;
-	options.includer = opts.includer;
-	options.outputFunctionName = opts.outputFunctionName;
-	options.localsName = opts.localsName || exports.localsName || _DEFAULT_LOCALS_NAME;
-	options.views = opts.views;
-	options.async = opts.async;
-	options.destructuredLocals = opts.destructuredLocals;
-	options.legacyInclude = typeof opts.legacyInclude != 'undefined' ? !!opts.legacyInclude : true;
+  var opts = utils.hasOwnOnlyObject(optsParam); // [!code highlight:2]
+  var options = utils.createNullProtoObjWherePossible();
+  this.templateText = text;
+  /** @type {string | null} */
+  this.mode = null;
+  this.truncate = false;
+  this.currentLine = 1;
+  this.source = '';
+  options.client = opts.client || false;
+  options.escapeFunction =
+    opts.escape || opts.escapeFunction || utils.escapeXML;
+  options.compileDebug = opts.compileDebug !== false;
+  options.debug = !!opts.debug;
+  options.filename = opts.filename;
+  options.openDelimiter =
+    opts.openDelimiter || exports.openDelimiter || _DEFAULT_OPEN_DELIMITER;
+  options.closeDelimiter =
+    opts.closeDelimiter || exports.closeDelimiter || _DEFAULT_CLOSE_DELIMITER;
+  options.delimiter = opts.delimiter || exports.delimiter || _DEFAULT_DELIMITER;
+  options.strict = opts.strict || false;
+  options.context = opts.context;
+  options.cache = opts.cache || false;
+  options.rmWhitespace = opts.rmWhitespace;
+  options.root = opts.root;
+  options.includer = opts.includer;
+  options.outputFunctionName = opts.outputFunctionName;
+  options.localsName =
+    opts.localsName || exports.localsName || _DEFAULT_LOCALS_NAME;
+  options.views = opts.views;
+  options.async = opts.async;
+  options.destructuredLocals = opts.destructuredLocals;
+  options.legacyInclude =
+    typeof opts.legacyInclude != 'undefined' ? !!opts.legacyInclude : true;
 
-	if (options.strict) {
-		options._with = false;
-	} else {
-		options._with = typeof opts._with != 'undefined' ? opts._with : true;
-	}
+  if (options.strict) {
+    options._with = false;
+  } else {
+    options._with = typeof opts._with != 'undefined' ? opts._with : true;
+  }
 
-	this.opts = options;
+  this.opts = options;
 
-	this.regex = this.createRegex();
+  this.regex = this.createRegex();
 }
 ```
 
@@ -256,72 +258,77 @@ function Template(text, optsParam) {
 
 ```javascript
 try {
-	if (opts.async) {
-		// Have to use generated function for this, since in envs without support,
-		// it breaks in parsing
-		try {
-			ctor = new Function('return (async function(){}).constructor;')();
-		} catch (e) {
-			if (e instanceof SyntaxError) {
-				throw new Error('This environment does not support async/await');
-			} else {
-				throw e;
-			}
-		}
-	} else {
-		ctor = Function;
-	}
-	fn = new ctor(opts.localsName + ', escapeFn, include, rethrow', src);
+  if (opts.async) {
+    // Have to use generated function for this, since in envs without support,
+    // it breaks in parsing
+    try {
+      ctor = new Function('return (async function(){}).constructor;')();
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        throw new Error('This environment does not support async/await');
+      } else {
+        throw e;
+      }
+    }
+  } else {
+    ctor = Function;
+  }
+  fn = new ctor(opts.localsName + ', escapeFn, include, rethrow', src);
 } catch (e) {
-	// istanbul ignore else
-	if (e instanceof SyntaxError) {
-		if (opts.filename) {
-			e.message += ' in ' + opts.filename;
-		}
-		e.message += ' while compiling ejs\n\n';
-		e.message += 'If the above error is not helpful, you may want to try EJS-Lint:\n';
-		e.message += 'https://github.com/RyanZim/EJS-Lint';
-		if (!opts.async) {
-			e.message += '\n';
-			e.message += 'Or, if you meant to create an async function, pass `async: true` as an option.';
-		}
-	}
-	throw e;
+  // istanbul ignore else
+  if (e instanceof SyntaxError) {
+    if (opts.filename) {
+      e.message += ' in ' + opts.filename;
+    }
+    e.message += ' while compiling ejs\n\n';
+    e.message +=
+      'If the above error is not helpful, you may want to try EJS-Lint:\n';
+    e.message += 'https://github.com/RyanZim/EJS-Lint';
+    if (!opts.async) {
+      e.message += '\n';
+      e.message +=
+        'Or, if you meant to create an async function, pass `async: true` as an option.';
+    }
+  }
+  throw e;
 }
 
 // Return a callable function which will execute the function
 // created by the source-code, with the passed data as locals
 // Adds a local `include` function which allows full recursive include
 var returnedFn = opts.client
-	? fn
-	: function anonymous(data) {
-			var include = function (path, includeData) {
-				var d = utils.shallowCopy(utils.createNullProtoObjWherePossible(), data);
-				if (includeData) {
-					d = utils.shallowCopy(d, includeData);
-				}
-				return includeFile(path, opts)(d);
-			};
-			return fn.apply(opts.context, [
-				data || utils.createNullProtoObjWherePossible(),
-				escapeFn,
-				include,
-				rethrow
-			]);
-		};
+  ? fn
+  : function anonymous(data) {
+      var include = function (path, includeData) {
+        var d = utils.shallowCopy(
+          utils.createNullProtoObjWherePossible(),
+          data,
+        );
+        if (includeData) {
+          d = utils.shallowCopy(d, includeData);
+        }
+        return includeFile(path, opts)(d);
+      };
+      return fn.apply(opts.context, [
+        data || utils.createNullProtoObjWherePossible(),
+        escapeFn,
+        include,
+        rethrow,
+      ]);
+    };
 if (opts.filename && typeof Object.defineProperty === 'function') {
-	var filename = opts.filename;
-	var basename = path.basename(filename, path.extname(filename));
-	try {
-		Object.defineProperty(returnedFn, 'name', {
-			value: basename,
-			writable: false,
-			enumerable: false,
-			configurable: true
-		});
-	} catch (e) {
-		/* ignore */
-	}
+  var filename = opts.filename;
+  var basename = path.basename(filename, path.extname(filename));
+  try {
+    Object.defineProperty(returnedFn, 'name', {
+      value: basename,
+      writable: false,
+      enumerable: false,
+      configurable: true,
+    });
+  } catch (e) {
+    /* ignore */
+  }
 }
 return returnedFn;
 ```
@@ -346,27 +353,32 @@ return returnedFn;
 
 ```javascript
 if (opts.outputFunctionName) {
-	if (!_JS_IDENTIFIER.test(opts.outputFunctionName)) { // [!code ++:3]
-		throw new Error('outputFunctionName is not a valid JS identifier.');
-	} 
-	prepended += '  var ' + opts.outputFunctionName + ' = __append;' + '\n';
+  if (!_JS_IDENTIFIER.test(opts.outputFunctionName)) {
+    // [!code ++:3]
+    throw new Error('outputFunctionName is not a valid JS identifier.');
+  }
+  prepended += '  var ' + opts.outputFunctionName + ' = __append;' + '\n';
 }
-if (opts.localsName && !_JS_IDENTIFIER.test(opts.localsName)) { // [!code ++:3]
-	throw new Error('localsName is not a valid JS identifier.'); 
-} 
+if (opts.localsName && !_JS_IDENTIFIER.test(opts.localsName)) {
+  // [!code ++:3]
+  throw new Error('localsName is not a valid JS identifier.');
+}
 if (opts.destructuredLocals && opts.destructuredLocals.length) {
-	var destructuring = '  var __locals = (' + opts.localsName + ' || {}),\n';
-	for (var i = 0; i < opts.destructuredLocals.length; i++) { 
-		var name = opts.destructuredLocals[i];
-		if (!_JS_IDENTIFIER.test(name)) { // [!code ++:3]
-			throw new Error('destructuredLocals[' + i + '] is not a valid JS identifier.'); 
-		} 
-		if (i > 0) {
-			destructuring += ',\n  ';
-		}
-		destructuring += name + ' = __locals.' + name;
-	}
-	prepended += destructuring + ';\n';
+  var destructuring = '  var __locals = (' + opts.localsName + ' || {}),\n';
+  for (var i = 0; i < opts.destructuredLocals.length; i++) {
+    var name = opts.destructuredLocals[i];
+    if (!_JS_IDENTIFIER.test(name)) {
+      // [!code ++:3]
+      throw new Error(
+        'destructuredLocals[' + i + '] is not a valid JS identifier.',
+      );
+    }
+    if (i > 0) {
+      destructuring += ',\n  ';
+    }
+    destructuring += name + ' = __locals.' + name;
+  }
+  prepended += destructuring + ';\n';
 }
 ```
 
@@ -380,10 +392,10 @@ if (opts.destructuredLocals && opts.destructuredLocals.length) {
 
 ```javascript
 if (opts.client) {
-	src = 'escapeFn = escapeFn || ' + escapeFn.toString() + ';' + '\n' + src;
-	if (opts.compileDebug) {
-		src = 'rethrow = rethrow || ' + rethrow.toString() + ';' + '\n' + src;
-	}
+  src = 'escapeFn = escapeFn || ' + escapeFn.toString() + ';' + '\n' + src;
+  if (opts.compileDebug) {
+    src = 'rethrow = rethrow || ' + rethrow.toString() + ';' + '\n' + src;
+  }
 }
 ```
 
@@ -404,9 +416,9 @@ if (opts.client) {
 
 ```javascript
 function Template(text, opts) {  // [!code --:2]
-	opts = opts || utils.createNullProtoObjWherePossible(); 
+	opts = opts || utils.createNullProtoObjWherePossible();
 function Template(text, optsParam) { // [!code ++:2]
-	var opts = utils.hasOwnOnlyObject(optsParam); 
+	var opts = utils.hasOwnOnlyObject(optsParam);
 	var options = utils.createNullProtoObjWherePossible();
 	this.templateText = text;
 	/** @type {string | null} */
@@ -462,55 +474,55 @@ function Template(text, optsParam) { // [!code ++:2]
 
 ```javascript title="lib/ejs.js (v3.1.10)" showLineNumbers startLineNumber=441
 exports.renderFile = function () {
-	var args = Array.prototype.slice.call(arguments);
-	var filename = args.shift();
-	var cb;
-	var opts = { filename: filename };
-	var data;
-	var viewOpts;
+  var args = Array.prototype.slice.call(arguments);
+  var filename = args.shift();
+  var cb;
+  var opts = { filename: filename };
+  var data;
+  var viewOpts;
 
-	// Do we have a callback?
-	if (typeof arguments[arguments.length - 1] == 'function') {
-		cb = args.pop();
-	}
-	// Do we have data/opts?
-	if (args.length) {
-		// Should always have data obj
-		data = args.shift();
-		// Normal passed opts (data obj + opts obj)
-		if (args.length) {
-			// Use shallowCopy so we don't pollute passed in opts obj with new vals
-			utils.shallowCopy(opts, args.pop());
-		}
-		// Special casing for Express (settings + opts-in-data)
-		else {
-			// Express 3 and 4
-			if (data.settings) {
-				// Pull a few things from known locations
-				if (data.settings.views) {
-					opts.views = data.settings.views;
-				}
-				if (data.settings['view cache']) {
-					opts.cache = true;
-				}
-				// Undocumented after Express 2, but still usable, esp. for
-				// items that are unsafe to be passed along with data, like `root`
-				viewOpts = data.settings['view options'];
-				if (viewOpts) {
-					utils.shallowCopy(opts, viewOpts);
-				}
-			}
-			// Express 2 and lower, values set in app.locals, or people who just
-			// want to pass options in their data. NOTE: These values will override
-			// anything previously set in settings  or settings['view options']
-			utils.shallowCopyFromList(opts, data, _OPTS_PASSABLE_WITH_DATA_EXPRESS);
-		}
-		opts.filename = filename;
-	} else {
-		data = utils.createNullProtoObjWherePossible();
-	}
+  // Do we have a callback?
+  if (typeof arguments[arguments.length - 1] == 'function') {
+    cb = args.pop();
+  }
+  // Do we have data/opts?
+  if (args.length) {
+    // Should always have data obj
+    data = args.shift();
+    // Normal passed opts (data obj + opts obj)
+    if (args.length) {
+      // Use shallowCopy so we don't pollute passed in opts obj with new vals
+      utils.shallowCopy(opts, args.pop());
+    }
+    // Special casing for Express (settings + opts-in-data)
+    else {
+      // Express 3 and 4
+      if (data.settings) {
+        // Pull a few things from known locations
+        if (data.settings.views) {
+          opts.views = data.settings.views;
+        }
+        if (data.settings['view cache']) {
+          opts.cache = true;
+        }
+        // Undocumented after Express 2, but still usable, esp. for
+        // items that are unsafe to be passed along with data, like `root`
+        viewOpts = data.settings['view options'];
+        if (viewOpts) {
+          utils.shallowCopy(opts, viewOpts);
+        }
+      }
+      // Express 2 and lower, values set in app.locals, or people who just
+      // want to pass options in their data. NOTE: These values will override
+      // anything previously set in settings  or settings['view options']
+      utils.shallowCopyFromList(opts, data, _OPTS_PASSABLE_WITH_DATA_EXPRESS);
+    }
+    opts.filename = filename;
+  } else {
+    data = utils.createNullProtoObjWherePossible();
+  }
 
-	return tryHandleCache(opts, data, cb);
+  return tryHandleCache(opts, data, cb);
 };
 ```
 

