@@ -417,12 +417,11 @@ app.post('/', async function (req, res) {
     res.redirect(process.env.QUEUE_SERVER_URL);
     return;
   }
-  // [!code highlight:4]
+  // [!code highlight:10]
   if (uuid.length != 36) {
     res.redirect(process.env.QUEUE_SERVER_URL);
     return;
   }
-  // [!code highlight:6]
   for (const c of uuid) {
     if (!/[-a-f0-9]/.test(c)) {
       res.redirect(process.env.QUEUE_SERVER_URL);
@@ -439,7 +438,7 @@ app.post('/', async function (req, res) {
         }),
       })
     ).text();
-    // [!code highlight:4]
+    // [!code highlight:3]
     if (result === 'true') {
       console.log('Gave flag to UUID ' + uuid);
       res.send(process.env.FLAG);

@@ -13,6 +13,12 @@ module.exports = {
         parser: 'astro',
       },
     },
+    {
+      files: '*.svelte',
+      options: {
+        parser: 'svelte',
+      },
+    },
   ],
   singleQuote: true,
   semi: true,
