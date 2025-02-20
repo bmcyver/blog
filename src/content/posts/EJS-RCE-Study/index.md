@@ -105,7 +105,9 @@ await r.post('/a', {
 });
 ```
 
-> [!NOTE] > `Prototype Pollution`이 발생한다는 것 자체가 큰 취약점이다. `Prototype Pollution`이 발생한다면 사용하고 있는 라이브러리에 따라서, 큰 문제가 발생할 수 있다. _(Ex. `jsonwebtoken`을 사용 중이라면 `token`이 잘못 생성되게도 할 수 있다.)_
+:::note
+`Prototype Pollution`이 발생한다는 것 자체가 큰 취약점이다. `Prototype Pollution`이 발생한다면 사용하고 있는 라이브러리에 따라서, 큰 문제가 발생할 수 있다. _(Ex. `jsonwebtoken`을 사용 중이라면 `token`이 잘못 생성되게도 할 수 있다.)_
+:::
 
 ### EJS RCE In CTFs
 
@@ -353,22 +355,22 @@ return returnedFn;
 
 ```javascript
 if (opts.outputFunctionName) {
+  // [!code ++:3]
   if (!_JS_IDENTIFIER.test(opts.outputFunctionName)) {
-    // [!code ++:3]
     throw new Error('outputFunctionName is not a valid JS identifier.');
   }
   prepended += '  var ' + opts.outputFunctionName + ' = __append;' + '\n';
 }
+// [!code ++:3]
 if (opts.localsName && !_JS_IDENTIFIER.test(opts.localsName)) {
-  // [!code ++:3]
   throw new Error('localsName is not a valid JS identifier.');
 }
 if (opts.destructuredLocals && opts.destructuredLocals.length) {
   var destructuring = '  var __locals = (' + opts.localsName + ' || {}),\n';
   for (var i = 0; i < opts.destructuredLocals.length; i++) {
     var name = opts.destructuredLocals[i];
+    // [!code ++:3]
     if (!_JS_IDENTIFIER.test(name)) {
-      // [!code ++:3]
       throw new Error(
         'destructuredLocals[' + i + '] is not a valid JS identifier.',
       );

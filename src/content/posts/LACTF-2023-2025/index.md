@@ -391,6 +391,8 @@ Stop! You're under arrest for making suggestive 3 letter acronyms!
 
 ### Solution
 
+<!-- TODO: add solution for california-state-police -->
+
 ## web/queue up! (34 solves, 483 points)
 
 ### Description
@@ -454,7 +456,8 @@ app.post('/', async function (req, res) {
 근데 좀 이상한 부분이 있다.
 
 1. `uuid`의 `type`을 확인하는 부분이 없다.
-2. `uuid`을 정규식으로 확인하는 것이 아닌 문자 하나하나 확인한다.
+2. `uuid`을 정규식으로 확인하는 것이 아닌 **문자 하나하나** 확인한다.
+3. `uuid`가 배열일 경우 해당 문자열에 `-a-f0-9` 범위에 하나라도 포함되어 있으면 `true`를 반환한다.
 
 위와 같은 이유로 `uuid`를 `string`이 아닌 배열이나 객체로 넘겨줄 수 있다.
 
@@ -502,6 +505,23 @@ app.get('/api/:uuid/bypass', async (req, res) => {
     res.send('invalid uuid');
   }
 });
+```
+
+1. `/api/:uuid/status`: `served`가 `true`이면 `true`를 반환한다.
+2. `/api/:uuid/bypass`: `served`를 `true`로 바꾼다.
+
+그렇다면 어떻게 `/api/:uuid/bypass`에 요청할 수 있을까?
+
+`uuid`를 문자열이 아닌 **배열**로 넘겨주면 된다.
+
+예를 들어 `uuid`가 `['<uuid>/bypass#', '0', ...., '0']`와 같은 배열이라면 `http://<url>/api/<uuid>/bypass#,0,.....,0/status` 이런 형식의 URL로 바뀌게 된다.
+
+즉, 위와 같은 형식으로 보내면 `served`가 `true`로 바뀌게 되고 `flag`를 얻을 수 있다.
+
+<!-- TODO: Add exploit code -->
+
+```typescript
+
 ```
 
 ## web/hptla (40 solves, 487 points)
