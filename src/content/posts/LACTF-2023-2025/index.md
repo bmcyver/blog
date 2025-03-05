@@ -166,7 +166,7 @@ UUIDs are the best! I love them (if you couldn't tell)!
 
 이제 코드를 한번 분석해보자.
 
-```javascript
+```javascript {34-37}
 function randomUUID() {
   return uuid.v1({
     node: [0x67, 0x69, 0x6e, 0x6b, 0x6f, 0x69],
@@ -177,7 +177,7 @@ function randomUUID() {
 function getUsers() {
   let output = '<strong>Admin users:</strong>\n';
   adminuuids.forEach((adminuuid) => {
-    const hash = crypto // [!code highlight:4]
+    const hash = crypto
       .createHash('md5')
       .update('admin' + adminuuid)
       .digest('hex');
@@ -200,7 +200,6 @@ app.get('/', (req, res) => {
     if (useruuids.length > 50) {
       useruuids.shift();
     }
-    // [!code highlight:4]
   } else if (isAdmin(id)) {
     res.send(process.env.FLAG);
     return;
@@ -302,8 +301,7 @@ If you wanna catch up on ALL the campus news, check out my new blog. It even has
 
 플래그의 위치가 들어나 있지는 않지만, 아래 코드와 같이 `serialize_image`의 결과 값이 `format`을 통해 넘겨지면서 `sql injection`이 발생한다.
 
-```python
-# views.py
+```python title="views.py" {12, 15-16}
 @app.route('/image-search', methods=['GET', 'POST'])
 def image_search():
     if 'image-query' not in request.files or request.method == 'GET':
@@ -315,10 +313,10 @@ def image_search():
         flash("image is too large (50kb max)");
         return redirect(url_for('home'))
 
-    spic = serialize_image(incoming_file.read()) # [!code highlight]
+    spic = serialize_image(incoming_file.read())
 
     try:
-        res = db.session.connection().execute( # [!code highlight:2]
+        res = db.session.connection().execute(
             text("select parent as PID from images where b85_image = '{}' AND ((select active from posts where id=PID) = TRUE)".format(spic)))
     except Exception:
         return ("SQL error encountered", 500)
@@ -330,8 +328,9 @@ def image_search():
             results.append(post)
 
     return render_template('image-search.html', results=results)
+```
 
-# utils.py
+```python title="utils.py"
 def serialize_image(pp):
     b85 = base64.a85encode(pp)
     b85_string = b85.decode('UTF-8', 'ignore')
@@ -410,7 +409,7 @@ Disclaimer: Average wait time is 61 days.
 
 먼저, `flagserver.js`를 살펴보면 `uuid`를 받아서 `uuid`의 형식을 확인하고, `http://queue:${process.env.QUEUE_SERVER_PORT}/api/${uuid}/status`로 요청을 보내서 `true`가 반환되면 `flag`를 준다.
 
-```javascript
+```javascript {9-18, 29-31}
 app.post('/', async function (req, res) {
   let uuid;
   try {
@@ -419,7 +418,6 @@ app.post('/', async function (req, res) {
     res.redirect(process.env.QUEUE_SERVER_URL);
     return;
   }
-  // [!code highlight:10]
   if (uuid.length != 36) {
     res.redirect(process.env.QUEUE_SERVER_URL);
     return;
@@ -440,7 +438,6 @@ app.post('/', async function (req, res) {
         }),
       })
     ).text();
-    // [!code highlight:3]
     if (result === 'true') {
       console.log('Gave flag to UUID ' + uuid);
       res.send(process.env.FLAG);
@@ -463,7 +460,7 @@ app.post('/', async function (req, res) {
 
 다음으로 `queue.js`를 분석해보자.
 
-```javascript
+```javascript {21, 34}
 const adminOnly = function (req, res, next) {
   const authHeader = req.get('Authorization');
   if (authHeader === `Bearer ${process.env.ADMIN_SECRET}`) {
@@ -485,7 +482,6 @@ app.get('/api/heartbeat', async (req, res) => {
 app.get('/api/:uuid/status', async (req, res) => {
   try {
     const user = await Queue.findByPk(req.params.uuid);
-    // [!code highlight]
     res.send(user.served);
   } catch {
     res.send('false');
@@ -498,7 +494,6 @@ app.get('/api/:uuid/bypass', async (req, res) => {
     if (user === undefined) {
       res.send('uuid not found');
     } else {
-      // [!code highlight]
       await user.update({ served: true });
       res.send('bypassed');
     }

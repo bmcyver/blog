@@ -24,7 +24,7 @@ draft: false
 
 `Spring Boot`에서는 인증(로그인, 회원가입 등)이 성공하면, 하나의 핸들러를 거치게 된다.
 
-```kotlin
+```kotlin {26-28}
 class ShieldCloud : AuthenticationSuccessHandler {
 
     override fun onAuthenticationSuccess(
@@ -50,7 +50,7 @@ class ShieldCloud : AuthenticationSuccessHandler {
 
             } catch (e: JsonParseException) {
                 authorities.add(SimpleGrantedAuthority("ROLE_USER"))
-            } catch (e: Exception) { // [!code highlight:3]
+            } catch (e: Exception) {
                 authorities.add(SimpleGrantedAuthority("ROLE_ADMIN"))
             }
         } else {
@@ -74,7 +74,7 @@ class ShieldCloud : AuthenticationSuccessHandler {
 
 그러나, `ROLE_ADMIN`을 받기만 해서는 `flag`를 얻기 위한 어떠한 작업도 수행할 수 없다. 아래의 코드를 보면, `flag`를 얻을 수 있는 통로인 `/api/v6/shieldosint/search`에서 `session`이 없다면 `Session null`을 반환하기 때문이다.
 
-```kotlin
+```kotlin {29}
 @RequestMapping("/api/v6/shieldosint")
 @Controller
 class ApiController(private val userService: UserService) {
@@ -103,7 +103,7 @@ class ApiController(private val userService: UserService) {
                 val query = querycheck
 
                 if (query.isNotEmpty()) {
-                    val customQueryResult = reflectionController.reflectMethod(methodName, query, magiccheck) // [!code highlight]
+                    val customQueryResult = reflectionController.reflectMethod(methodName, query, magiccheck)
                     return "Query Result: $customQueryResult"
                 } else {
                     return "Query Result: $defaultQueryResult"
@@ -199,9 +199,9 @@ class ReflectionController {
 
 즉, `/api/v6/shieldosint/search` -> `ReflectionController` -> `DataProvider` 순으로 호출되는데, `ReflectionController`에서 `DataProvider`의 메소드를 호출할 때, `mp`와 `query`에 따라 전달되는 인자가 달라진다. `magicParam`는 `type`을 나타내고, `query`는 `magicParam`에 따른 데이터를 나타낸다. 즉, `magicParam`을 `string`으로 지정하여, `query`의 3번째 단어에 `SQL Injection`을 할 쿼리를 넣으면 된다.
 
-```kotlin
+```kotlin {2-10}
 fun filterQuery(query: String): String {
-        val hasWhitespace = Regex("\\s") // [!code highlight:9]
+        val hasWhitespace = Regex("\\s")
         val containsRuntime = Regex("(?i)runtime")
         val containsJava = Regex("(?i)java")
         val special_check1 = Regex("/")
@@ -306,7 +306,7 @@ await instance
 
 `docker-compose.yml`을 보면, `flag`가 `environment`에 저장되어 있는 것을 확인할 수 있다. 또 `app.py`를 보면 누가 봐도 의심스러운 `safe_eval` 함수가 존재한다. 또한 이는 `/verify`에서 특정 조건을 만족하면 호출된다. 그렇다면 `safe_eval` 함수를 통해 `os.environ`을 호출하여 `flag`를 획득하면 된다.
 
-```python
+```python {30-33, 57}
 @app.route('/verify', methods=['GET', 'TRACE'])
 def verify_file():
     flag = 0
@@ -336,7 +336,7 @@ def verify_file():
                         if b"CODEGATE2024\x00" not in exif_data:
                             return  jsonify({'error': 'Unsupported file parse'}), 400
 
-                        json_start_marker = b"CODEGATE2024\x00" # [!code highlight:4]
+                        json_start_marker = b"CODEGATE2024\x00"
                         json_start_index = exif_data.find(json_start_marker) + len(json_start_marker)
                         json_data_bytes = exif_data[json_start_index:]
                         json_data_str = json_data_bytes.decode('ascii')
@@ -363,7 +363,7 @@ def verify_file():
                                     return jsonify({'success': 'Verified'})
                                 if ")" in value:
                                     return jsonify({'success': 'Verified'})
-                                description_contents = safe_eval(value) # [!code highlight]
+                                description_contents = safe_eval(value)
                                 items_dict = dict(description_contents)
                                 return jsonify({'debug': f'{items_dict}' })
                 except Exception as e:

@@ -68,10 +68,10 @@ for i in range(10):
     print i
 ```
 
-```ts
-let x: [string, number]; // [!code highlight]
-console.log('hewwo'); // [!code --]
-console.log('hello'); // [!code ++]
+```ts {1} del={2} ins={3}
+let x: [string, number];
+console.log('hewwo');
+console.log('hello');
 console.log('goodbye');
 ```
 

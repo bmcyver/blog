@@ -4,10 +4,8 @@ import tailwind from '@astrojs/tailwind';
 import swup from '@swup/astro';
 import Compress from 'astro-compress';
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
-import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 import expressiveCode from 'astro-expressive-code';
 import { expressiveCodeConfig } from './src/config.ts';
-import { pluginLanguageBadge } from './src/plugins/expressive-code-lang.ts';
 import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
@@ -23,6 +21,7 @@ import { GithubCardComponent } from './src/plugins/rehype-component-github-card.
 import { parseDirectiveNode } from './src/plugins/remark-directive-rehype.js';
 import { remarkExcerpt } from './src/plugins/remark-excerpt.js';
 import { remarkReadingTime } from './src/plugins/remark-reading-time.mjs';
+import { pluginLanguageBadge } from './src/plugins/expressive-code-lang.js';
 
 // https://astro.build/config
 export default defineConfig({
@@ -66,13 +65,8 @@ export default defineConfig({
     }),
     expressiveCode({
       themes: expressiveCodeConfig.themes,
-      plugins: [
-        pluginCollapsibleSections(),
-        pluginLineNumbers(),
-        pluginLanguageBadge(),
-      ],
+      plugins: [pluginCollapsibleSections(), pluginLanguageBadge()],
       defaultProps: {
-        wrap: true,
         showLineNumbers: false,
       },
     }),
