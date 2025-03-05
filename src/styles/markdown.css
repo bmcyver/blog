@@ -39,52 +39,6 @@
         }
     }
 
-    span.highlighted {
-        margin: 0 -1.25rem;
-        padding: 0 1.25rem;
-        @apply inline-block bg-[var(--codeblock-highlight-bg)];
-        width: calc(100% + 2.5rem);
-        line-height: 1.5rem;
-    }
-
-    span.diff {
-        margin: 0 -1.25rem;
-        padding: 0 1.25rem;
-        @apply inline-block;
-        width: calc(100% + 2.5rem);
-        line-height: 1.5rem;
-        &.add {
-            @apply bg-[var(--codeblock-diff-add)];
-            &::before {
-                @apply text-[var(--codeblock-diff-add-text)];
-                content: '+';
-                margin-right: 0.5rem;
-            }
-        }
-        &.remove {
-            @apply bg-[var(--codeblock-diff-remove)];
-            &::before {
-                @apply text-[var(--codeblock-diff-remove-text)];
-                content: '-';
-                margin-right: 0.5rem;
-            }
-        }
-    }
-
-    pre {
-        @apply bg-[var(--codeblock-bg)] !important;
-        @apply rounded-xl px-5;
-        padding: 1.2rem;
-
-        code {
-            @apply bg-transparent text-inherit text-sm p-0;
-
-            ::selection {
-                @apply bg-[var(--codeblock-selection)];
-            }
-        }
-    }
-
     ul, ol {
         li::marker {
             @apply text-[var(--primary)];

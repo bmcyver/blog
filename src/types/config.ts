@@ -86,3 +86,7 @@ export type BlogPostData = {
   nextTitle?: string;
   nextId?: string;
 };
+
+export type ExpressiveCodeConfig = {
+  themes: string[];
+};

