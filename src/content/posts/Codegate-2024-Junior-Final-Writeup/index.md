@@ -435,7 +435,7 @@ with open('img1.jpeg', 'rb') as file_a, open('img2.jpeg', 'rb') as file_b:
 먼저 `secret.js`를 봐보자.
 
 <!-- prettier-ignore-start -->
-```javascript
+```js
 var g = require('dyson-generators');
 var realFlag = require('fs').readFileSync('/flag.txt').toString();
 
@@ -486,7 +486,7 @@ module.exports = {
 
 일단 다른 정보들도 얻어보자. 먼저, `Dockerfile`을 보면 [dyson-demo](https://github.com/webpro/dyson-demo)를 가져오는 것을 알 수 있다. 이는 `dyson`을 활용한 앱임을 알 수 있으며, `dyson`은 `multi request`를 지원하는 라이브러리이다.
 
-```javascript
+```js
 const http = require('http');
 
 const isMultiRequest = (path, options) => {
@@ -536,7 +536,7 @@ module.exports = {
 `secret.js`를 좀 자세히 보면, `;(semicolon)`이 안 찍혀 있는 것을 알 수 있다.
 
 <!-- prettier-ignore-start -->
-```javascript
+```js
 const SuperSecretPassword = '[REDACTED]'
 [guessPassword, guessFlag] =
 	req.query.guess !== undefined ? atob(req.query.guess).split('|') : ['idk', 'idk'])
@@ -545,7 +545,7 @@ const SuperSecretPassword = '[REDACTED]'
 
 와
 
-```javascript
+```js
 const SuperSecretPassword =
   /*"[REDACTED]" [guessPassword, guessFlag] =*/ req.query.guess !== undefined
     ? atob(req.query.guess).split('|')

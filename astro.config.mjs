@@ -22,6 +22,7 @@ import { parseDirectiveNode } from './src/plugins/remark-directive-rehype.js';
 import { remarkExcerpt } from './src/plugins/remark-excerpt.js';
 import { remarkReadingTime } from './src/plugins/remark-reading-time.mjs';
 import { pluginLanguageBadge } from './src/plugins/expressive-code-lang.js';
+import { pluginFileIcons } from '@xt0rted/expressive-code-file-icons';
 
 // https://astro.build/config
 export default defineConfig({
@@ -59,13 +60,17 @@ export default defineConfig({
     Compress({
       CSS: false,
       Image: false,
-      Action: {
-        Passed: async () => true, // https://github.com/PlayForm/Compress/issues/376
-      },
     }),
     expressiveCode({
       themes: expressiveCodeConfig.themes,
-      plugins: [pluginCollapsibleSections(), pluginLanguageBadge()],
+      plugins: [
+        pluginCollapsibleSections(),
+        pluginLanguageBadge(),
+        pluginFileIcons({
+          iconClass: 'text-4 w-5 inline mr-1 mb-1',
+          titleClass: '',
+        }),
+      ],
       defaultProps: {
         showLineNumbers: false,
       },

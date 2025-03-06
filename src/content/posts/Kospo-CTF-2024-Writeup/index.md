@@ -98,7 +98,7 @@ draft: false
 
 `getMe`를 통해 `id`, `pw`를 반환하며, `getBook`을 통해 `flag`를 얻을 수 있다. 그러나 `getBook`의 경우에는 `is_premium_user`가 `true`여야 `flag`를 반환한다. 따라서 `updateUser`를 통해 `is_premium_user`를 `true`로 변경한 후, `getBook`을 통해 `flag`를 얻을 수 있다.
 
-```javascript
+```js
 const book_content_query = `
 mutation {
   updateUser(id: "??", password: "??", is_premium_user: true) {
@@ -257,7 +257,7 @@ console.log(res.data.split('<h1>')[1].split('</h1>')[0].trim());
 내가 좋아하는 `nodejs`로 작성된 서버이다!!
 일단, `flag`는 봇의 `cookie`에 존재한다. 먼저, `flag`을 얻기 위한 `board`가 어떻게 작동하는 알아보자.
 
-```javascript
+```js
 router.post('/new', (req, res, next) => {
   let page_uuid = uuid.v4();
   db.query(
@@ -357,7 +357,7 @@ router.get('/view/:uuid', (req, res, next) => {
    `auth` 관련 코드를 보면, id와 pw의 타입 검증 없이 그대로 바인딩하고 있는 것을 알 수 있다.
    이는, `sql injection`이 가능해진다.
 
-```javascript
+```js
 passport.use(
   new Strategy(function (req, cb) {
     let username = req.body.username;

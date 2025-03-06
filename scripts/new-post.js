@@ -20,7 +20,7 @@ Usage: npm run new-post -- <filename>`);
   process.exit(1); // Terminate the script and return error code 1
 }
 
-let fileName = args[0];
+let fileName = `${args[0]}/index.md`;
 
 // Add .md extension if not present
 const fileExtensionRegex = /\.(md|mdx)$/i;
@@ -36,19 +36,38 @@ if (fs.existsSync(fullPath)) {
   process.exit(1);
 }
 
-const content = `---
+const isCTFWriteUp = args[1].toLowerCase() === 'ctf';
+
+let content = `---
 title: ${args[0]}
 published: ${getDate()}
 updated: ${getDate()}
-description: 
-image: 
+description: ${isCTFWriteUp ? 'A writeup for <CTF> (<Web>)' : ''}
 tags: 
-  - 
-category: 
+${
+  isCTFWriteUp
+    ? `  - Writeup
+  - CTF
+  - Web`
+    : ''
+}
+category: ${isCTFWriteUp ? 'CTF' : ''}
 draft: false
----
+---${
+  isCTFWriteUp
+    ? `
+
+## web/chall ( solves, points)
+
+:::tip[description]
+:::`
+    : ''
+}
 `;
 
+fs.mkdirSync(path.join(targetDir, args[0]), {
+  recursive: true,
+});
 fs.writeFileSync(path.join(targetDir, fileName), content);
 
 console.log(`Post ${fullPath} created`);
