@@ -15,6 +15,6 @@ draft: true
 ::github{repo="uclaacm/lactf-archive"}
 문제들은 여기서 확인할 수 있다.
 
-`admin bot`은 로컬 환경에서 사용할 수 있도록 `domain`을 수정하였다.
+`admin bot`은 로컬 환경에서 사용할 수 있도록 도메인을 수정하였다.
 
 <!--TODO ADD CHALLENGES -->

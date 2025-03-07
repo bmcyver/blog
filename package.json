@@ -20,8 +20,8 @@
     "@astrojs/sitemap": "^3.2.1",
     "@astrojs/svelte": "^7.0.5",
     "@astrojs/tailwind": "^6.0.0",
-    "@expressive-code/core": "^0.40.2",
     "@expressive-code/plugin-collapsible-sections": "^0.40.2",
+    "@expressive-code/plugin-line-numbers": "^0.40.2",
     "@fontsource-variable/jetbrains-mono": "^5.2.5",
     "@fontsource/roboto": "^5.2.5",
     "@iconify-json/fa6-brands": "^1.2.5",
@@ -56,13 +56,14 @@
     "sanitize-html": "^2.14.0",
     "sharp": "^0.33.5",
     "stylus": "^0.64.0",
-    "svelte": "^5.22.3",
+    "svelte": "^5.22.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.2",
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@astrojs/ts-plugin": "^1.10.4",
+    "@eslint/js": "^9.21.0",
     "@rollup/plugin-yaml": "^4.1.2",
     "@types/markdown-it": "^14.1.2",
     "@types/mdast": "^4.0.4",
@@ -72,9 +73,11 @@
     "postcss-import": "^16.1.0",
     "postcss-nesting": "^13.0.1",
     "prettier": "^3.5.3",
+    "globals": "^16.0.0",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-svelte": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.11"
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "typescript-eslint": "^8.26.0"
   },
   "packageManager": "pnpm@9.15.4"
 }

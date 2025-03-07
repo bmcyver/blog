@@ -139,13 +139,13 @@ const maxLevel = siteConfig.toc.depth;
         this.tocEntries[i].classList.remove(this.visibleClass);
         i--;
       }
-      let parentOffset = this.tocEl?.getBoundingClientRect().top || 0;
-      let scrollOffset = this.tocEl?.scrollTop || 0;
-      let top =
+      const parentOffset = this.tocEl?.getBoundingClientRect().top || 0;
+      const scrollOffset = this.tocEl?.scrollTop || 0;
+      const top =
         this.tocEntries[min].getBoundingClientRect().top -
         parentOffset +
         scrollOffset;
-      let bottom =
+      const bottom =
         this.tocEntries[max].getBoundingClientRect().bottom -
         parentOffset +
         scrollOffset;
@@ -199,8 +199,8 @@ const maxLevel = siteConfig.toc.depth;
       if (!this.sections.length) return;
 
       for (let i = 0; i < this.sections.length; i++) {
-        let offsetTop = this.sections[i].getBoundingClientRect().top;
-        let offsetBottom = this.sections[i].getBoundingClientRect().bottom;
+        const offsetTop = this.sections[i].getBoundingClientRect().top;
+        const offsetBottom = this.sections[i].getBoundingClientRect().bottom;
 
         if (
           this.isInRange(offsetTop, 0, window.innerHeight) ||

