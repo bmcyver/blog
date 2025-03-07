@@ -506,7 +506,7 @@ JavaScript에서는 자동적으로 형변환을 한다.
 만약에 이를 비교연산에 사용한다고 하면 다음과 같이 된다.
 
 ```js
-{ a: 'b' } == '[object Object]' // true
+console.log({ a: 'b' } == '[object Object]'); // true
 ```
 
 이는 `==` 연산자가 두 피연산자의 타입을 맞추기 위해 자동적으로 형변환을 하기 때문이다.<br>
