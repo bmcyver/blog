@@ -443,7 +443,7 @@ const generateNode = (data: Data, options: Options): Text => {
                     [],
                   ),
                   h('span', { class: 'link-card__domain-name' }, [
-                    NodeURL.domainToASCII(data.domainName),
+                    NodeURL.domainToUnicode(data.domainName),
                   ]),
                 ]),
                 data.date
