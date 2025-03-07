@@ -63,6 +63,11 @@ export const profileConfig: ProfileConfig = {
       icon: 'fa6-brands:github',
       url: 'https://github.com/bmcyver',
     },
+    {
+      name: 'Discord',
+      icon: 'fa6-brands:discord',
+      url: 'https://discord.com/users/967304143981117450',
+    },
   ],
 };
 

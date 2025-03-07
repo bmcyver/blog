@@ -24,6 +24,7 @@ import { parseDirectiveNode } from './src/plugins/remark-directive-rehype.js';
 import { remarkExcerpt } from './src/plugins/remark-excerpt.js';
 import { remarkReadingTime } from './src/plugins/remark-reading-time.mjs';
 import { pluginLanguageBadge } from './src/plugins/expressive-code-lang.js';
+import fuwariLinkCard from './src/plugins/fuwari-link-card.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -61,6 +62,9 @@ export default defineConfig({
     Compress({
       CSS: false,
       Image: false,
+    }),
+    fuwariLinkCard({
+      internalLink: { enabled: true },
     }),
     expressiveCode({
       themes: expressiveCodeConfig.themes,
