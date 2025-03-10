@@ -353,9 +353,10 @@ router.get('/view/:uuid', (req, res, next) => {
 
 1. `css injection`을 통한 `nonce leak` (csp를 보면 이게 인텐인 것 같기도 하다.)
 2. 계정 로그인 관련 취약점을 통한 `nonce leak`
-   난 2번 방법을 사용해 `nonce`를 얻었다.
-   `auth` 관련 코드를 보면, id와 pw의 타입 검증 없이 그대로 바인딩하고 있는 것을 알 수 있다.
-   이는, `sql injection`이 가능해진다.
+
+난 2번 방법을 사용해 `nonce`를 얻었다.
+`auth` 관련 코드를 보면, id와 pw의 타입 검증 없이 그대로 바인딩하고 있는 것을 알 수 있다.
+이로 인해서 `sql injection`이 가능해진다.
 
 ```js
 passport.use(
