@@ -4,8 +4,8 @@ published: 2000-01-01
 updated: 2000-01-01
 description: How code blocks look in Markdown using Expressive Code.
 tags:
-  - Guides
-category: Guides
+  - Guide
+category: Guide
 draft: true
 ---
 

@@ -4,10 +4,8 @@ published: 2025-02-15
 updated: 2025-02-15
 description: A writeup for LA CTF 2023 (Web)
 tags:
-  - Writeup
-  - CTF
   - Web
-category: CTF
+category: CTF Writeup
 draft: true
 ---
 

@@ -1,12 +1,11 @@
 ---
 title: Exploring EJS RCE
-description: A study on EJS RCE
+description: Research on EJS RCE
 published: 2024-10-18
 updated: 2024-10-18
 tags:
-  - Study
   - JavaScript
-category: Study
+category: Research
 draft: false
 ---
 

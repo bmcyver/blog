@@ -4,8 +4,8 @@ published: 2000-01-01
 updated: 2000-01-01
 description: A simple example of a Markdown blog post.
 tags:
-  - Guides
-category: Guides
+  - Guide
+category: Guide
 draft: true
 ---
 

@@ -4,8 +4,8 @@ published: 2000-01-01
 updated: 2000-01-01
 description: This post demonstrates how to include embedded video in a blog post.
 tags:
-  - Guides
-category: Guides
+  - Guide
+category: Guide
 draft: true
 ---
 

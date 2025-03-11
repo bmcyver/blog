@@ -4,8 +4,8 @@ published: 2000-01-01
 updated: 2000-01-01
 description: Guide to using the link card feature.
 tags:
-  - Guides
-category: Guides
+  - Guide
+category: Guide
 draft: true
 ---
 
@@ -28,7 +28,7 @@ https://astro.build/
 
 **Internal Links**
 
-[/posts/drafts/link-card](/posts/drafts/link-card/)
+[/posts/drafts/link-card/](/posts/drafts/link-card/)
 
 For more details, see the internalLink option section.
 
@@ -45,7 +45,7 @@ https://astro.build/
 
 [https://fuwari.vercel.app/](https://fuwari.vercel.app/)
 
-[/posts/drafts/link-card](/posts/drafts/link-card/)
+[/posts/drafts/link-card/](/posts/drafts/link-card/)
 
 https://はじめよう.みんな/
 

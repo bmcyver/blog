@@ -4,11 +4,9 @@ description: A writeup for Codegate 2024 Junior Final (Web)
 published: 2024-09-24
 updated: 2024-09-24
 tags:
-  - Writeup
-  - CTF
   - Web
   - Ai
-category: CTF
+category: CTF Writeup
 draft: false
 ---
 

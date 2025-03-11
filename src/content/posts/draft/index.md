@@ -2,11 +2,11 @@
 title: Simple Guides for Fuwari
 published: 2000-01-01
 updated: 2000-01-01
-description: How to use this blog template."
+description: How to use this blog template.
 image: ./cover.jpeg
 tags:
-  - Guides
-category: Guides
+  - Guide
+category: Guide
 draft: true
 ---
 

@@ -3,11 +3,9 @@ title: KOSPO CTF 2024 Writeup
 description: A writeup for KOSPO CTF 2024 (Web/Misc)
 published: 2024-10-08T15:34:20.075Z
 tags:
-  - Writeup
-  - CTF
   - Web
   - Misc
-category: CTF
+category: CTF Writeup
 draft: false
 ---
 

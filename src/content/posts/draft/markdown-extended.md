@@ -3,10 +3,9 @@ title: Markdown Extended Features
 published: 2000-01-01
 updated: 2000-01-01
 description: Read more about Markdown features in Fuwari
-image: ''
 tags:
-  - Guides
-category: Guides
+  - Guide
+category: Guide
 draft: true
 ---
 

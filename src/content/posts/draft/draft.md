@@ -3,8 +3,8 @@ title: Draft Example
 published: 2000-01-01
 updated: 2000-01-01
 tags:
-  - Guides
-category: Guides
+  - Guide
+category: Guide
 draft: true
 ---
 

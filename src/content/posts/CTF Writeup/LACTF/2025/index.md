@@ -1,17 +1,15 @@
 ---
-title: LA CTF 2024 Writeup
+title: LA CTF 2025 Writeup
 published: 2025-02-15
 updated: 2025-02-15
-description: A writeup for LA CTF 2024 (Web)
+description: A writeup for LA CTF 2025 (Web)
 tags:
-  - Writeup
-  - CTF
   - Web
-category: CTF
+category: CTF Writeup
 draft: true
 ---
 
-2024년도 **LA CTF**의 **Web** 문제들의 라이트업이다.
+2025년도 **LA CTF**의 **Web** 문제들의 라이트업이다.
 ::github{repo="uclaacm/lactf-archive"}
 문제들은 여기서 확인할 수 있다.
 
