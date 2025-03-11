@@ -1,7 +1,0 @@
-[
-    {
-      "key": "ctrl+shift+c",
-      "command": "workbench.action.tasks.runTask",
-      "args": "Simple Browser"
-    }
-  ]

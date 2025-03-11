@@ -2,8 +2,26 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build and Run",
+            "label": "Run Dev Server",
+            "type": "shell",
+            "command": "pnpm dev",
+            "isBackground": true,
+            "problemMatcher": [
+                "$tsc-watch"
+            ]
+        },
+        {
+            "label": "Open Browser",
+            "type": "shell",
             "command": "${input:openSimpleBrowser}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build and Run",
+            "dependsOn": [
+                "Run Dev Server",
+                "Open Browser"
+            ],
             "problemMatcher": []
         }
     ],
@@ -12,7 +30,7 @@
             "id": "openSimpleBrowser",
             "type": "command",
             "command": "simpleBrowser.show",
-            "args": ["http://localhost:4321"],
+            "args": ["http://localhost:4321"]
         }
     ]
 }

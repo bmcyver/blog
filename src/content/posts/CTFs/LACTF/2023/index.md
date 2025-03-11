@@ -387,7 +387,7 @@ I've put the flag on a web server, but due to high load, I've had to put a virtu
 Disclaimer: Average wait time is 61 days.
 :::
 
-대충 61일 기다리면 `flag`를 주겠다고 한다.
+사이트에 들어가니, 61일을 기다리면 `flag`를 주겠다고 한다.
 ![queue-up-1](queue-up-1.png)
 
 61일을 기다릴수는 없으니 한번 코드를 분석해보자.
