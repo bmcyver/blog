@@ -1,0 +1,67 @@
+---
+import BlogCard from '@/components/BlogCard.astro'
+import Link from '@/components/Link.astro'
+import PageHead from '@/components/PageHead.astro'
+import { buttonVariants } from '@/components/ui/button'
+import { SITE } from '@/consts'
+import Layout from '@/layouts/Layout.astro'
+import { getRecentPosts } from '@/lib/data-utils'
+
+const blog = await getRecentPosts(SITE.featuredPostCount)
+---
+
+<Layout class="max-w-3xl">
+  <PageHead slot="head" title="Home" />
+  <section>
+    <div class="rounded-lg border">
+      <div class="flex flex-col space-y-1.5 p-6">
+        <h3 class="text-3xl leading-none font-medium">Hey! I'm bmcyver</h3>
+      </div>
+      <div class="p-6 pt-0">
+        <p class="text-muted-foreground mb-2 text-sm">
+          I'm currently studying <strong>web security</strong> and <strong
+            >binary exploitation</strong
+          >. I participate in CTFs as a member of
+          <strong
+            ><Link
+              href="https://deadsec.team"
+              class="text-foreground"
+              external
+              underline>DeadSec</Link
+            ></strong
+          >.
+        </p>
+        <p class="text-muted-foreground text-sm">
+          I also enjoy playing <strong>Genshin Impact</strong> in my free time. Read
+          more
+          <Link href="/about" class="text-foreground" underline
+            >on the About page</Link
+          >.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="flex flex-col gap-y-4">
+    <h2 class="text-2xl font-medium">Latest posts</h2>
+    <ul class="flex flex-col gap-y-4">
+      {
+        blog.map((post) => (
+          <li>
+            <BlogCard entry={post} />
+          </li>
+        ))
+      }
+    </ul>
+    <div class="flex justify-center">
+      <Link
+        href="/blog"
+        class={buttonVariants({ variant: 'ghost' }) + ' group'}
+      >
+        See all posts <span
+          class="ml-1.5 transition-transform group-hover:translate-x-1"
+          >&rarr;</span
+        >
+      </Link>
+    </div>
+  </section>
+</Layout>

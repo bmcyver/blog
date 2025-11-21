@@ -1,0 +1,77 @@
+---
+import Breadcrumbs from '@/components/Breadcrumbs.astro'
+import PageHead from '@/components/PageHead.astro'
+import { Awards, CVEs } from '@/consts'
+import Layout from '@/layouts/Layout.astro'
+
+// import Link from '@/components/Link.astro'
+// import ProjectCard from '@/components/ProjectCard.astro'
+// import { getAllProjects } from '@/lib/data-utils'
+
+// const projects = await getAllProjects()
+---
+
+<Layout class="max-w-3xl">
+  <PageHead slot="head" title="About" />
+  <Breadcrumbs items={[{ label: 'About', icon: 'lucide:info' }]} />
+
+  <section>
+    <div class="min-w-full">
+      <div class="prose mb-8">
+        <p>
+          Hello! I'm bmcyver. I'm currently studying <strong
+            >web security</strong
+          > and
+          <strong>binary exploitation</strong>. Also, I'm participating in CTFs
+          as a member of the
+          <strong
+            ><a href="https://deadsec.team" class="hover:underline">DeadSec</a
+            ></strong
+          >
+        </p>
+        <p>
+          I also enjoy playing <strong>Genshin Impact</strong> in my free time.
+        </p>
+
+        <h3>Awards</h3>
+        <div class="not-prose overflow-x-auto">
+          <table class="w-full text-sm">
+            <tbody>
+              {
+                Awards.map((award) => (
+                  <tr>
+                    <td class="px-3 py-0.5">{award.year}</td>
+                    <td class="px-3 py-0.5">{award.event}</td>
+                    <td class="px-3 py-0.5">{award.team}</td>
+                    <td class="px-3 py-0.5 font-medium">{award.place}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <h3>CVEs</h3>
+        <ul>
+          {
+            CVEs.map((cve) => (
+              <li>
+                <a
+                  href={`https://nvd.nist.gov/vuln/detail/${cve.id}`}
+                  class="no-underline hover:underline"
+                >
+                  {cve.id}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <!-- <h2 class="mb-4 text-2xl font-medium">Example Projects Listing</h2>
+      <div class="flex flex-col gap-4">
+        {projects.map((project) => <ProjectCard project={project} />)}
+      </div> -->
+      </div>
+    </div>
+  </section>
+</Layout>
