@@ -7,6 +7,7 @@ export type Site = {
   postsPerPage: number
   featuredPostCount: number
   githubUserName: string
+  githubLicenseLink: string
 }
 
 export type SocialLink = {
