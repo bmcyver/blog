@@ -9,6 +9,7 @@ export const SITE: Site = {
   postsPerPage: 5,
   featuredPostCount: 3,
   githubUserName: 'bmcyver',
+  githubLicenseLink: 'https://github.com/bmcyver/blog?tab=readme-ov-file#licenses'
 }
 
 export const NAV_LINKS: SocialLink[] = [
