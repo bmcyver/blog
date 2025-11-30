@@ -64,13 +64,7 @@ export const Awards: Award[] = [
     place: '1st',
     team: '._.',
     event: 'YISF',
-  },
-  {
-    year: 2024,
-    place: '3rd',
-    team: '상은 제비뽑기로 정하시는건',
-    event: 'WaRP CTF',
-  },
+  }
 ]
 
 export const CVEs: { id: string }[] = [{ id: 'CVE-2025-61385' }]
