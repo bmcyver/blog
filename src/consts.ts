@@ -9,7 +9,8 @@ export const SITE: Site = {
   postsPerPage: 5,
   featuredPostCount: 3,
   githubUserName: 'bmcyver',
-  githubLicenseLink: 'https://github.com/bmcyver/blog?tab=readme-ov-file#licenses'
+  githubLicenseLink:
+    'https://github.com/bmcyver/blog?tab=readme-ov-file#licenses',
 }
 
 export const NAV_LINKS: SocialLink[] = [
@@ -64,7 +65,7 @@ export const Awards: Award[] = [
     place: '1st',
     team: '._.',
     event: 'YISF',
-  }
+  },
 ]
 
 export const CVEs: { id: string }[] = [{ id: 'CVE-2025-61385' }]
