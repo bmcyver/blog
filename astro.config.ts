@@ -19,7 +19,7 @@ import { pluginFileIcons } from '@xt0rted/expressive-code-file-icons'
 
 import tailwindcss from '@tailwindcss/vite'
 
-import cloudflare from '@astrojs/cloudflare';
+import cloudflare from '@astrojs/cloudflare'
 
 export default defineConfig({
   server: {
@@ -110,7 +110,5 @@ export default defineConfig({
     remarkPlugins: [remarkMath, remarkEmoji],
   },
 
-  adapter: cloudflare(
-    {imageService: 'compile'}
-  ),
+  adapter: cloudflare({ imageService: 'compile' }),
 })
