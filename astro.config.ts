@@ -19,6 +19,8 @@ import { pluginFileIcons } from '@xt0rted/expressive-code-file-icons'
 
 import tailwindcss from '@tailwindcss/vite'
 
+import cloudflare from '@astrojs/cloudflare';
+
 export default defineConfig({
   server: {
     host: '0.0.0.0',
@@ -74,12 +76,15 @@ export default defineConfig({
     sitemap(),
     icon(),
   ],
+
   vite: {
     plugins: [tailwindcss()],
   },
+
   devToolbar: {
     enabled: false,
   },
+
   markdown: {
     syntaxHighlight: false,
     rehypePlugins: [
@@ -104,4 +109,8 @@ export default defineConfig({
     ],
     remarkPlugins: [remarkMath, remarkEmoji],
   },
+
+  adapter: cloudflare(
+    {imageService: 'compile'}
+  ),
 })
