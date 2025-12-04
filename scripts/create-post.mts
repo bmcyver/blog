@@ -1,0 +1,30 @@
+import { writeFile } from 'fs/promises'
+import { mkdir } from 'fs/promises'
+import { dirname } from 'path'
+
+const template = `---
+title: 
+description: 
+date: ${new Date().toISOString()}
+tags:
+    - CTF
+    - Writeup
+    - Web
+authors:
+    - bmcyver
+draft: false
+---
+
+import Callout from "@/components/Callout.astro"
+
+# Web/<Challenge-Name> (x Solves, x Points)
+`
+
+const filename = `src/content/blog/writeup/placeholder/index.mdx`
+const directory = dirname(filename)
+
+// Ensure the directory exists
+await mkdir(directory, { recursive: true })
+
+await writeFile(filename, template)
+console.log(`Created new post at ${filename}`)
