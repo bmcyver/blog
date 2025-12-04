@@ -9,11 +9,12 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "prettier": "prettier --write **/*.{ts,tsx,css,astro} --ignore-path .gitignore",
+    "prettier": "prettier --write **/*.{mts,ts,tsx,css,astro} --ignore-path .gitignore",
+    "post": "node ./scripts/create-post.mts",
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.5",
+    "@astrojs/check": "^0.9.6",
     "@astrojs/markdown-remark": "^6.3.9",
     "@astrojs/mdx": "^4.3.12",
     "@astrojs/react": "^4.4.2",
@@ -27,7 +28,7 @@
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0",
     "@xt0rted/expressive-code-file-icons": "^1.0.0",
-    "astro": "^5.16.0",
+    "astro": "^5.16.4",
     "astro-expressive-code": "^0.40.2",
     "astro-icon": "^1.1.5",
     "class-variance-authority": "^0.7.1",
@@ -73,5 +74,5 @@
       }
     ]
   },
-  "packageManager": "pnpm@10.18.3+sha512.bbd16e6d7286fd7e01f6b3c0b3c932cda2965c06a908328f74663f10a9aea51f1129eea615134bf992831b009eabe167ecb7008b597f40ff9bc75946aadfb08d"
+  "packageManager": "pnpm@10.24.0"
 }
