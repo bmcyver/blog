@@ -3,10 +3,16 @@
  * https://developers.cloudflare.com/workers/wrangler/configuration/
  */
 {
+  "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "blog",
+  "main": "dist/_worker.js/index.js",
   "compatibility_date": "2025-12-04",
+  "workers_dev": false,
   "assets": {
-	"directory": "./dist"
+    "binding": "ASSETS",
+    "directory": "./dist"
   },
-  "workers_dev": false
+  "observability": {
+    "enabled": true
+  }
 }
