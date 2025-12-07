@@ -1,4 +1,4 @@
-## bmcyver.dev
+## Blog
 
 A personal blog and portfolio site, built with [astro-erudite](https://github.com/jktrn/astro-erudite).
 
