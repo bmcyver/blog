@@ -7,6 +7,7 @@ import SubpostsHeader from '@/components/SubpostsHeader.astro'
 import SubpostsSidebar from '@/components/SubpostsSidebar.astro'
 import TOCHeader from '@/components/TOCHeader.astro'
 import TOCSidebar from '@/components/TOCSidebar.astro'
+import ViewCount from '@/components/ViewCount'
 import { badgeVariants } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import Layout from '@/layouts/Layout.astro'
@@ -182,6 +183,10 @@ const tocSections = await getTOCSections(currentPostId)
                   )
               }
             </span>
+          </div>
+
+          <div class="flex w-full items-center justify-center gap-2 py-2 sm:w-fit sm:px-2 sm:py-0 first:sm:pl-0 last:sm:pr-0">
+            <ViewCount id={post.id} client:load />
           </div>
 
           {
