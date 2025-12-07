@@ -7,6 +7,9 @@
   "name": "blog",
   "main": "dist/_worker.js/index.js",
   "compatibility_date": "2025-12-04",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "workers_dev": false,
   "assets": {
     "binding": "ASSETS",
@@ -14,5 +17,13 @@
   },
   "observability": {
     "enabled": true
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "astro-blog-views-count",
+      "database_id": "6d638534-12ba-4fd3-9f66-6df85bf7962c",
+      "migrations_dir": "drizzle/migrations"
+    }
+  ]
 }
