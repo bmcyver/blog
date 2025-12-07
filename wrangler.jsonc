@@ -12,7 +12,6 @@
   ],
   "workers_dev": false,
   "assets": {
-    "binding": "ASSETS",
     "directory": "./dist"
   },
   "observability": {
@@ -23,7 +22,7 @@
       "binding": "DB",
       "database_name": "astro-blog-views-count",
       "database_id": "6d638534-12ba-4fd3-9f66-6df85bf7962c",
-      "migrations_dir": "drizzle/migrations"
+      "migrations_dir": "drizzle"
     }
   ]
 }

@@ -11,7 +11,11 @@
     "astro": "astro",
     "prettier": "prettier --write **/*.{mts,ts,tsx,css,astro} --ignore-path .gitignore",
     "post": "node ./scripts/create-post.mts",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "typegen": "wrangler types",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "db:migrate:remote": "wrangler d1 migrations apply DB --remote"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
