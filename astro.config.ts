@@ -110,5 +110,8 @@ export default defineConfig({
     remarkPlugins: [remarkMath, remarkEmoji],
   },
 
-  adapter: cloudflare({ imageService: 'compile', platformProxy: {enabled: true} }),
+  adapter: cloudflare({
+    imageService: 'compile',
+    platformProxy: { enabled: true },
+  }),
 })

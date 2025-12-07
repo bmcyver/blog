@@ -185,7 +185,9 @@ const tocSections = await getTOCSections(currentPostId)
             </span>
           </div>
 
-          <div class="flex w-full items-center justify-center gap-2 py-2 sm:w-fit sm:px-2 sm:py-0 first:sm:pl-0 last:sm:pr-0">
+          <div
+            class="flex w-full items-center justify-center gap-2 py-2 sm:w-fit sm:px-2 sm:py-0 first:sm:pl-0 last:sm:pr-0"
+          >
             <ViewCount id={post.id} client:load />
           </div>
 
