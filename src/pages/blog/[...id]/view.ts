@@ -4,10 +4,12 @@ import { getCollection } from 'astro:content'
 import { eq, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
 
+// Disable prerendering because this is a dynamic API route
 export const prerender = false
 
 const ids = await getCollection('blog').then((post) => post.map((p) => p.id))
 
+// GET /blog/[...id]/view - Get view count for a blog post
 export async function GET(context: APIContext) {
   const runtime = context.locals.runtime
   const db = drizzle(runtime.env.DB)
@@ -40,6 +42,7 @@ export async function GET(context: APIContext) {
   })
 }
 
+// POST /blog/[...id]/view - Increment view count for a blog post
 export async function POST(context: APIContext) {
   const runtime = context.locals.runtime
   const db = drizzle(runtime.env.DB)
