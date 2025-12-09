@@ -1,4 +1,5 @@
 import { Skeleton } from '@/components/ui/skeleton'
+import { cn } from '@/lib/utils'
 import { storage } from '@/lib/storage'
 import { viewsTable } from '@/schema'
 import { useEffect, useState } from 'react'
@@ -12,9 +13,11 @@ const INC_TTL = 12 * 60 * 60 * 1000 // 12 hours
 export default function ViewCount({
   id,
   inc = false,
+  className,
 }: {
   id: string
   inc?: boolean
+  className?: string
 }) {
   const [count, setCount] = useState<number | null>(null)
 
@@ -64,14 +67,14 @@ export default function ViewCount({
 
   if (count === null) {
     return (
-      <div className="flex items-center gap-1">
+      <div className={cn('flex items-center gap-1', className)}>
         <Skeleton className="bg-primary/5 h-4.5 w-14" />
       </div>
     )
   }
 
   return (
-    <div className="flex items-center gap-1">
+    <div className={cn('flex items-center gap-1', className)}>
       <span>{count} views</span>
     </div>
   )
