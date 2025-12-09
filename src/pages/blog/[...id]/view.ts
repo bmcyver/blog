@@ -28,6 +28,7 @@ export async function GET(context: APIContext) {
     .where(eq(viewsTable.id, context.params.id))
     .get()
 
+  // If entry doesn't exist, create it with 0 views
   if (!res) {
     res = await db
       .insert(viewsTable)
@@ -55,6 +56,7 @@ export async function POST(context: APIContext) {
     return new Response('Invalid ID', { status: 400 })
   }
 
+  // Insert with count=1, or increment if it already exists
   const res = await db
     .insert(viewsTable)
     .values({ id: context.params.id, count: 1 })
