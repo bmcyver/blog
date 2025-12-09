@@ -1,3 +1,4 @@
+import { SITE } from '@/consts'
 import { getAllPostsAndSubposts } from '@/lib/data-utils'
 import { generateOGImage } from '@/lib/og-image'
 import { formatDate } from '@/lib/utils'
@@ -21,7 +22,7 @@ export async function GET(context: APIContext) {
   const ogImage = await generateOGImage(
     post.data.title,
     formatDate(post.data.date),
-    post.data.authors?.[0] || 'Unknown Author',
+    SITE.author
   )
 
   return new Response(ogImage, {

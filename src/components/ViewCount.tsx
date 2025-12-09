@@ -65,7 +65,7 @@ export default function ViewCount({
   if (count === null) {
     return (
       <div className="flex items-center gap-1">
-        <Skeleton className="bg-primary/5 h-5 w-16" />
+        <Skeleton className="bg-primary/5 h-4.5 w-14" />
       </div>
     )
   }

@@ -10,8 +10,6 @@ tags:
     - CTF
     - Writeup
     - Web
-authors:
-    - bmcyver
 draft: false
 ---
 

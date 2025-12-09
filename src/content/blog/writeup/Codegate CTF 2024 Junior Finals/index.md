@@ -7,8 +7,6 @@ tags:
   - Writeup
   - Web
   - Ai
-authors:
-  - bmcyver
 draft: false
 ---
 
