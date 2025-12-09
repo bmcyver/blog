@@ -109,7 +109,8 @@ export default defineConfig({
     ],
     remarkPlugins: [remarkMath, remarkEmoji],
   },
-
+  prefetch: false, // disable prefetch because it leads to 503 errors on Cloudflare Workers
+  output: 'static',
   adapter: cloudflare({
     imageService: 'compile',
     platformProxy: { enabled: true },
