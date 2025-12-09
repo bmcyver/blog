@@ -2,11 +2,13 @@ export type Site = {
   title: string
   description: string
   href: string
+  /**
+   * GitHub username of the site author
+   */
   author: string
   locale: string
   postsPerPage: number
   featuredPostCount: number
-  githubUserName: string
   githubLicenseLink: string
 }
 
