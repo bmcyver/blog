@@ -22,7 +22,7 @@ export async function GET(context: APIContext) {
   const ogImage = await generateOGImage(
     post.data.title,
     formatDate(post.data.date),
-    SITE.author
+    SITE.author,
   )
 
   return new Response(ogImage, {

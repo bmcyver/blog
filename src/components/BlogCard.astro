@@ -1,7 +1,7 @@
 ---
-import AvatarComponent from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import ViewCount from '@/components/ViewCount'
 import {
   getCombinedReadingTime,
   getSubpostCount,
@@ -12,7 +12,6 @@ import { Icon } from 'astro-icon/components'
 import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import Link from './Link.astro'
-import ViewCount from '@/components/ViewCount'
 
 interface Props {
   entry: CollectionEntry<'blog'>
@@ -52,9 +51,15 @@ const subpostCount = !isSubpost(entry.id) ? await getSubpostCount(entry.id) : 0
       <div
         class="text-muted-foreground mb-2 flex flex-wrap items-center gap-x-2 text-xs"
       >
-        <span>{formattedDate}</span>
+        <span class="flex items-center gap-1">
+          <Icon name="lucide:calendar" class="size-3" />
+          {formattedDate}
+        </span>
         <Separator orientation="vertical" className="h-4!" />
-        <span>{readTime}</span>
+        <span class="flex items-center gap-1">
+          <Icon name="lucide:clock" class="size-3" />
+          {readTime}
+        </span>
         {
           subpostCount > 0 && (
             <>
@@ -66,9 +71,11 @@ const subpostCount = !isSubpost(entry.id) ? await getSubpostCount(entry.id) : 0
             </>
           )
         }
-                <Separator orientation="vertical" className="h-4!" />
-
-        <ViewCount id={entry.id} client:load />
+        <Separator orientation="vertical" className="h-4!" />
+        <span class="flex items-center gap-1">
+          <Icon name="lucide:eye" class="size-3" />
+          <ViewCount id={entry.id} client:load />
+        </span>
       </div>
 
       {
