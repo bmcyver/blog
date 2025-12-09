@@ -1,6 +1,5 @@
 ---
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
-import Link from '@/components/Link.astro'
 import PostHead from '@/components/PostHead.astro'
 import PostNavigation from '@/components/PostNavigation.astro'
 import SubpostsHeader from '@/components/SubpostsHeader.astro'
@@ -131,17 +130,17 @@ const tocSections = await getTOCSections(currentPostId)
         <div
           class="text-muted-foreground divide-border mb-4 flex flex-col items-center justify-center divide-y text-xs sm:flex-row sm:flex-wrap sm:divide-x sm:divide-y-0 sm:text-sm"
         >
-          
-
           <div
-            class="flex w-full items-center justify-center gap-2 py-2 sm:w-fit sm:px-2 sm:py-0 first:sm:pl-0 last:sm:pr-0"
+            class="flex w-full items-center justify-center gap-1 py-2 sm:w-fit sm:px-2 sm:py-0 first:sm:pl-0 last:sm:pr-0"
           >
+            <Icon name="lucide:calendar" class="size-3" />
             <span>{formatDate(post.data.date)}</span>
           </div>
 
           <div
-            class="flex w-full items-center justify-center gap-2 py-2 sm:w-fit sm:px-2 sm:py-0 first:sm:pl-0 last:sm:pr-0"
+            class="flex w-full items-center justify-center gap-1 py-2 sm:w-fit sm:px-2 sm:py-0 first:sm:pl-0 last:sm:pr-0"
           >
+            <Icon name="lucide:clock" class="size-3" />
             <span>
               {postReadingTime}
               {
@@ -157,9 +156,15 @@ const tocSections = await getTOCSections(currentPostId)
           </div>
 
           <div
-            class="flex w-full items-center justify-center gap-2 py-2 sm:w-fit sm:px-2 sm:py-0 first:sm:pl-0 last:sm:pr-0"
+            class="flex w-full items-center justify-center gap-1 py-2 sm:w-fit sm:px-2 sm:py-0 first:sm:pl-0 last:sm:pr-0"
           >
-            <ViewCount id={post.id} inc={true} className="w-24" client:load />
+            <Icon name="lucide:eye" class="size-3" />
+            <ViewCount
+              id={post.id}
+              inc={true}
+              className="w-auto sm:w-16"
+              client:load
+            />
           </div>
 
           {

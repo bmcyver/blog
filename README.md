@@ -12,5 +12,6 @@ A personal blog and portfolio site, built with [astro-erudite](https://github.co
 ### TODO
 - [x] author 관련 컴포넌트/기능 삭제 (작성자가 혼자임)
 - [x] 포스트 관련 모든 컴포넌트에 view count 추가
-- [ ] README.md 업데이트
-- [ ] 기술 관련 포스트 작성
+- [ ] subpost
+    - [ ] 설정 맞춤화
+    - [ ] SubPostCard 컴포넌트 작성
