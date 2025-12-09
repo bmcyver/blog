@@ -1,51 +1,48 @@
 import { Skeleton } from '@/components/ui/skeleton'
+import { storage } from '@/lib/storage'
+import { viewsTable } from '@/schema'
 import { useEffect, useState } from 'react'
 
+const COUNT_TTL = 5 * 60 * 1000 // 5 minutes
+const INC_TTL = 12 * 60 * 60 * 1000 // 12 hours
+
 /**
- * onlyGet: only fetch the view count without incrementing it
+ * inc: whether to increment the view count
  */
 export default function ViewCount({
   id,
-  onlyGet = false,
+  inc = false,
 }: {
   id: string
-  onlyGet?: boolean
+  inc?: boolean
 }) {
   const [count, setCount] = useState<number | null>(null)
 
   useEffect(() => {
     const fetchViewCount = async () => {
-      const checkKey = `view-check-v1-${id}`
-      const cacheKey = `view-cache-v1-${id}`
+      const countKey = `view-count-v1-${id}`
+      const incKey = `view-inc-v1-${id}`
+
       try {
-        const viewItem = localStorage.getItem(checkKey)
-        const cacheItem = localStorage.getItem(cacheKey)
+        const cachedCount = storage.get<number>(countKey)
+        const hasIncremented = storage.get<boolean>(incKey)
 
         // If we haven't recorded a view yet, and we're allowed to increment, do so
-        if (!viewItem && !onlyGet) {
+        if (inc && !hasIncremented) {
           const res = await fetch(`/blog/${id}/view`, {
             method: 'POST',
           })
-          const data = (await res.json()) as { id: string; count: number }
-          localStorage.setItem(checkKey, 'true')
-          localStorage.setItem(
-            cacheKey,
-            JSON.stringify({ count: data.count, timestamp: Date.now() }),
-          )
-          return setCount(data.count)
+          if (res.ok) {
+            const data = (await res.json()) as { id: string; count: number }
+            storage.set(countKey, data.count, COUNT_TTL)
+            storage.set(incKey, true, INC_TTL)
+            return setCount(data.count)
+          }
         }
 
         // Check cache for existing view count
-        if (cacheItem) {
-          const parsed = JSON.parse(cacheItem) as {
-            count: number
-            timestamp: number
-          }
-          const now = Date.now()
-          // Use cached value if it's less than 3 minutes old
-          if (now - parsed.timestamp < 3 * 60 * 1000) {
-            return setCount(parsed.count)
-          }
+        if (cachedCount !== null) {
+          return setCount(cachedCount)
         }
 
         // Fetch the current view count
@@ -53,12 +50,9 @@ export default function ViewCount({
           method: 'GET',
         })
         if (res.ok) {
-          const data = (await res.json()) as { id: string; count: number }
-          localStorage.setItem(
-            cacheKey,
-            JSON.stringify({ count: data.count, timestamp: Date.now() }),
-          )
-          setCount(data.count)
+          const data = (await res.json()) as typeof viewsTable.$inferSelect
+          storage.set(countKey, data.count, COUNT_TTL)
+          return setCount(data.count)
         }
       } catch (error) {
         console.error('Error fetching view count:', error)
@@ -66,9 +60,9 @@ export default function ViewCount({
     }
 
     fetchViewCount()
-  }, [id])
+  }, [id, inc])
 
-  if (!count) {
+  if (count === null) {
     return (
       <div className="flex items-center gap-1">
         <Skeleton className="bg-primary/5 h-5 w-16" />
