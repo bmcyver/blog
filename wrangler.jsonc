@@ -13,10 +13,8 @@
   "workers_dev": false,
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
-  },
-  "observability": {
-    "enabled": true
+    "not_found_handling": "404-page",
+    "binding": "ASSETS",
   },
   "d1_databases": [
     {
