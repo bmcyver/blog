@@ -16,6 +16,9 @@
     "not_found_handling": "404-page",
     "binding": "ASSETS",
   },
+  "observability": {
+    "enabled": true
+  },
   "d1_databases": [
     {
       "binding": "DB",
