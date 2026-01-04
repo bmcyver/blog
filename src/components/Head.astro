@@ -39,7 +39,7 @@ import Favicons from './Favicons.astro'
     rel="alternate"
     type="application/rss+xml"
     title={SITE.title}
-    href={new URL('rss.xml', Astro.site)}
+    href={new URL('rss.xml', import.meta.env.SITE)}
   />
 
   <Favicons />
