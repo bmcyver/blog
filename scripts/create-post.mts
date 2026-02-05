@@ -1,5 +1,5 @@
-import { writeFile } from 'fs/promises'
-import { mkdir } from 'fs/promises'
+import { writeFileSync } from 'fs'
+import { mkdirSync } from 'fs'
 import { dirname } from 'path'
 
 const template = `---
@@ -22,7 +22,7 @@ const filename = `src/content/blog/writeup/placeholder/index.mdx`
 const directory = dirname(filename)
 
 // Ensure the directory exists
-await mkdir(directory, { recursive: true })
+mkdirSync(directory, { recursive: true })
 
-await writeFile(filename, template)
+writeFileSync(filename, template)
 console.log(`Created new post at ${filename}`)
