@@ -9,7 +9,6 @@ export type Site = {
   locale: string
   postsPerPage: number
   featuredPostCount: number
-  githubLicenseLink: string
 }
 
 export type SocialLink = {

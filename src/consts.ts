@@ -8,8 +8,6 @@ export const SITE: Site = {
   locale: 'ko-KR',
   postsPerPage: 5,
   featuredPostCount: 3,
-  githubLicenseLink:
-    'https://github.com/bmcyver/blog?tab=readme-ov-file#licenses',
 }
 
 export const NAV_LINKS: SocialLink[] = [
