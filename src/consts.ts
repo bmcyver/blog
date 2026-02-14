@@ -1,4 +1,4 @@
-import type { IconMap, SocialLink, Site, Award } from '@/types'
+import type { IconMap, SocialLink, Site } from '@/types'
 
 export const SITE: Site = {
   title: 'bmcyver',
@@ -53,7 +53,12 @@ export const ICON_MAP: IconMap = {
   RSS: 'lucide:rss',
 }
 
-export const Awards: Award[] = [
+export const Awards: {
+  year: number
+  place: string
+  team: string
+  event: string
+}[] = [
   { year: 2025, place: '2nd', team: '1010110', event: 'ELECCON Junior' },
   {
     year: 2025,
@@ -69,4 +74,4 @@ export const Awards: Award[] = [
   },
 ]
 
-export const CVEs: { id: string }[] = [{ id: 'CVE-2025-61385' }]
+export const CVEs: string[] = ['CVE-2025-61385']
