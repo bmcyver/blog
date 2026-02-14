@@ -19,10 +19,3 @@ export type SocialLink = {
 export type IconMap = {
   [key: string]: string
 }
-
-export type Award = {
-  year: number
-  place: string
-  event: string
-  team: string
-}
