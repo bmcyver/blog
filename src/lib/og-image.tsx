@@ -58,6 +58,13 @@ export async function generateOGImage(
           position: 'relative',
         }}
       >
+        <div
+          style={{
+            width: '48px',
+            height: '2px',
+            background: '#06b6d4',
+          }}
+        />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <span
             style={{
@@ -82,9 +89,7 @@ export async function generateOGImage(
             {title}
           </h1>
         </div>
-        <span style={{ fontSize: '32px', color: '#94a3b8' }}>
-          Written by {author}
-        </span>
+        <span style={{ fontSize: '32px', color: '#94a3b8' }}>by {author}</span>
       </div>
     </div>,
     {

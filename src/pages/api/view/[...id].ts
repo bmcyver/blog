@@ -3,7 +3,7 @@ import type { APIContext } from 'astro'
 import { getCollection } from 'astro:content'
 import { eq, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
-import { env } from "cloudflare:workers"
+import { env } from 'cloudflare:workers'
 
 // Disable prerendering because this is a dynamic API route
 export const prerender = false
