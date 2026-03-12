@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react'
 const COUNT_TTL = 5 * 60 * 1000 // 5 minutes
 const INC_TTL = 12 * 60 * 60 * 1000 // 12 hours
 
+export const prerender = false
+
 /**
  * inc: whether to increment the view count
  */
@@ -32,7 +34,7 @@ export default function ViewCount({
 
         // If we haven't recorded a view yet, and we're allowed to increment, do so
         if (inc && !hasIncremented) {
-          const res = await fetch(`/blog/${id}/view`, {
+          const res = await fetch(`/api/view/${id}`, {
             method: 'POST',
           })
           if (res.ok) {
@@ -49,7 +51,7 @@ export default function ViewCount({
         }
 
         // Fetch the current view count
-        const res = await fetch(`/blog/${id}/view`, {
+        const res = await fetch(`/api/view/${id}`, {
           method: 'GET',
         })
         if (res.ok) {
