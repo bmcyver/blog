@@ -13,7 +13,7 @@ tags:
 draft: false
 ---
 
-import Callout from "@/components/Callout.astro"
+import Callout from "@/components/callout.astro"
 
 # Web/<Challenge-Name> (x Solves, x Points)
 `
