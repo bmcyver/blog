@@ -78,7 +78,7 @@
 
     :where(ol):not(:where(.not-prose, .not-prose *)) {
       @apply marker:text-foreground/30 my-5 ml-6 list-decimal [&>li]:mt-2;
-      @apply [&[type='A']]:list-[upper-alpha] [[type='I']]:list-[upper-roman] [[type='a']]:list-[lower-alpha] [[type='i']]:list-[lower-roman];
+      @apply [[type='I']]:list-[upper-roman] [[type='a']]:list-[lower-alpha] [[type='i']]:list-[lower-roman] [&[type='A']]:list-[upper-alpha];
     }
 
     :where(li):not(:where(.not-prose, .not-prose *)) {
