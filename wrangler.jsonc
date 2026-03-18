@@ -5,11 +5,10 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "blog",
-  "main": "@astrojs/cloudflare/entrypoints/server",
-  "compatibility_date": "2025-12-04",
   "compatibility_flags": [
     "nodejs_compat"
   ],
+  "preview_urls": false,
   "workers_dev": false,
   "assets": {
     "directory": "./dist",
