@@ -22,11 +22,7 @@ export const NAV_LINKS: SocialLink[] = [
   {
     href: '/about',
     label: 'about',
-  },
-  {
-    href: 'https://bmcyver.dev',
-    label: 'links',
-  },
+  }
 ]
 
 export const SOCIAL_LINKS: SocialLink[] = [
