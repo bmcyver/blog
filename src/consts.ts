@@ -22,7 +22,7 @@ export const NAV_LINKS: SocialLink[] = [
   {
     href: '/about',
     label: 'about',
-  }
+  },
 ]
 
 export const SOCIAL_LINKS: SocialLink[] = [
