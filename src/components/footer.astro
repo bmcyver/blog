@@ -9,14 +9,14 @@ import { SITE, SOCIAL_LINKS } from '@/consts'
 >
   <div class="flex flex-wrap items-center justify-center gap-x-2 text-center">
     <span class="text-muted-foreground text-sm">
-      &copy; 2025-{new Date().getFullYear()}
+      &copy; {new Date().getFullYear()}
       <a
         href={`https://github.com/${SITE.author}`}
         class="font-semibold hover:underline">{SITE.author}</a
-      >. Some rights reserved. See <a
+      >. <a
         href={`https://github.com/${SITE.author}/blog#licenses`}
-        class="font-semibold hover:underline">NOTICE</a
-      >.
+        class="font-semibold hover:underline">Some</a
+      > rights reserved.
     </span>
     <Separator orientation="vertical" className="hidden h-4! sm:block" />
     <p class="text-muted-foreground text-sm">
