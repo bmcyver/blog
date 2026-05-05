@@ -8,7 +8,7 @@ import TOCHeader from '@/components/toc-header.astro'
 import TOCSidebar from '@/components/toc-sidebar.astro'
 import { badgeVariants } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import ViewCount from '@/components/ViewCount'
+import ViewCount from '@/components/ViewCount.astro'
 import Layout from '@/layouts/layout.astro'
 import {
   getAdjacentPosts,
@@ -159,12 +159,7 @@ const tocSections = await getTOCSections(currentPostId)
             class="flex w-full items-center justify-center gap-1 py-2 sm:w-fit sm:px-2 sm:py-0 first:sm:pl-0 last:sm:pr-0"
           >
             <Icon name="lucide:eye" class="size-3" />
-            <ViewCount
-              id={post.id}
-              inc={true}
-              className="w-auto sm:w-16"
-              client:load
-            />
+            <ViewCount id={post.id} inc={true} className="w-auto sm:w-16" />
           </div>
 
           {

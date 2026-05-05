@@ -1,0 +1,92 @@
+---
+import { cn } from '@/lib/utils'
+
+interface Props {
+    id: string
+    inc?: boolean
+    className?: string
+}
+
+const { id, inc = false, className } = Astro.props
+---
+
+<view-count
+    data-view-id={id}
+    data-view-inc={inc.toString()}
+    class={cn('flex items-center', className)}
+>
+    <div class="skeleton-wrapper">
+        <div class="bg-primary/5 h-4.5 w-14 animate-pulse rounded-md"></div>
+    </div>
+    <span class="count-text hidden"></span>
+</view-count>
+
+<script>
+    import { storage } from '@/lib/storage'
+
+    const COUNT_TTL = 5 * 60 * 1000 // 5 minutes
+    const INC_TTL = 12 * 60 * 60 * 1000 // 12 hours
+
+    class ViewCount extends HTMLElement {
+        async connectedCallback() {
+            const id = this.dataset.viewId
+            const inc = this.dataset.viewInc === 'true'
+
+            if (!id) return
+
+            const countText = this.querySelector('.count-text')
+            const skeleton = this.querySelector('.skeleton-wrapper')
+
+            const showCount = (count: number) => {
+                if (countText && skeleton) {
+                    countText.textContent = `${count} views`
+                    countText.classList.remove('hidden')
+                    skeleton.classList.add('hidden')
+                }
+            }
+
+            const countKey = `view-count-v1-${id}`
+            const incKey = `view-inc-v1-${id}`
+
+            try {
+                const cachedCount = storage.get<number>(countKey)
+                const hasIncremented = storage.get<boolean>(incKey)
+
+                if (inc && !hasIncremented) {
+                    const res = await fetch(`/api/view/${id}`, {
+                        method: 'POST',
+                    })
+                    if (res.ok) {
+                        const data = (await res.json()) as { count: number }
+                        storage.set(countKey, data.count, COUNT_TTL)
+                        storage.set(incKey, true, INC_TTL)
+                        showCount(data.count)
+                        return
+                    }
+                }
+
+                if (cachedCount !== null) {
+                    showCount(cachedCount)
+                    return
+                }
+
+                const res = await fetch(`/api/view/${id}`, { method: 'GET' })
+                if (res.ok) {
+                    const data = (await res.json()) as { count: number }
+                    storage.set(countKey, data.count, COUNT_TTL)
+                    showCount(data.count)
+                    return
+                }
+            } catch (error) {
+                console.error('Error fetching view count:', error)
+            }
+
+            // Fallback in case of error or no count returned
+            showCount(0)
+        }
+    }
+
+    if (!customElements.get('view-count')) {
+        customElements.define('view-count', ViewCount)
+    }
+</script>
