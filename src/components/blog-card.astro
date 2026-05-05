@@ -1,7 +1,7 @@
 ---
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import ViewCount from '@/components/ViewCount'
+import ViewCount from '@/components/ViewCount.astro'
 import {
   getCombinedReadingTime,
   getSubpostCount,
@@ -74,7 +74,7 @@ const subpostCount = !isSubpost(entry.id) ? await getSubpostCount(entry.id) : 0
         <Separator orientation="vertical" className="h-4!" />
         <span class="flex items-center gap-1">
           <Icon name="lucide:eye" class="size-3" />
-          <ViewCount id={entry.id} client:load />
+          <ViewCount id={entry.id} />
         </span>
       </div>
 
