@@ -110,5 +110,6 @@ export default defineConfig({
     ],
     remarkPlugins: [remarkMath, remarkEmoji],
   },
-  output: 'static'
+  output: 'static',
+  prefetch: false,
 })
