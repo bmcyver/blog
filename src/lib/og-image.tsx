@@ -1,17 +1,25 @@
 import sharp from 'sharp'
 import satori, { type Font } from 'satori'
-import { readFileSync } from 'fs'
+
+async function fetchFont(url: string): Promise<ArrayBuffer> {
+  console.log(`[OG] Fetching font from ${url}...`)
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(`Failed to fetch font from ${url}: ${response.statusText}`)
+  }
+  return await response.arrayBuffer()
+}
 
 const fonts: Font[] = [
   {
-    name: 'Noto Sans',
-    data: readFileSync('public/fonts/NotoSansKR-Regular.ttf'),
+    name: 'Pretendard',
+    data: await fetchFont("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff/Pretendard-Regular.woff"),
     style: 'normal',
     weight: 400,
   },
   {
-    name: 'Noto Sans',
-    data: readFileSync('public/fonts/NotoSansKR-Bold.ttf'),
+    name: 'Pretendard',
+    data: await fetchFont("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff/Pretendard-Bold.woff"),
     weight: 700,
     style: 'normal',
   },
@@ -33,7 +41,7 @@ export async function generateOGImage(
         padding: '80px',
         background: '#050a14',
         position: 'relative',
-        fontFamily: 'Noto Sans',
+        fontFamily: 'Pretendard',
       }}
     >
       {/* 그리드 패턴 */}

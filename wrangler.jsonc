@@ -8,7 +8,7 @@
   "compatibility_flags": [
     "nodejs_compat"
   ],
-  "compatibility_date": "2026-04-22",
+  "compatibility_date": "2026-05-10",
   "preview_urls": false,
   "workers_dev": false,
   "assets": {
@@ -17,13 +17,5 @@
   },
   "observability": {
     "enabled": true
-  },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "astro-blog-views-count",
-      "database_id": "6d638534-12ba-4fd3-9f66-6df85bf7962c",
-      "migrations_dir": "drizzle"
-    }
-  ]
+  }
 }
