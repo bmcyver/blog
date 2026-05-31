@@ -21,8 +21,6 @@ import { pluginFileIcons } from '@xt0rted/expressive-code-file-icons'
 
 import tailwindcss from '@tailwindcss/vite'
 
-import cloudflare from '@astrojs/cloudflare'
-
 export default defineConfig({
   server: {
     host: '0.0.0.0',
@@ -103,8 +101,8 @@ export default defineConfig({
         rehypeShiki,
         {
           themes: {
-            light: 'github-light',
-            dark: 'github-dark',
+            light: 'one-light',
+            dark: 'one-dark-pro',
           },
           inline: 'tailing-curly-colon',
         },
@@ -112,10 +110,5 @@ export default defineConfig({
     ],
     remarkPlugins: [remarkMath, remarkEmoji],
   },
-  prefetch: false, // disable prefetch because it leads to 503 errors on Cloudflare Workers
-  output: 'static',
-  adapter: cloudflare({
-    imageService: 'compile',
-    prerenderEnvironment: 'node',
-  }),
+  output: 'static'
 })
