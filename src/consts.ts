@@ -10,9 +10,9 @@ export const SITE = {
   author: "bmcyver",
   locale: "ko-KR",
   dir: "ltr",
-  defaultPageImage: "/static/opengraph-image.png",
+  defaultPageImage: "/static/opengraph-image.png", // TODO add satori support
   defaultPostImage: "/static/1200x630.png",
-  featuredPostCount: 2,
+  licenseUrl: "https://github.com/bmcyver/blog#licenses",
 } as const
 
 export const NAVIGATION = [
@@ -34,19 +34,19 @@ export const Awards: {
   team: string
   event: string
 }[] = [
-  { year: 2025, place: "2nd", team: "1010110", event: "ELECCON Junior" },
-  {
-    year: 2025,
-    place: "3rd",
-    team: "2h2u",
-    event: "CCE Junior",
-  },
-  {
-    year: 2025,
-    place: "1st",
-    team: "._.",
-    event: "YISF",
-  },
-]
+    { year: 2025, place: "2nd", team: "1010110", event: "ELECCON Junior" },
+    {
+      year: 2025,
+      place: "3rd",
+      team: "2h2u",
+      event: "CCE Junior",
+    },
+    {
+      year: 2025,
+      place: "1st",
+      team: "._.",
+      event: "YISF",
+    },
+  ]
 
 export const CVEs: string[] = ["CVE-2025-61385"]
