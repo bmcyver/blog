@@ -1,72 +1,37 @@
 {
-  "name": "blog",
+  "name": "astro-erudite",
   "type": "module",
-  "private": true,
+  "version": "2.0.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro build",
     "preview": "astro preview",
-    "prettier": "prettier --write **/*.{mts,ts,tsx,css,astro} --ignore-path .gitignore",
-    "post": "node ./scripts/create-post.mts",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate:local": "wrangler d1 migrations apply DB --local",
-    "db:migrate:remote": "wrangler d1 migrations apply DB --remote"
+    "astro": "astro",
+    "format": "biome format --write .",
+    "format:check": "biome format ."
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.9",
-    "@astrojs/markdown-remark": "^7.1.2",
-    "@astrojs/mdx": "^5.0.6",
-    "@astrojs/react": "^5.0.5",
+    "@astrojs/markdown-satteri": "^0.2.1",
     "@astrojs/rss": "^4.0.18",
-    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/sitemap": "^3.7.3",
     "@expressive-code/plugin-collapsible-sections": "^0.42.0",
     "@expressive-code/plugin-line-numbers": "^0.42.0",
-    "@iconify-json/lucide": "^1.2.109",
-    "@shikijs/rehype": "^4.1.0",
-    "@tailwindcss/vite": "^4.3.0",
-    "@xt0rted/expressive-code-file-icons": "^1.0.0",
-    "astro": "^6.3.7",
-    "astro-icon": "^1.1.5",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^1.16.0",
-    "radix-ui": "^1.4.3",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "rehype-expressive-code": "^0.42.0",
-    "rehype-external-links": "^3.0.0",
-    "rehype-katex": "^7.0.1",
-    "remark-emoji": "^5.0.2",
-    "remark-math": "^6.0.0",
-    "satori": "^0.26.0",
+    "astro": "^6.4.2",
+    "github-slugger": "^2.0.0",
+    "hast-util-select": "^6.0.4",
+    "hast-util-to-html": "^9.0.5",
+    "hastscript": "^9.0.1",
+    "satteri": "^0.6.3",
+    "satteri-expressive-code": "^0.1.8",
     "sharp": "^0.34.5",
-    "tailwind-merge": "^3.6.0",
-    "tailwindcss": "^4.3.0"
+    "temml": "^0.13.3"
   },
   "devDependencies": {
-    "@types/react": "^19.2.15",
-    "@types/react-dom": "^19.2.3",
-    "prettier": "^3.8.3",
-    "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-astro-organize-imports": "^0.4.12",
-    "prettier-plugin-tailwindcss": "^0.8.0",
-    "typescript": "^6.0.3"
-  },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true,
-    "plugins": [
-      "prettier-plugin-astro",
-      "prettier-plugin-tailwindcss",
-      "prettier-plugin-astro-organize-imports"
-    ],
-    "overrides": [
-      {
-        "files": "*.astro",
-        "options": {
-          "parser": "astro"
-        }
-      }
-    ]
+    "@biomejs/biome": "^2.4.16",
+    "@types/hast": "^3.0.4",
+    "@types/mdast": "^4.0.4"
   }
 }
