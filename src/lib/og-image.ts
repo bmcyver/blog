@@ -1,0 +1,152 @@
+import sharp from "sharp"
+import satori, { type Font } from "satori"
+
+async function fetchFont(url: string): Promise<ArrayBuffer> {
+  console.log(`[OG] Fetching font from ${url}...`)
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(`Failed to fetch font from ${url}: ${response.statusText}`)
+  }
+  return await response.arrayBuffer()
+}
+
+const fonts: Font[] = [
+  {
+    name: "Pretendard",
+    data: await fetchFont(
+      "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff/Pretendard-Regular.woff",
+    ),
+    style: "normal",
+    weight: 400,
+  },
+  {
+    name: "Pretendard",
+    data: await fetchFont(
+      "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff/Pretendard-Bold.woff",
+    ),
+    weight: 700,
+    style: "normal",
+  },
+]
+
+export async function generateOGImage(
+  title: string,
+  date: string,
+  author: string,
+) {
+  const svg = await satori(
+    {
+      type: "div",
+      props: {
+        style: {
+          width: "1200px",
+          height: "630px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: "80px",
+          background: "#050a14",
+          position: "relative",
+          fontFamily: "Pretendard",
+        },
+        children: [
+          /* 그리드 패턴 */
+          {
+            type: "div",
+            props: {
+              style: {
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                opacity: 0.2,
+                backgroundImage:
+                  "linear-gradient(#06b6d4 1px, transparent 1px), linear-gradient(90deg, #06b6d4 1px, transparent 1px)",
+                backgroundSize: "50px 50px",
+              },
+            },
+          },
+          {
+            type: "div",
+            props: {
+              style: {
+                display: "flex",
+                flexDirection: "column",
+                gap: "40px",
+                position: "relative",
+              },
+              children: [
+                {
+                  type: "div",
+                  props: {
+                    style: {
+                      width: "48px",
+                      height: "2px",
+                      background: "#06b6d4",
+                    },
+                  },
+                },
+                {
+                  type: "div",
+                  props: {
+                    style: {
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "20px",
+                    },
+                    children: [
+                      {
+                        type: "span",
+                        props: {
+                          style: {
+                            fontSize: "24px",
+                            color: "#06b6d4",
+                            fontWeight: "600",
+                            textShadow: "0 0 20px rgba(6, 182, 212, 0.5)",
+                          },
+                          children: date,
+                        },
+                      },
+                      {
+                        type: "h1",
+                        props: {
+                          style: {
+                            fontSize: "68px",
+                            fontWeight: "bold",
+                            color: "white",
+                            margin: 0,
+                            lineHeight: 1.2,
+                            textShadow: "0 0 40px rgba(6, 182, 212, 0.3)",
+                          },
+                          children: title,
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  type: "span",
+                  props: {
+                    style: {
+                      fontSize: "32px",
+                      color: "#94a3b8",
+                    },
+                    children: `by ${author}`,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      width: 1200,
+      height: 630,
+      fonts: fonts,
+    },
+  )
+
+  return new Uint8Array(await sharp(Buffer.from(svg)).png().toBuffer())
+}

@@ -14,7 +14,7 @@ const base = Astro.site ?? new URL(Astro.url.origin)
 const ogTitle = title ?? SITE.title
 const fullTitle = title ? pageTitle(title) : SITE.title
 const canonical = new URL(Astro.url.pathname, base)
-const ogImage = new URL(SITE.defaultPageImage, base)
+// const ogImage = new URL(SITE.defaultPageImage, base);
 ---
 
 <title>{fullTitle}</title>
@@ -28,11 +28,11 @@ const ogImage = new URL(SITE.defaultPageImage, base)
 <meta property="og:type" content="website">
 <meta property="og:site_name" content={SITE.title}>
 <meta property="og:locale" content={SITE.locale.replace("-", "_")}>
-<meta property="og:image" content={ogImage}>
-<meta property="og:image:alt" content={ogTitle}>
+<!-- <meta property="og:image" content={ogImage}> -->
+<!-- <meta property="og:image:alt" content={ogTitle} /> -->
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content={ogTitle}>
 <meta name="twitter:description" content={description}>
-<meta name="twitter:image" content={ogImage}>
-<meta name="twitter:image:alt" content={ogTitle}>
+<!-- <meta name="twitter:image" content={ogImage}> -->
+<!-- <meta name="twitter:image:alt" content={ogTitle} /> -->

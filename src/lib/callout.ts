@@ -52,7 +52,7 @@ export function calloutDirective() {
       const title: ElementContent[] = [
         { type: "text", value: capitalize(node.name) },
       ]
-      if (label) title.push(h("span", ` (${label})`))
+      if (label) title[0] = h("text", label)
 
       const summary = toHtml(
         h("summary", [
