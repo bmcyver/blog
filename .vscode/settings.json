@@ -1,5 +1,5 @@
 {
   "editor.formatOnSave": true,
   "editor.foldingImportsByDefault": true,
-  "editor.foldingStrategy": "auto",
+  "editor.foldingStrategy": "auto"
 }
