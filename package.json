@@ -21,6 +21,7 @@
     "hast-util-select": "^6.0.4",
     "hast-util-to-html": "^9.0.5",
     "hastscript": "^9.0.1",
+    "satori": "^0.26.0",
     "satteri": "^0.6.3",
     "satteri-expressive-code": "^0.1.8",
     "sharp": "^0.34.5",

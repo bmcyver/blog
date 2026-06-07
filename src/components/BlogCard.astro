@@ -22,8 +22,8 @@ const authors = await getEntries(post.data.authors)
           <entry-authors>
             <author-avatars>
               {authors.map((author) => (
-                <img
-                  src={author.data.avatar.src}
+                <Image
+                  src={author.data.avatar}
                   alt={author.data.name}
                   width="18"
                   height="18"

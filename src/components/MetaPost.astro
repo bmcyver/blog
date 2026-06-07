@@ -18,7 +18,7 @@ const url = new URL(Astro.url.pathname, base)
 const canonical = new URL(Astro.props.canonical ?? Astro.url.pathname, base)
 const ogImage = image
   ? new URL(image.src, base)
-  : new URL(SITE.defaultPostImage, base)
+  : new URL(`/og/${post.id}.png`, base)
 ---
 
 <title>{pageTitle(title)}</title>

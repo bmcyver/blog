@@ -8,6 +8,7 @@ import SocialIcons from "@/components/SocialIcons.astro"
 import { trimSlash } from "@/lib/utils"
 import type { SvgComponent } from "astro/types"
 import type { CollectionEntry } from "astro:content"
+import { Image } from "astro:assets"
 
 type Props = { author: CollectionEntry<"authors"> }
 
@@ -34,10 +35,10 @@ const isCurrent = trimSlash(Astro.url.pathname) === href
 
 <li>
   {isCurrent ? (
-      <img src={avatar.src} alt={name} width="64" height="64" />
+      <Image src={avatar} alt={name} width="64" height="64" />
     ) : (
       <a href={href} tabindex="-1" aria-hidden="true">
-        <img src={avatar.src} alt="" width="64" height="64" />
+        <Image src={avatar} alt="" width="64" height="64" />
       </a>
     )}
   <author-info>
