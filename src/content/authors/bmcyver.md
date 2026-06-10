@@ -1,7 +1,7 @@
 ---
 name: "bmcyver"
 pronouns: "he/him"
-avatar: "/src/assets/logo.webp"
+avatar: "/public/avatar.webp"
 bio: "._."
 mail: "me@bmcyver.dev"
 socials:

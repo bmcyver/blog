@@ -1,29 +1,28 @@
 ---
-import Logo from "@/assets/logo.webp";
-import ThemeToggle from "@/components/ThemeToggle.astro";
-import { NAVIGATION, SITE } from "@/consts";
-import { normalizePath } from "@/lib/utils";
-import { Image } from "astro:assets";
+import Logo from "/public/avatar.webp"
+import ThemeToggle from "@/components/ThemeToggle.astro"
+import { NAVIGATION, SITE } from "@/consts"
+import { normalizePath } from "@/lib/utils"
+import { Image } from "astro:assets"
 
-type Props = { crumbs?: { label: string; href: string }[] };
+type Props = { crumbs?: { label: string; href: string }[] }
 
-const { crumbs = [] } = Astro.props;
-const pathname = normalizePath(Astro.url.pathname) || "/";
+const { crumbs = [] } = Astro.props
+const pathname = normalizePath(Astro.url.pathname) || "/"
 const section = NAVIGATION.find(
   ({ href }) => pathname === href || pathname.startsWith(`${href}/`),
-);
+)
 ---
 
 <aside>
   <sidebar-inner>
     <a href="/" aria-label={SITE.title}>
-      <Image src={Logo} alt="Logo" />
+      <img src={Logo.src} alt="Logo" height="70" width="70">
       <span>{SITE.title}</span>
     </a>
     <nav>
       <ul>
-        {
-          NAVIGATION.map((item) => (
+        {NAVIGATION.map((item) => (
             <li>
               <a
                 href={item.href}
@@ -50,10 +49,8 @@ const section = NAVIGATION.find(
                   </ul>
                 )}
             </li>
-          ))
-        }
-        {
-          !section &&
+          ))}
+        {!section &&
             crumbs.map((crumb, i) => (
               <li data-depth={i ? 1 : undefined}>
                 <a
@@ -63,8 +60,7 @@ const section = NAVIGATION.find(
                   {crumb.label}
                 </a>
               </li>
-            ))
-        }
+            ))}
       </ul>
     </nav>
   </sidebar-inner>
