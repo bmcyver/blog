@@ -2,13 +2,13 @@
 import Logo from "@/assets/logo.jpg"
 import ThemeToggle from "@/components/ThemeToggle.astro"
 import { NAVIGATION, SITE } from "@/consts"
-import { trimSlash } from "@/lib/utils"
+import { normalizePath } from "@/lib/utils"
 import { Image } from "astro:assets"
 
 type Props = { crumbs?: { label: string; href: string }[] }
 
 const { crumbs = [] } = Astro.props
-const pathname = trimSlash(Astro.url.pathname) || "/"
+const pathname = normalizePath(Astro.url.pathname) || "/"
 const section = NAVIGATION.find(
   ({ href }) => pathname === href || pathname.startsWith(`${href}/`),
 )

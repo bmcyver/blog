@@ -7,7 +7,6 @@ import Twitter from "@/assets/icons/twitter.svg"
 export const SITE = {
   title: "bmcyver",
   description: "bmcyver's blog - A place to share my thoughts and ideas",
-  author: "bmcyver",
   locale: "ko-KR",
   dir: "ltr",
   licenseUrl: "https://github.com/bmcyver/blog#licenses",

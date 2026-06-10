@@ -2,10 +2,10 @@ import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-s
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers"
 import {
   createRenderer,
-  type SatteriExpressiveCodeOptions,
-} from "satteri-expressive-code"
+  type AstroExpressiveCodeOptions,
+} from "astro-expressive-code"
 
-export const ecOptions: SatteriExpressiveCodeOptions = {
+export const ecOptions: AstroExpressiveCodeOptions = {
   themes: ["one-light", "one-dark-pro"],
   useDarkModeMediaQuery: true,
   themeCssSelector: (theme) =>

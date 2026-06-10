@@ -434,7 +434,6 @@ with open('img1.jpeg', 'rb') as file_a, open('img2.jpeg', 'rb') as file_b:
 
 먼저 `secret.js`를 봐보자.
 
-<!-- prettier-ignore-start -->
 ```js
 var g = require('dyson-generators');
 var realFlag = require('fs').readFileSync('/flag.txt').toString();
@@ -480,7 +479,6 @@ module.exports = {
 	}
 };
 ```
-<!-- prettier-ignore-end -->
 
 `/api/flagService`로 요청을 받으며, `localhost`이면서 `SuperSecretPassword`와 `guessPassword`가 같거나, `realFlag`와 `guessFlag`가 같으면 `flag`를 반환한다. 그러나 이는 일반적으로는 우회가 불가능하다. `SuperSecretPassword`는 풀이자가 알 수 없도록 길 것이며, `realFlag`는 `sha256`으로 해싱되어 있을 거기 때문이다.
 
@@ -535,13 +533,11 @@ module.exports = {
 
 `secret.js`를 좀 자세히 보면, `;(semicolon)`이 안 찍혀 있는 것을 알 수 있다.
 
-<!-- prettier-ignore-start -->
 ```js
 const SuperSecretPassword = '[REDACTED]'
 [guessPassword, guessFlag] =
 	req.query.guess !== undefined ? atob(req.query.guess).split('|') : ['idk', 'idk'])
 ```
-<!-- prettier-ignore-end -->
 
 와
 

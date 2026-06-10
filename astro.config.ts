@@ -1,14 +1,12 @@
 import { defineConfig } from "astro/config"
 import sitemap from "@astrojs/sitemap"
 import { satteri } from "@astrojs/markdown-satteri"
-import {
-  blockExpressiveCode,
-  inlineExpressiveCode,
-} from "./src/lib/expressive-code"
+import { inlineExpressiveCode, ecOptions } from "./src/lib/expressive-code"
 import { temmlMath } from "./src/lib/math"
 import { calloutDirective } from "./src/lib/callout"
 import { externalLinks } from "./src/lib/external-links"
 import { headingNamespace } from "./src/lib/heading-namespace"
+import astroExpressiveCode from "astro-expressive-code"
 
 export default defineConfig({
   site: "https://blog.bmcyver.dev",
@@ -16,15 +14,18 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) =>
-        !/\/blog\/[^/]+\/[^/]+\/?$/.test(page) && !page.includes("/tags/"),
+        !/\/blog\/[^/]+\/[^/]+\/?$/.test(page) &&
+        !/\/authors\/[^/]+\/?$/.test(page) &&
+        !page.includes("/tags/"),
     }),
+    astroExpressiveCode(ecOptions),
   ],
   markdown: {
     syntaxHighlight: false,
     processor: satteri({
       features: { directive: true, math: true },
       mdastPlugins: [calloutDirective, inlineExpressiveCode, temmlMath],
-      hastPlugins: [externalLinks, blockExpressiveCode, headingNamespace],
+      hastPlugins: [externalLinks, headingNamespace],
     }),
   },
   devToolbar: {
