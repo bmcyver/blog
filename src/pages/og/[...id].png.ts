@@ -1,4 +1,3 @@
-import { SITE } from "@/consts"
 import { getPosts } from "@/lib/content"
 import { generateOGImage } from "@/lib/og-image"
 import { formatDate } from "@/lib/utils"
@@ -22,7 +21,7 @@ export async function GET(context: APIContext) {
   const ogImage = await generateOGImage(
     post.data.title,
     formatDate(post.data.date),
-    SITE.author,
+    post.data.authors.join(", "),
   )
 
   return new Response(ogImage, {
