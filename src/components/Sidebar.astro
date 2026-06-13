@@ -14,7 +14,7 @@ const section = NAVIGATION.find(
 )
 ---
 
-<aside>
+<aside data-bar>
   <sidebar-inner>
     <a href="/" aria-label={SITE.title}>
       <img src={Logo.src} alt="Logo" height="70" width="70">
@@ -85,12 +85,6 @@ const section = NAVIGATION.find(
       flex-direction: row;
       align-items: center;
       gap: var(--space-s);
-      padding-block: var(--space-2xs);
-      padding-inline: var(--bar-gutter);
-      background-color: color-mix(in oklab, var(--background) 90%, transparent);
-      backdrop-filter: blur(var(--blur-sm));
-      border-block-end: 2px solid var(--border);
-      border-image: var(--bar-border-image);
     }
   }
 
