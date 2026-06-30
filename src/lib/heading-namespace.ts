@@ -1,5 +1,6 @@
 import GithubSlugger from "github-slugger"
 import { defineHastPlugin } from "satteri"
+import { fileURLToPath } from "node:url"
 
 const SUBPOST = /\/blog\/[^/]+\/(?!index\.md$)([^/]+)\.md$/
 
@@ -10,7 +11,8 @@ export function headingNamespace() {
     element: {
       filter: ["h1", "h2", "h3", "h4", "h5", "h6"],
       visit(node, ctx) {
-        const match = SUBPOST.exec(ctx.filename)
+        const path = ctx.fileURL ? fileURLToPath(ctx.fileURL) : ""
+        const match = SUBPOST.exec(path)
         if (!match) return
         ctx.setProperty(
           node,
