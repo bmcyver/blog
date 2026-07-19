@@ -12,6 +12,7 @@ import astroExpressiveCode from "astro-expressive-code"
 export default defineConfig({
   site: "https://blog.bmcyver.dev",
   prefetch: false, // cloudflare 503 error workaround
+  compressHTML: true,
   integrations: [
     sitemap({
       filter: (page) =>
