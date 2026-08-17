@@ -3,7 +3,6 @@ title: Codegate 2024 Junior Finals Writeup
 description: A writeup for Codegate 2024 Junior Finals (Web)
 date: 2024-09-24
 tags:
-  - CTF
   - Writeup
   - Web
   - Ai

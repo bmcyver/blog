@@ -3,7 +3,6 @@ title: KOSPO CTF 2024 Writeup
 description: A writeup for KOSPO CTF 2024 (Web/Misc)
 date: 2024-10-08
 tags:
-  - CTF
   - Writeup
   - Web
 draft: false
