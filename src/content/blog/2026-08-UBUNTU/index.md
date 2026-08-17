@@ -22,10 +22,7 @@ draft: false
 
 ## 우분투 26.04
 
-<figure style="text-align: center; font-size: var(--step-0)">
-  <img src="/src/content/blog/2026-08-UBUNTU/ubuntu 26.04 wallpaper.png" alt="ubuntu wallpaper">
-  <figcaption><a href="https://ubuntu.com/blog/unmasking-the-resolute-raccoon">https://ubuntu.com/blog/unmasking-the-resolute-raccoon</a></figcaption>
-</figure>
+![](./ubuntu%2026.04%20wallpaper.png)
 
 우분투 26.04는 **Resolute Raccoon**이라는 코드네임을 갖고 출시했다.<br/>
 GNOME 50을 기본적으로 탑재하고, `sudo-rs`를 사용하는 배포판이다.
@@ -47,7 +44,7 @@ Rufus로 이미지를 USB로 굽고 부팅하고, Next 버튼을 계속 누르�
 
 `한국어(Hangul)`에 들어가서 한/영 전환 키를 원하는 키로 변경해주면 된다.
 
-<img src="/src/content/blog/2026-08-UBUNTU/keyboard-setting-2.png" alt="설명" style="max-height: 400px; width: auto; object-fit: contain; display: block; margin: 0 auto;" />
+![](./keyboard-setting-2.png)
 
 :::note
 필자의 경우 윈도우에서 쓰던 `한/영` 키를 입력하면 `Hangul`이 아닌 `R_Alt`로 뜨는 일이 발생했다. 열심히 삽질을 하다가 `/usr/share/X11/xkb/keycodes/evdev`에서 `한/영`키가 `R_Alt`로 매핑되어 있어서 `HNGL`로 바꿔주니 위 사진처럼 `Hangul`로 잘 떴다.
