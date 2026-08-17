@@ -11,7 +11,7 @@ draft: false
 
 ## 리눅스를 설치하게 된 계기
 
-평소 보안 공부와 개발을 윈도우 native 환경이 아닌, WSL2를 이용해 리눅스 환경에서 해왔다. 그런데 WSL2, Docker, 브라우저, IDE를 열기만 해도 10GB를 기본적으로 사용했다. 여기서 브라우저 탭을 늘리거나, WSL2에서 무거운 작업을 하면 금방 16GB를 가득 채우게 되며 속도가 매우 느려졌다. (필자의 노트북의 메모리는 16GB다.)
+평소 보안 공부와 개발을 윈도우 native 환경이 아닌, WSL2를 이용해 리눅스 환경에서 해왔다. 그런데 WSL2, Docker, 브라우저, IDE를 열기만 해도 10GB를 기본적으로 사용했다. 여기서 브라우저 탭을 늘리거나, WSL2에서 무거운 작업을 하면 금방 16GB를 가득 채우게 되며 속도가 매우 느려졌다. (참고로 필자의 노트북의 메모리는 16GB다.)
 
 그래서 차라리 WSL2를 버리고 윈도우에서 작업을 할까 했지만, 리눅스가 주는 편안함을 포기할 수 없었기 때문에 리눅스랑 친해질 겸 윈도우를 밀고 리눅스를 설치하게 되었다.
 
@@ -23,7 +23,7 @@ draft: false
 ## 우분투 26.04
 
 <figure style="text-align: center; font-size: var(--step-0)">
-  <img src="/src/content/blog/2026-08-USING-UBUNTU/ubuntu 26.04 wallpaper.png" alt="ubuntu wallpaper">
+  <img src="/src/content/blog/2026-08-UBUNTU/ubuntu 26.04 wallpaper.png" alt="ubuntu wallpaper">
   <figcaption><a href="https://ubuntu.com/blog/unmasking-the-resolute-raccoon">https://ubuntu.com/blog/unmasking-the-resolute-raccoon</a></figcaption>
 </figure>
 
@@ -47,7 +47,7 @@ Rufus로 이미지를 USB로 굽고 부팅하고, Next 버튼을 계속 누르�
 
 `한국어(Hangul)`에 들어가서 한/영 전환 키를 원하는 키로 변경해주면 된다.
 
-<img src="/src/content/blog/2026-08-USING-UBUNTU/keyboard-setting-2.png" alt="설명" style="max-height: 400px; width: auto; object-fit: contain; display: block; margin: 0 auto;" />
+<img src="/src/content/blog/2026-08-UBUNTU/keyboard-setting-2.png" alt="설명" style="max-height: 400px; width: auto; object-fit: contain; display: block; margin: 0 auto;" />
 
 :::note
 필자의 경우 윈도우에서 쓰던 `한/영` 키를 입력하면 `Hangul`이 아닌 `R_Alt`로 뜨는 일이 발생했다. 열심히 삽질을 하다가 `/usr/share/X11/xkb/keycodes/evdev`에서 `한/영`키가 `R_Alt`로 매핑되어 있어서 `HNGL`로 바꿔주니 위 사진처럼 `Hangul`로 잘 떴다.
