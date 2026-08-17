@@ -1,9 +1,8 @@
 ---
 title: 2025 CCE Junior Quals Writeup
 description: A writeup for 2025 CCE Junior Quals
-date: 2025-08-18T13:00:40.407Z
+date: 2025-08-18
 tags:
-  - CTF
   - Writeup
   - Web
 authors:
