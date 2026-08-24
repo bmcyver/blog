@@ -5,9 +5,10 @@ import { SITE, SOCIALS } from "@/consts"
 
 <footer>
   <p>
-    &copy; {new Date().getFullYear()} {SITE.title}. Licensed under
+    &copy; {new Date().getFullYear()} {SITE.title}. <br/>
+    Licensed under
     <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
-    (check exceptions <a href="https://github.com/bmcyver/blog#licenses">noted here</a>).
+    (check <a href="https://github.com/bmcyver/blog#licenses">exceptions</a>).
   </p>
 
   <SocialIcons links={SOCIALS} />
@@ -18,12 +19,8 @@ import { SITE, SOCIALS } from "@/consts"
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     margin-block: var(--space-xs) var(--page-offset-bottom);
-
-    @media (width >= 40rem) {
-      flex-direction: row;
-      justify-content: space-between;
-    }
 
     p {
       font-size: var(--step--1);
