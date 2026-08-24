@@ -1,6 +1,7 @@
 import GithubSlugger from "github-slugger"
 import { defineHastPlugin } from "satteri"
 import { fileURLToPath } from "node:url"
+import { plainText } from "./hast-text"
 
 const SUBPOST = /\/blog\/[^/]+\/(?!index\.md$)([^/]+)\.md$/
 
@@ -17,7 +18,7 @@ export function headingNamespace() {
         ctx.setProperty(
           node,
           "id",
-          `${match[1]}-${slugger.slug(ctx.textContent(node))}`,
+          `${match[1]}-${slugger.slug(plainText(node))}`,
         )
       },
     },

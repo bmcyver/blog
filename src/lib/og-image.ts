@@ -1,39 +1,93 @@
+import { createHash } from "node:crypto"
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
+import { dirname, join } from "node:path"
 import sharp from "sharp"
 import satori, { type Font } from "satori"
 
-async function fetchFont(url: string): Promise<ArrayBuffer> {
+const FONT_CACHE_DIR = join(
+  process.cwd(),
+  "node_modules",
+  ".cache",
+  "blog-og-fonts",
+)
+const IMAGE_CACHE_DIR = join(
+  process.cwd(),
+  "node_modules",
+  ".cache",
+  "blog-og-images",
+)
+
+async function getCachedFont(
+  url: string,
+  filename: string,
+): Promise<ArrayBuffer> {
+  const cachedPath = join(FONT_CACHE_DIR, filename)
+
+  if (existsSync(cachedPath)) {
+    const buffer = readFileSync(cachedPath)
+    return buffer.buffer.slice(
+      buffer.byteOffset,
+      buffer.byteOffset + buffer.byteLength,
+    )
+  }
+
   console.log(`[OG] Fetching font from ${url}...`)
   const response = await fetch(url)
   if (!response.ok) {
     throw new Error(`Failed to fetch font from ${url}: ${response.statusText}`)
   }
-  return await response.arrayBuffer()
+
+  const arrayBuffer = await response.arrayBuffer()
+
+  try {
+    if (!existsSync(dirname(cachedPath))) {
+      mkdirSync(dirname(cachedPath), { recursive: true })
+    }
+    writeFileSync(cachedPath, Buffer.from(arrayBuffer))
+  } catch (error) {
+    console.warn(`[OG] Failed to write font cache:`, error)
+  }
+
+  return arrayBuffer
 }
 
 const fonts: Font[] = [
   {
     name: "Pretendard",
-    data: await fetchFont(
+    data: await getCachedFont(
       "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff/Pretendard-Regular.woff",
+      "Pretendard-Regular139.woff",
     ),
     style: "normal",
     weight: 400,
   },
   {
     name: "Pretendard",
-    data: await fetchFont(
+    data: await getCachedFont(
       "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff/Pretendard-Bold.woff",
+      "Pretendard-Bold139.woff",
     ),
     weight: 700,
     style: "normal",
   },
 ]
 
+function getOGCacheKey(title: string, date: string, author: string): string {
+  return createHash("sha256").update(`${title}:${date}:${author}`).digest("hex")
+}
+
 export async function generateOGImage(
   title: string,
   date: string,
   author: string,
 ) {
+  const cacheKey = getOGCacheKey(title, date, author)
+  const cachedImagePath = join(IMAGE_CACHE_DIR, `${cacheKey}.png`)
+
+  if (existsSync(cachedImagePath)) {
+    return readFileSync(cachedImagePath)
+  }
+
   const svg = await satori(
     {
       type: "div",
@@ -148,5 +202,16 @@ export async function generateOGImage(
     },
   )
 
-  return new Uint8Array(await sharp(Buffer.from(svg)).png().toBuffer())
+  const pngBuffer = await sharp(Buffer.from(svg)).png().toBuffer()
+
+  try {
+    if (!existsSync(dirname(cachedImagePath))) {
+      mkdirSync(dirname(cachedImagePath), { recursive: true })
+    }
+    writeFileSync(cachedImagePath, pngBuffer)
+  } catch (error) {
+    console.warn(`[OG] Failed to write image cache:`, error)
+  }
+
+  return pngBuffer
 }

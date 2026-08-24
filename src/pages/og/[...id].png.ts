@@ -21,7 +21,7 @@ export async function GET(context: APIContext) {
   const ogImage = await generateOGImage(
     post.data.title,
     formatDate(post.data.date),
-    post.data.authors.join(", "),
+    post.data.authors.map((author) => author.id).join(", "),
   )
 
   return new Response(ogImage, {

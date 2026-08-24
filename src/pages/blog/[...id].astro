@@ -4,6 +4,7 @@ import PostActions from "@/components/PostActions.astro"
 import ScrollToTop from "@/components/ScrollToTop.astro"
 import SeriesReader from "@/components/SeriesReader.astro"
 import TableOfContents from "@/components/TableOfContents.astro"
+import Giscus from "@/components/Giscus.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getPosts, getSubposts, pageTitle } from "@/lib/content"
 import { formatDate, isSubpost, subpostSlug } from "@/lib/utils"
@@ -133,6 +134,7 @@ if (isSubpost(post.id)) {
       </article>
     ))}
   {chain.length > 1 && <SeriesReader />}
+  {post.data.comments !== false && <Giscus term={`/blog/${parent.id}`} />}
 </Layout>
 
 <style>
@@ -200,9 +202,14 @@ if (isSubpost(post.id)) {
         gap: var(--space-3xs);
 
         a {
-          color: color-mix(in oklab, var(--muted-foreground) 50%, transparent);
+          color: var(--muted-foreground);
+          opacity: 0.85;
+          transition:
+            opacity 0.15s ease,
+            color 0.15s ease;
 
           &:hover {
+            opacity: 1;
             color: var(--foreground);
           }
         }

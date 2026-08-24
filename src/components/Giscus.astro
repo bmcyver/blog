@@ -1,0 +1,72 @@
+---
+import { GISCUS } from "@/consts"
+
+type Props = {
+  term?: string
+}
+
+const { term } = Astro.props
+---
+
+<section class="giscus-wrapper" id="comments" aria-label="Comments">
+  <div class="giscus"></div>
+</section>
+
+<script is:inline define:vars={{ giscusConfig: GISCUS, term }}>
+  function getTheme() {
+    const root = document.documentElement
+    const isDark =
+      root.dataset.theme === "dark" ||
+      (!root.dataset.theme &&
+        matchMedia("(prefers-color-scheme: dark)").matches)
+    return isDark ? giscusConfig.darkTheme : giscusConfig.lightTheme
+  }
+
+  function initGiscus() {
+    const container = document.querySelector(".giscus")
+    if (!container || container.hasChildNodes()) return
+
+    const script = document.createElement("script")
+    script.src = "https://giscus.app/client.js"
+    script.setAttribute("data-repo", giscusConfig.repo)
+    script.setAttribute("data-repo-id", giscusConfig.repoId)
+    script.setAttribute("data-category", giscusConfig.category)
+    script.setAttribute("data-category-id", giscusConfig.categoryId)
+    script.setAttribute("data-mapping", giscusConfig.mapping)
+    if (term) script.setAttribute("data-term", term)
+    script.setAttribute("data-strict", giscusConfig.strict)
+    script.setAttribute("data-reactions-enabled", giscusConfig.reactionsEnabled)
+    script.setAttribute("data-emit-metadata", giscusConfig.emitMetadata)
+    script.setAttribute("data-input-position", giscusConfig.inputPosition)
+    script.setAttribute("data-lang", giscusConfig.lang)
+    script.setAttribute("data-theme", getTheme())
+    script.crossOrigin = "anonymous"
+    script.async = true
+    container.appendChild(script)
+  }
+
+  initGiscus()
+
+  const observer = new MutationObserver(() => {
+    const iframe = document.querySelector("iframe.giscus-frame")
+    if (iframe?.contentWindow) {
+      iframe.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: getTheme() } } },
+        "https://giscus.app",
+      )
+    }
+  })
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  })
+</script>
+
+<style>
+  .giscus-wrapper {
+    margin-block-start: var(--space-xl);
+    padding-block-start: var(--space-l);
+    border-block-start: 1px solid var(--border);
+    min-height: 150px;
+  }
+</style>

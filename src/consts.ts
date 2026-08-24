@@ -2,14 +2,27 @@ import type { SvgComponent } from "astro/types"
 import Email from "@/assets/icons/email.svg"
 import GitHub from "@/assets/icons/github.svg"
 import RSS from "@/assets/icons/rss.svg"
-import Twitter from "@/assets/icons/twitter.svg"
 
 export const SITE = {
   title: "bmcyver",
   description: "bmcyver's blog - A place to share my thoughts and ideas",
   locale: "ko-KR",
   dir: "ltr",
-  licenseUrl: "https://github.com/bmcyver/blog#licenses",
+} as const
+
+export const GISCUS = {
+  repo: "bmcyver/blog",
+  repoId: "R_kgDOQaER_g", // Will be replaced or configured by the user
+  category: "Comments",
+  categoryId: "DIC_kwDOQaER_s4DEDI2", // Will be replaced or configured by the user
+  mapping: "pathname",
+  strict: "0",
+  reactionsEnabled: "1",
+  emitMetadata: "0",
+  inputPosition: "top",
+  lang: "ko",
+  lightTheme: "noborder_light",
+  darkTheme: "noborder_dark",
 } as const
 
 export const NAVIGATION = [

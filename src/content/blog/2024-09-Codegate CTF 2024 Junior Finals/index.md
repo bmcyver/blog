@@ -549,7 +549,7 @@ const SuperSecretPassword =
 
 는 `ASI misbehavior`로 인해, 같은 코드로 인식된다. 따라서, `http://url:port/user?,api/flagService?guess=`으로 요청을 하면 `flag`를 얻을 수 있다. (물론 아래 사진과 같이, `host`를 변경해야 한다.)
 
-![dyson1](dyson1.png)
+![](dyson1.png)
 
 대회 때 `multi request`가 있는 것은 알았으나, `ASI misbehavior`를 이용한 우회는 생각하지 못했다. 그래서 `npm audit` 돌려서 나온, `prototype pollution`만 엄청 시도해보고 있었다.
 
@@ -559,7 +559,7 @@ const SuperSecretPassword =
 
 문제 파일을 보게 되면, `ai`를 통해 `cmd injection`을 방지하려고 하는 것을 알 수 있다. 그러나, `cmd injection` 필터링 명령을 `system` 프롬프트가 아닌 `user` 프롬프트를 통해 하기 때문에, 비교적 쉽게 우회할 수 있다.
 
-![firewall1](firewall1.png)
+![](firewall1.png)
 
 `codegate2024{1786d016ae1230e8d03e76c53c4a622098c72b73573d68979e167b45524407ed5c131c002342f44f664674fe91f2655a7a28}`
 

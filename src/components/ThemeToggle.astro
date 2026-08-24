@@ -44,8 +44,8 @@ import SunIcon from "@/assets/icons/sun.svg"
   }
 </style>
 
-<script>
-  const toggleTheme = () => {
+<script is:inline>
+  document.getElementById("theme-toggle")?.addEventListener("click", () => {
     const root = document.documentElement
     const dark =
       root.dataset.theme === "dark" ||
@@ -54,8 +54,5 @@ import SunIcon from "@/assets/icons/sun.svg"
     const theme = dark ? "light" : "dark"
     root.dataset.theme = theme
     localStorage.theme = theme
-  }
-
-  const button = document.getElementById("theme-toggle")
-  if (button) button.onclick = toggleTheme
+  })
 </script>

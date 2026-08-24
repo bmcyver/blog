@@ -8,8 +8,7 @@ import {
 export const ecOptions: AstroExpressiveCodeOptions = {
   themes: ["one-light", "one-dark-pro"],
   useDarkModeMediaQuery: true,
-  themeCssSelector: (theme) =>
-    `[data-theme="${theme.name === "one-dark-pro" ? "dark" : "light"}"]`,
+  themeCssSelector: (theme) => `[data-theme="${theme.type}"]`,
   plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
   defaultProps: {
     wrap: false,

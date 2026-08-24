@@ -7,6 +7,7 @@ import { calloutDirective } from "./src/lib/callout"
 import { externalLinks } from "./src/lib/external-links"
 import { headingNamespace } from "./src/lib/heading-namespace"
 import { headingAnchors } from "./src/lib/heading-anchors"
+import { imageSize } from "./src/lib/image-size"
 import astroExpressiveCode from "astro-expressive-code"
 
 export default defineConfig({
@@ -27,7 +28,7 @@ export default defineConfig({
     processor: satteri({
       features: { directive: true, math: true },
       mdastPlugins: [calloutDirective, inlineExpressiveCode, temmlMath],
-      hastPlugins: [externalLinks, headingNamespace, headingAnchors],
+      hastPlugins: [externalLinks, headingNamespace, headingAnchors, imageSize],
     }),
   },
   devToolbar: {

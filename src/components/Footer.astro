@@ -4,12 +4,11 @@ import { SITE, SOCIALS } from "@/consts"
 ---
 
 <footer>
-  <a href={SITE.licenseUrl} target="_blank" rel="noopener noreferrer">
-    <p>
-      &copy; {new Date().getFullYear()}
-      {SITE.title}
-    </p>
-  </a>
+  <p>
+    &copy; {new Date().getFullYear()} {SITE.title}. Licensed under
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+    (check exceptions <a href="https://github.com/bmcyver/blog#licenses">noted here</a>).
+  </p>
 
   <SocialIcons links={SOCIALS} />
 </footer>
@@ -29,6 +28,10 @@ import { SITE, SOCIALS } from "@/consts"
     p {
       font-size: var(--step--1);
       color: var(--muted-foreground);
+
+      a {
+        text-decoration: underline;
+      }
     }
   }
 </style>

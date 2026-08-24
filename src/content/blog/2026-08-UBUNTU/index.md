@@ -44,7 +44,7 @@ Rufus로 이미지를 USB로 굽고 부팅하고, Next 버튼을 계속 누르�
 
 `한국어(Hangul)`에 들어가서 한/영 전환 키를 원하는 키로 변경해주면 된다.
 
-![](./keyboard-setting-2.png)
+![|x500](./keyboard-setting-2.png)
 
 :::note
 필자의 경우 윈도우에서 쓰던 `한/영` 키를 입력하면 `Hangul`이 아닌 `R_Alt`로 떴다. 원인을 찾다보니 `/usr/share/X11/xkb/keycodes/evdev`에서 `한/영`키가 `R_Alt`로 매핑되어 있어서 발생하는 문제였다. `R_Alt`를 `HNGL`로 바꿔주니 위 사진처럼 `Hangul`로 잘 떴다.
