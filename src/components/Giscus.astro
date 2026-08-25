@@ -40,6 +40,7 @@ const { term } = Astro.props
     script.setAttribute("data-input-position", giscusConfig.inputPosition)
     script.setAttribute("data-lang", giscusConfig.lang)
     script.setAttribute("data-theme", getTheme())
+    script.setAttribute("data-loading", "lazy")
     script.crossOrigin = "anonymous"
     script.async = true
     container.appendChild(script)
