@@ -12,9 +12,9 @@ export const SITE = {
 
 export const GISCUS = {
   repo: "bmcyver/blog",
-  repoId: "R_kgDOQaER_g", // Will be replaced or configured by the user
+  repoId: "R_kgDOQaER_g",
   category: "Comments",
-  categoryId: "DIC_kwDOQaER_s4DEDI2", // Will be replaced or configured by the user
+  categoryId: "DIC_kwDOQaER_s4DEDI2",
   mapping: "pathname",
   strict: "0",
   reactionsEnabled: "1",
