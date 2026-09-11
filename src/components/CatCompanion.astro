@@ -1,0 +1,174 @@
+---
+const head = " /\\_/\\\n( "
+const tail = " )\n > ^ <"
+const happy = " /\\_/\\\n( ^.^ )\n(\\) (/)"
+---
+
+<cat-companion class="companion">
+  <button type="button" aria-label="Pet the cat">
+    <span class="art" aria-hidden="true">
+      <span class="idle">{head}<span class="eyes">o</span>{"."}<span class="eyes">o</span>{tail}</span>
+      <span class="blink">{head}{"-.-"}{tail}</span>
+      <span class="happy">{happy}</span>
+    </span>
+  </button>
+</cat-companion>
+
+<script>
+  class CatCompanion extends HTMLElement {
+    private cleanup?: () => void
+
+    connectedCallback() {
+      this.cleanup?.()
+      const controller = new AbortController()
+      const { signal } = controller
+      const enabled = window.matchMedia("(min-width: 64rem) and (prefers-reduced-motion: no-preference)")
+      let petTimer: ReturnType<typeof setTimeout> | undefined
+      let frame = 0
+      let pointerX = 0
+      let pointerY = 0
+      const art = this.querySelector<HTMLElement>(".art")
+      const resetEyes = () => {
+        cancelAnimationFrame(frame)
+        frame = 0
+        this.style.removeProperty("--eye-x")
+        this.style.removeProperty("--eye-y")
+      }
+
+      this.querySelector("button")?.addEventListener("click", () => {
+        clearTimeout(petTimer)
+        this.dataset.pet = "true"
+        petTimer = setTimeout(() => { delete this.dataset.pet }, 1200)
+      }, { signal })
+
+      window.addEventListener("pointermove", (event) => {
+        if (!enabled.matches || event.pointerType === "touch" || !art) return
+        pointerX = event.clientX
+        pointerY = event.clientY
+        if (frame) return
+        frame = requestAnimationFrame(() => {
+          frame = 0
+          const bounds = art.getBoundingClientRect()
+          const dx = pointerX - (bounds.left + bounds.width / 2)
+          const dy = pointerY - (bounds.top + bounds.height / 2)
+          const distance = Math.max(80, Math.hypot(dx, dy))
+          this.style.setProperty("--eye-x", `${(dx / distance) * 2}px`)
+          this.style.setProperty("--eye-y", `${(dy / distance) * 3}px`)
+        })
+      }, { passive: true, signal })
+      document.documentElement.addEventListener("pointerleave", resetEyes, { signal })
+      window.addEventListener("blur", resetEyes, { signal })
+      enabled.addEventListener("change", resetEyes, { signal })
+
+      this.cleanup = () => {
+        controller.abort()
+        clearTimeout(petTimer)
+        resetEyes()
+        delete this.dataset.pet
+      }
+    }
+
+    disconnectedCallback() {
+      this.cleanup?.()
+    }
+  }
+
+  if (!customElements.get("cat-companion")) {
+    customElements.define("cat-companion", CatCompanion)
+  }
+</script>
+
+<style>
+  .companion {
+    display: block;
+    inline-size: fit-content;
+  }
+
+  button {
+    display: block;
+    padding: 4px;
+    margin-inline-start: -4px;
+    border: 0;
+    background: none;
+    color: var(--muted-foreground);
+    cursor: pointer;
+  }
+
+  .art {
+    display: grid;
+    font: 12px / 1.5 monospace;
+    opacity: 0.4;
+    user-select: none;
+  }
+
+  .art > span {
+    grid-area: 1 / 1;
+    white-space: pre;
+  }
+
+  .idle {
+    animation: blink-open 6s step-end infinite;
+  }
+
+  .blink {
+    visibility: hidden;
+    animation: blink-closed 6s step-end infinite;
+  }
+
+  .happy {
+    visibility: hidden;
+  }
+
+  .eyes {
+    display: inline-block;
+    transform: translate(var(--eye-x, 0px), var(--eye-y, 0px));
+    transition: transform 120ms ease-out;
+  }
+
+  .companion[data-pet] .art > span {
+    animation: none;
+    visibility: hidden;
+  }
+
+  .companion[data-pet] .art > .happy {
+    visibility: visible;
+  }
+
+  @media (hover: hover) {
+    button:hover .art > span {
+      animation: none;
+      visibility: hidden;
+    }
+
+    button:hover .art > .happy {
+      visibility: visible;
+    }
+  }
+
+  @keyframes blink-open {
+    0%, 100% { visibility: visible; }
+    95% { visibility: hidden; }
+  }
+
+  @keyframes blink-closed {
+    0%, 100% { visibility: hidden; }
+    95% { visibility: visible; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .art > span {
+      animation: none;
+    }
+
+    .companion .eyes {
+      transition: none;
+      transform: none;
+    }
+  }
+
+  @media (width < 64rem) {
+    .companion {
+      display: none;
+    }
+  }
+</style>
