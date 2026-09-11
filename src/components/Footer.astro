@@ -5,8 +5,9 @@ import { SITE, SOCIALS } from "@/consts"
 
 <footer>
   <p>
-    &copy; {new Date().getFullYear()} {SITE.title}. 
-    Check <a href="https://github.com/bmcyver/blog#licenses">LICENSE</a>
+    <a href="https://github.com/bmcyver/blog#licenses"
+      >&copy; {new Date().getFullYear()} {SITE.title}.
+    </a>
   </p>
 
   <SocialIcons links={SOCIALS} />
@@ -25,7 +26,13 @@ import { SITE, SOCIALS } from "@/consts"
       color: var(--muted-foreground);
 
       a {
-        text-decoration: underline;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+          text-decoration: underline;
+          text-decoration-color: color-mix(in oklab, currentColor 40%, transparent);
+        }
       }
     }
   }

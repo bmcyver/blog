@@ -7,7 +7,10 @@ const happy = " /\\_/\\\n( ^.^ )\n(\\) (/)"
 <cat-companion class="companion">
   <button type="button" aria-label="Pet the cat">
     <span class="art" aria-hidden="true">
-      <span class="idle">{head}<span class="eyes">o</span>{"."}<span class="eyes">o</span>{tail}</span>
+      <span class="idle"
+        >{head}<span class="eyes">o</span>{"."}<span class="eyes">o</span>
+        {tail}</span
+      >
       <span class="blink">{head}{"-.-"}{tail}</span>
       <span class="happy">{happy}</span>
     </span>
@@ -22,7 +25,9 @@ const happy = " /\\_/\\\n( ^.^ )\n(\\) (/)"
       this.cleanup?.()
       const controller = new AbortController()
       const { signal } = controller
-      const enabled = window.matchMedia("(min-width: 64rem) and (prefers-reduced-motion: no-preference)")
+      const enabled = window.matchMedia(
+        "(min-width: 64rem) and (prefers-reduced-motion: no-preference)",
+      )
       let petTimer: ReturnType<typeof setTimeout> | undefined
       let frame = 0
       let pointerX = 0
@@ -35,28 +40,40 @@ const happy = " /\\_/\\\n( ^.^ )\n(\\) (/)"
         this.style.removeProperty("--eye-y")
       }
 
-      this.querySelector("button")?.addEventListener("click", () => {
-        clearTimeout(petTimer)
-        this.dataset.pet = "true"
-        petTimer = setTimeout(() => { delete this.dataset.pet }, 1200)
-      }, { signal })
+      this.querySelector("button")?.addEventListener(
+        "click",
+        () => {
+          clearTimeout(petTimer)
+          this.dataset.pet = "true"
+          petTimer = setTimeout(() => {
+            delete this.dataset.pet
+          }, 1200)
+        },
+        { signal },
+      )
 
-      window.addEventListener("pointermove", (event) => {
-        if (!enabled.matches || event.pointerType === "touch" || !art) return
-        pointerX = event.clientX
-        pointerY = event.clientY
-        if (frame) return
-        frame = requestAnimationFrame(() => {
-          frame = 0
-          const bounds = art.getBoundingClientRect()
-          const dx = pointerX - (bounds.left + bounds.width / 2)
-          const dy = pointerY - (bounds.top + bounds.height / 2)
-          const distance = Math.max(80, Math.hypot(dx, dy))
-          this.style.setProperty("--eye-x", `${(dx / distance) * 2}px`)
-          this.style.setProperty("--eye-y", `${(dy / distance) * 3}px`)
-        })
-      }, { passive: true, signal })
-      document.documentElement.addEventListener("pointerleave", resetEyes, { signal })
+      window.addEventListener(
+        "pointermove",
+        (event) => {
+          if (!enabled.matches || event.pointerType === "touch" || !art) return
+          pointerX = event.clientX
+          pointerY = event.clientY
+          if (frame) return
+          frame = requestAnimationFrame(() => {
+            frame = 0
+            const bounds = art.getBoundingClientRect()
+            const dx = pointerX - (bounds.left + bounds.width / 2)
+            const dy = pointerY - (bounds.top + bounds.height / 2)
+            const distance = Math.max(80, Math.hypot(dx, dy))
+            this.style.setProperty("--eye-x", `${(dx / distance) * 2}px`)
+            this.style.setProperty("--eye-y", `${(dy / distance) * 3}px`)
+          })
+        },
+        { passive: true, signal },
+      )
+      document.documentElement.addEventListener("pointerleave", resetEyes, {
+        signal,
+      })
       window.addEventListener("blur", resetEyes, { signal })
       enabled.addEventListener("change", resetEyes, { signal })
 
@@ -146,13 +163,23 @@ const happy = " /\\_/\\\n( ^.^ )\n(\\) (/)"
   }
 
   @keyframes blink-open {
-    0%, 100% { visibility: visible; }
-    95% { visibility: hidden; }
+    0%,
+    100% {
+      visibility: visible;
+    }
+    95% {
+      visibility: hidden;
+    }
   }
 
   @keyframes blink-closed {
-    0%, 100% { visibility: hidden; }
-    95% { visibility: visible; }
+    0%,
+    100% {
+      visibility: hidden;
+    }
+    95% {
+      visibility: visible;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
