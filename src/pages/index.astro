@@ -33,31 +33,31 @@ import { Awards, CVEs } from "@/consts"
       <table class="awards-table">
         <tbody>
           {Awards.map((award) => (
-              <tr>
-                <td>{award.year}</td>
-                <td>{award.event}</td>
-                <td>{award.team}</td>
-                <td>
-                  <strong>{award.place}</strong>
-                </td>
-              </tr>
-            ))}
+            <tr>
+              <td>{award.year}</td>
+              <td>{award.event}</td>
+              <td>{award.team}</td>
+              <td>
+                <strong>{award.place}</strong>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
 
       <h3>CVEs</h3>
       <ul>
         {CVEs.map((cve) => (
-            <li>
-              <a
-                href={`https://nvd.nist.gov/vuln/detail/${cve}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {cve}
-              </a>
-            </li>
-          ))}
+          <li>
+            <a
+              href={`https://nvd.nist.gov/vuln/detail/${cve}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {cve}
+            </a>
+          </li>
+        ))}
       </ul>
     </prose-content>
   </dictionary-entry>

@@ -35,14 +35,14 @@ const posts = (await getPosts()).filter((post) =>
   <section>
     <h2>Posts</h2>
     {posts.length > 0 ? (
-        <ul>
-          {posts.map((post) => (
-            <BlogCard post={post} />
-          ))}
-        </ul>
-      ) : (
-        <p>No posts yet.</p>
-      )}
+      <ul>
+        {posts.map((post) => (
+          <BlogCard post={post} />
+        ))}
+      </ul>
+    ) : (
+      <p>No posts yet.</p>
+    )}
   </section>
 </Layout>
 

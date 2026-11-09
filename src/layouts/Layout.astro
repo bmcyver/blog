@@ -38,8 +38,10 @@ const { crumbs } = Astro.props
           >
         </page-nav>
         {Astro.slots.has("toc") && (
-            <page-toc><slot name="toc" /></page-toc>
-          )}
+          <page-toc>
+            <slot name="toc" />
+          </page-toc>
+        )}
       </page-header>
       <page-content>
         <main><slot /></main>

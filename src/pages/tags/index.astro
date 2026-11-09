@@ -10,10 +10,13 @@ const tags = await getTags()
   <MetaPage slot="head" title="Tags" noindex />
   <ul>
     {[...tags].map(([tag, posts]) => (
-        <li>
-          <a href={`/tags/${tag}`}>#{tag}<tag-count>{posts.length}</tag-count></a>
-        </li>
-      ))}
+      <li>
+        <a href={`/tags/${tag}`}>
+          #{tag}
+          <tag-count>{posts.length}</tag-count>
+        </a>
+      </li>
+    ))}
   </ul>
 </Layout>
 

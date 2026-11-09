@@ -13,34 +13,32 @@ const { name, description, link, tags, image, startDate, endDate } =
 
 <li>
   {image && (
-      <a
-        href={link}
-        target="_blank"
-        rel="noopener noreferrer"
-        tabindex="-1"
-        aria-hidden="true"
-      >
-        <Image src={image} alt="" width={640} height={336} />
-      </a>
-    )}
+    <a
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <Image src={image} alt="" width={640} height={336} />
+    </a>
+  )}
   <entry-info>
     <a href={link} target="_blank" rel="noopener noreferrer">{name}</a>
     <entry-meta>
       {startDate && (
-          <project-dates>
-            <time datetime={startDate.toISOString()}>
-              {formatDate(startDate)}
-            </time>
-            {" → "}
-            {endDate ? (
-              <time datetime={endDate.toISOString()}>
-                {formatDate(endDate)}
-              </time>
-            ) : (
-              "Present"
-            )}
-          </project-dates>
-        )}
+        <project-dates>
+          <time datetime={startDate.toISOString()}>
+            {formatDate(startDate)}
+          </time>
+          {" → "}
+          {endDate ? (
+            <time datetime={endDate.toISOString()}>{formatDate(endDate)}</time>
+          ) : (
+            "Present"
+          )}
+        </project-dates>
+      )}
       <project-link>
         <ExternalIcon aria-hidden="true" />
         {new URL(link).hostname}
@@ -48,12 +46,12 @@ const { name, description, link, tags, image, startDate, endDate } =
     </entry-meta>
     <p>{description}</p>
     {tags && tags.length > 0 && (
-        <project-tags>
-          {tags.map((tag) => (
-            <span>{tag}</span>
-          ))}
-        </project-tags>
-      )}
+      <project-tags>
+        {tags.map((tag) => (
+          <span>{tag}</span>
+        ))}
+      </project-tags>
+    )}
   </entry-info>
 </li>
 

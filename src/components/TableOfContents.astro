@@ -26,34 +26,34 @@ const { title, sections } = Astro.props
   </label>
   <ul data-bar>
     {sections.map(({ id, label, open, headings }) =>
-        id ? (
-          <li data-group>
-            {headings.length > 0 ? (
-              <details open={open || undefined}>
-                <summary>
-                  <a href={`#${id}`}>{label}</a>
-                  <ChevronIcon aria-hidden="true" />
-                </summary>
-                <ul>
-                  {headings.map(({ depth, slug, text }) => (
-                    <li data-depth={depth}>
-                      <a href={`#${slug}`}>{text}</a>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            ) : (
-              <a href={`#${id}`}>{label}</a>
-            )}
+      id ? (
+        <li data-group>
+          {headings.length > 0 ? (
+            <details open={open || undefined}>
+              <summary>
+                <a href={`#${id}`}>{label}</a>
+                <ChevronIcon aria-hidden="true" />
+              </summary>
+              <ul>
+                {headings.map(({ depth, slug, text }) => (
+                  <li data-depth={depth}>
+                    <a href={`#${slug}`}>{text}</a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ) : (
+            <a href={`#${id}`}>{label}</a>
+          )}
+        </li>
+      ) : (
+        headings.map(({ depth, slug, text }) => (
+          <li data-depth={depth}>
+            <a href={`#${slug}`}>{text}</a>
           </li>
-        ) : (
-          headings.map(({ depth, slug, text }) => (
-            <li data-depth={depth}>
-              <a href={`#${slug}`}>{text}</a>
-            </li>
-          ))
-        ),
-      )}
+        ))
+      ),
+    )}
   </ul>
 </nav>
 
