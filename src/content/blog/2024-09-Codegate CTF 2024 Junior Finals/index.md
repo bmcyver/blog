@@ -547,11 +547,11 @@ const SuperSecretPassword =
     : ['idk', 'idk']
 ```
 
-는 `ASI misbehavior`로 인해, 같은 코드로 인식된다. 따라서, `http://url:port/user?,api/flagService?guess=`으로 요청을 하면 `flag`를 얻을 수 있다. (물론 아래 사진과 같이, `host`를 변경해야 한다.)
+는 인터프리터가 사실상 같은 코드로 인식한다. 따라서, `http://url:port/user?,api/flagService?guess=`으로 요청을 하면 `flag`를 얻을 수 있다. (물론 아래 사진과 같이, `host`를 변경해야 한다.)
 
 ![](dyson1.png)
 
-대회 때 `multi request`가 있는 것은 알았으나, `ASI misbehavior`를 이용한 우회는 생각하지 못했다. 그래서 `npm audit` 돌려서 나온, `prototype pollution`만 엄청 시도해보고 있었다.
+대회 때 `multi request`가 있는 것은 알았으나, 인터프리터의 버그?를 사용할 생각을 못했다. 그래서 `npm audit` 돌려서 나온, `prototype pollution`만 엄청 시도해보고 있었다.
 
 ## Ai
 
